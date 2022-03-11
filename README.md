@@ -1,4 +1,4 @@
 # StartYourProject
 🌐💻 Social network for IT-team search (ML/DL)
 
-Development team: PyTorchki ([Vladislav](https://github.com/v-mk-s/), [Vladislav](https://github.com/v-mk-s/), [Vladislav](https://github.com/v-mk-s/), [Vladislav](https://github.com/v-mk-s/)).
+Development team: PyTorchki ([Vladislav](https://github.com/v-mk-s), [Alexey](https://github.com/alexey190900), [Daniile](https://github.com/mrworldw1de) and [Ilya](https://github.com/ilya0100)).
