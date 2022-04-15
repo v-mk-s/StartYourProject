@@ -6,10 +6,10 @@ struct LoginData {
     std::string password;
 };
 
-struct RegisterData : public LoginData {
+struct RegisterData {
     std::string email;
-    // std::string username;
-    // std::string password;
+    std::string username;
+    std::string password;
 };
 
 enum class ErrorStatus {

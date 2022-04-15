@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
+#include "gmock/gmock.h"
 #include "../../client/validation.hpp"
 #include "../../client/utils.hpp"
-#include "../../client/client_uc/login.hpp"
+#include "../../client/usecases.hpp"
 
 TEST(LOGIN_USE_CASE, GET_CORRECT_LOGIN_DATA) {
     // std::string username = "alexey";
@@ -63,4 +64,51 @@ TEST(VALIDAION, CORRECT_PASSWORD) {
     std::string password = "qweqw21";
 
     EXPECT_EQ(isValidUsername(password), false);
+}
+
+TEST(USECASES, INPUT_LOGIN_FIRST) {
+    LoginData cor_login = { .username = "alex",
+                        .password = "asd2das4ad2"}
+    LoginData login = {0};
+    MockLoginUC mock_login_uc;
+    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
+
+    EXPECT_EQ(logic.username, cor_login.username);
+    EXPECT_EQ(logic.password, cor_login.password);
+}
+
+TEST(USECASES, INPUT_LOGIN_SECOND) {
+    LoginData incor_login = {   .username = "alexasd",
+                                .password = "asd2"}
+    LoginData login = {0};
+    MockLoginUC mock_login_uc;
+    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
+
+    EXPECT_EQ(logic.username, incor_login.username);
+    EXPECT_EQ(logic.password, incor_login.password);
+}
+
+TEST(USECASES, INPUT_REGISTER_FIRST) {
+    RegisterData cor_reg = {    .email = "sklaa00@mail.ru",
+                                .username = "alex",
+                                .password = "asd2das4ad2"}
+    RegisterData reg = {0};
+    MockLoginUC mock_login_uc;
+    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
+
+    EXPECT_EQ(reg.email, incor_reg.email);
+    EXPECT_EQ(reg.username, incor_reg.username);
+    EXPECT_EQ(reg.password, incor_reg.password);
+}
+
+TEST(USECASES, INPUT_REGISTER_SECOND) {
+    RegisterData incor_reg = {  .email = "sklaa00mail.ru",
+                                .username = "alex!",
+                                .password = "aad2"}
+    MockLoginUC mock_login_uc;
+    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
+
+    EXPECT_EQ(reg.email, incor_reg.email);
+    EXPECT_EQ(reg.username, incor_reg.username);
+    EXPECT_EQ(reg.password, incor_reg.password);
 }

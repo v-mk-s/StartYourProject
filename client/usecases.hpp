@@ -1,4 +1,5 @@
 #pragma once
+#include "gmock/gmock.h"
 #include "clientui.hpp"
 #include "general.hpp"
 
@@ -17,6 +18,16 @@
 //     NetworkRequirements net;
 //     LoginData login_data;
 // };
+
+class MockLoginUC : public LoginUC {
+public:
+    MOCK_METHOD1(onLoginButton, ErrorStatus(LoginData user_data));
+};
+
+class MockRegisterUC : public RegisterUC {
+public:
+    MOCK_METHOD1(onRegisterButton, ErrorStatus(RegisterData user_data));
+};
 
 class LoginUC {
 public:

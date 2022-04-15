@@ -1,8 +1,8 @@
 #pragma once
 #include "clientui.hpp"
 #include "usecases.hpp"
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
+// #include <QtNetwork/QNetworkAccessManager>
+// #include <QtNetwork/QNetworkReply>
 
 
 class INet {
