@@ -11,11 +11,3 @@ public:
     LoginUC login_uc;
     RegisterUC register_uc;
 };
-
-class UiRequirements {
-public:
-    virtual void showError();
-    virtual void showSuccess();
-    virtual void showMainDisplay();
-
-};

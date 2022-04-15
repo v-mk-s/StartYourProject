@@ -1,5 +1,6 @@
 #pragma once
-#include "usecase.hpp"
+#include "login_uc.hpp"
+#include "register_uc.hpp"
 
 class NetworkRequirements {
 public:
