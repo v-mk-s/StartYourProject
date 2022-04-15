@@ -2,11 +2,6 @@
 #include "login_uc.hpp"
 #include "register_uc.hpp"
 
-class NetworkRequirements {
-public:
-    virtual void makeRequest();
-};
-
 class Net {
 public:
     // login
