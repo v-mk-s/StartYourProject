@@ -11,15 +11,15 @@ enum class ErrorStatus {
 enum class RequestType {
     unnown,
     login,
-    registerUser,
-    editProfile,
-    publishPost,
+    register_user,
+    edit_profile,
+    publish_post,
     logout,
-    getMainPage,
+    get_main_page,
     subscribe,
-    checkDiversity,
-    delUser,
-    delPost
+    check_diversity,
+    del_user,
+    del_post
 };
 
 enum class ResponseType {
@@ -32,23 +32,23 @@ enum class ResponseType {
 
 // Нужно как-то избавиться от копипасты
 struct LoginData {
-    std::string userName;
-    std::string passWord;
+    std::string username;
+    std::string password;
 };
 
-struct RegisterData {
-    std::string userName;
-    std::string passWord;
-    std::string eMail;
+struct RegisterData: public LoginData {
+    // std::string username;
+    // std::string password;
+    std::string email;
 };
 
-struct EditUserData {
-    std::string userName;
-    std::string eMail;
+struct UserData: public RegisterData {
+    // std::string username;
+    // std::string email;
     std::string name;
-    std::string surName;
-    std::string userDiscription;
-    std::string passWord;
+    std::string sur_name;
+    std::string user_discription;
+    // std::string password;
 };
 
 
