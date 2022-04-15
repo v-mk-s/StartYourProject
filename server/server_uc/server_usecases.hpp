@@ -3,31 +3,35 @@
 #include "utils.hpp"
 
 
-// class ServerUseCases {
-//  public:
-//     ServerUseCases();
-// };
+class IServerUseCases {
+ public:
+    virtual ErrorStatus checkUserInDB(LoginData user) = 0;
+    virtual ErrorStatus addUserToDB(RegisterData user_data) = 0;
+    virtual ErrorStatus editUserData(UserData user_data) = 0;
+    virtual ErrorStatus delUserData(std::string username) = 0;
+    virtual ErrorStatus getUserData(std::string username) = 0;
+};
 
 
 class LoginUC {
  public:
-    Response checkUserInDB(LoginData user);
+    ErrorStatus checkUserInDB(LoginData user);
 };
 
 
 class RegisterUC {
  public:
-    Response addUserToDB(RegisterData user_data);
+    ErrorStatus addUserToDB(RegisterData user_data);
 };
 
 
 class EditProfileUC {
  public:
-    Response editUserData(UserData user_data);
+    ErrorStatus editUserData(UserData user_data);
 };
 
 
 class DelUserProfileUC {
  public:
-    Response delUserData(std::string username);
+    ErrorStatus delUserData(std::string username);
 };

@@ -1,37 +1,54 @@
 #pragma once
 
+#include "router.hpp"
 #include "utils.hpp"
 #include "server_usecases.hpp"
 
 
 class IHandler {
  public:
-    IHandler();
+    virtual void Handle(RequestInterface request, ResponseInterface response) = 0;
 };
 
 
 class LoginHandler: public IHandler {
  public:
-    Response Handler(Request requestLogin);
+    LoginHandler(IServerUseCases* usecase): usecase(usecase) {}
+
+    void Handle(RequestInterface request, ResponseInterface response);
 
  private:
-    LoginUC usecase;
+    IServerUseCases* usecase;
 };
 
 
 class RegisterHandler: public IHandler {
  public:
-    Response Handler(Request requestRegister);
+    RegisterHandler(IServerUseCases* usecase): usecase(usecase) {}
+
+    void Handle(RequestInterface request, ResponseInterface response);
 
  private:
-    RegisterUC usecase;
+    IServerUseCases* usecase;
 };
 
 
 class EditProfileHandler: public IHandler {
  public:
-    Response Handler(Request requestEditProfile);
+    EditProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
+
+    void Handle(RequestInterface request, ResponseInterface response);
 
  private:
-    EditProfileUC usecase;
+    IServerUseCases* usecase;
+};
+
+class GetUserProfileHandler: public IHandler {
+ public:
+    GetUserProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
+
+    void Handle(RequestInterface request, ResponseInterface response);
+
+ private:
+    IServerUseCases* usecase;
 };
