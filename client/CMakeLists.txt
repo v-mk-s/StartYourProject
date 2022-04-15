@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(client_lib)
 
-file(GLOB SOURCES *.c ./client_uc/*.c)
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} ./client_uc)
+file(GLOB SOURCES *.c)
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC {INCLUDE_DIR})

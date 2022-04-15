@@ -11,3 +11,8 @@ struct RegisterData : public LoginData {
     // std::string username;
     // std::string password;
 };
+
+enum class ErrorStatus {
+    error,
+    noError
+};

@@ -1,18 +1,27 @@
 #pragma once
-#include "login_uc.hpp"
-#include "register_uc.hpp"
+#include "clientui.hpp"
+#include "usecases.hpp"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
 
-class Net {
+
+class INet {
 public:
-    // login
-    int sendLoginData(LoginData login);
-    
-    // register
-    int sendRegisterData(RegisterData register);
+    virtual void Dispatch(IRequest request, std::function<void(IResponse)>) = 0;
+};
+
+class RegisterNet {
+public:
+    void Dispatch(IRequest request, std::function<void(IResponse)>);
 
 private:
-    QtNetworkManager* networkmanager;
-    LoginUC login_usecase;
-    RegisterUC register_usecase;
+    IClientUseCase* usecase;
+};
 
+class LoginNet {
+public:
+    void Dispatch(IRequest request, std::function<void(IResponse)>);
+
+private:
+    IClientUseCase* usecase;
 };

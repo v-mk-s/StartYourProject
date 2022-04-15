@@ -5,7 +5,6 @@ public:
     virtual void showError();
     virtual void showSuccess();
     virtual void showMainDisplay();
-
 };
 
 class NetworkRequirements {
