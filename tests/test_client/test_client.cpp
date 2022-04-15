@@ -4,17 +4,17 @@
 #include "../../client/utils.hpp"
 #include "../../client/usecases.hpp"
 
-TEST(LOGIN_USE_CASE, GET_CORRECT_LOGIN_DATA) {
-    // std::string username = "alexey";
-    // std::string password = "alexey19092000";
 
-    // LoginData pushLoginButton(std::string& username, std::string& password);
+// class MockLoginUC : public LoginUC {
+// public:
+//     MOCK_METHOD1(onLoginButton, ErrorStatus(LoginData user_data));
+// };
 
-    // LoginData result = pushLoginButton(username, password);
+// class MockRegisterUC : public RegisterUC {
+// public:
+//     MOCK_METHOD1(onRegisterButton, ErrorStatus(RegisterData user_data));
+// };
 
-    // EXPECT_EQ()
-
-}
 
 TEST(VALIDAION, CORRECT_USERNAME) {
     std::string username = "Alexey00";
@@ -67,48 +67,35 @@ TEST(VALIDAION, CORRECT_PASSWORD) {
 }
 
 TEST(USECASES, INPUT_LOGIN_FIRST) {
-    LoginData cor_login = { .username = "alex",
-                        .password = "asd2das4ad2"}
-    LoginData login = {0};
-    MockLoginUC mock_login_uc;
-    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
-
-    EXPECT_EQ(logic.username, cor_login.username);
-    EXPECT_EQ(logic.password, cor_login.password);
+    LoginData cor_login = {0};
+    cor_login.username = "alex";
+    cor_login.password = "asd2das4ad2";
+    LoginUC usecase = {0};
+    EXPECT_EQ(usecase.onLoginButton(cor_login), noError);
 }
 
 TEST(USECASES, INPUT_LOGIN_SECOND) {
-    LoginData incor_login = {   .username = "alexasd",
-                                .password = "asd2"}
-    LoginData login = {0};
-    MockLoginUC mock_login_uc;
-    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
-
-    EXPECT_EQ(logic.username, incor_login.username);
-    EXPECT_EQ(logic.password, incor_login.password);
+    LoginData incor_login = {0};
+    incor_login.username = "alexasd"; 
+    incor_login.password = "asd2";
+    LoginUC usecase = {0};
+    EXPECT_EQ(usecase.onLoginButton(incor_login), noError);
 }
 
 TEST(USECASES, INPUT_REGISTER_FIRST) {
-    RegisterData cor_reg = {    .email = "sklaa00@mail.ru",
-                                .username = "alex",
-                                .password = "asd2das4ad2"}
-    RegisterData reg = {0};
-    MockLoginUC mock_login_uc;
-    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
-
-    EXPECT_EQ(reg.email, incor_reg.email);
-    EXPECT_EQ(reg.username, incor_reg.username);
-    EXPECT_EQ(reg.password, incor_reg.password);
+    RegisterData cor_reg = {0};
+    cor_reg.email = "sklaa00@mail.ru";
+    cor_reg.username = "alex";
+    cor_reg.password = "asd2das4ad2";
+    RegisterUC reg = {0};
+    EXPECT_EQ(usecase.onLoginButton(cor_reg), noError);
 }
 
 TEST(USECASES, INPUT_REGISTER_SECOND) {
-    RegisterData incor_reg = {  .email = "sklaa00mail.ru",
-                                .username = "alex!",
-                                .password = "aad2"}
-    MockLoginUC mock_login_uc;
-    EXPECT_CALL(mock_login_uc, onLoginButton(login).Times(AtLeast(1)));
-
-    EXPECT_EQ(reg.email, incor_reg.email);
-    EXPECT_EQ(reg.username, incor_reg.username);
-    EXPECT_EQ(reg.password, incor_reg.password);
+    RegisterData incor_reg = {0};
+    incor_reg.email = "sklaa00mail.ru";
+    incor_reg.username = "alex!";
+    incor_reg.password = "aad2";
+    RegisterUC reg = {0};
+    EXPECT_EQ(usecase.onLoginButton(incor_reg), noError);
 }

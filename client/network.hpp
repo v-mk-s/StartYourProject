@@ -12,6 +12,7 @@ public:
 
 class RegisterNet {
 public:
+    RegisterNet(IClientUseCase* _usecase) : usecase(_usecase) {}
     void Dispatch(IRequest request, std::function<void(IResponse)>);
 
 private:
@@ -20,6 +21,7 @@ private:
 
 class LoginNet {
 public:
+    LoginNet(IClientUseCase* _usecase) : usecase(_usecase) {}
     void Dispatch(IRequest request, std::function<void(IResponse)>);
 
 private:

@@ -1,46 +1,23 @@
 #pragma once
-#include "gmock/gmock.h"
 #include "clientui.hpp"
 #include "general.hpp"
 
-// class LoginUC {
-// public:
-//     LoginUC(LoginData _login_data = {0}) : login_data(_login_data) {}
-
-//     LoginData pushLoginButton(std::string& username, std::string& password);
-
-//     bool getLoginData(LoginData login);
-
-//     void goToLoginDisplay();
-
-// // private:
-//     UiRequirements ui;
-//     NetworkRequirements net;
-//     LoginData login_data;
-// };
-
-class MockLoginUC : public LoginUC {
+class LoginUC : IClientUseCase {
 public:
-    MOCK_METHOD1(onLoginButton, ErrorStatus(LoginData user_data));
-};
-
-class MockRegisterUC : public RegisterUC {
-public:
-    MOCK_METHOD1(onRegisterButton, ErrorStatus(RegisterData user_data));
-};
-
-class LoginUC {
-public:
-    ErrorStatus onLoginButton(LoginData user_data);
+    LoginUC(LoginData _login_data = {0}) : login_data(_login_data) {}
+    ErrorStatus onLoginButton(LoginData& login_data);
 
 private:
-    IClientUseCase* usecase;
+    LoginData login_data;
+    // IClientUseCase* usecase;
 };
 
-class RegisterUC {
+class RegisterUC : IClientUseCase {
 public:
-    ErrorStatus onRegisterButton(RegisterData reg_data);
+    LoginUC(LoginData _reg_data = {0}) : reg_data(_reg_data) {}
+    ErrorStatus onRegisterButton(RegisterData& reg_data);
 
 private:
-    IClientUseCase* usecase;
+    LoginData reg_data;
+    // IClientUseCase* usecase;
 };
