@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.16)
-project(client_lib)
+cmake_minimum_required(VERSION 3.14)
+project(client_syp)
 
-file(GLOB SOURCES *.c)
-file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wextra -Werror")
+
+file(GLOB SOURCES basic/*.cpp clientui/*.cpp network/*.cpp client_uc/*.cpp)
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} basic/ clientui/ network/ client_uc/)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC {INCLUDE_DIR})
 
-set(CLIENT_LIB_LIBRARIES ${PROJECT_NAME} PARENT_SCOPE)
-set(CLIENT_LIB_INCLUDE_DIRS ${INCLUDE_DIRS} PARENT_SCOPE)
+set(CLIENT_SYP_LIBRARIES ${PROJECT_NAME} PARENT_SCOPE)
+set(CLIENT_SYP_INCLUDE_DIRS ${INCLUDE_DIRS} PARENT_SCOPE)

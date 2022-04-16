@@ -1,0 +1,2 @@
+/usr/bin/ar qc libclient_syp.a CMakeFiles/client_syp.dir/basic/validation.cpp.o
+/usr/bin/ranlib libclient_syp.a

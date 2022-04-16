@@ -1,0 +1,1 @@
+/usr/local/bin/c++ CMakeFiles/StartYourProject.dir/main.cpp.o -o StartYourProject  client/libclient_syp.a 

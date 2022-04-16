@@ -1,58 +1,59 @@
 #include <gtest/gtest.h>
 // #include "gmock/gmock.h"
-#include "../../client/validation.hpp"
+#include "../../client/client_uc/usecases.hpp"
+#include "../../client/basic/validation.hpp"
 #include "../../client/utils.hpp"
-#include "../../client/usecases.hpp"
+#include "../../client/network/network.hpp"
 
 
-TEST(VALIDAION, CORRECT_USERNAME) {
+TEST(VALID_USERNAME_TEST, CORRECT_USERNAME) {
     std::string username = "Alexey00";
 
-    EXPECT_EQ(isValidUsername(username), true);
+    EXPECT_EQ(isValidUsername(username), 0);
 }
 
-TEST(VALIDAION, INCORRECT_USERNAME) {
+TEST(VALID_USERNAME_TEST, INCORRECT_USERNAME_FIRST) {
     std::string username = "Alexey!00";
 
-    EXPECT_EQ(isValidUsername(username), false);
+    EXPECT_EQ(isValidUsername(username), 0);
 }
 
-TEST(VALIDAION, INCORRECT_USERNAME) {
+TEST(VALID_USERNAME_TEST, INCORRECT_USERNAME_SECOND) {
     std::string username = "";
 
-    EXPECT_EQ(isValidUsername(username), false);
+    EXPECT_EQ(isValidUsername(username), 0);
 }
 
-TEST(VALIDAION, CORRECT_EMAIL) {
+TEST(IS_VALID_EMAIL, CORRECT_EMAIL) {
     std::string email = "alexey@mail.ru";
 
-    EXPECT_EQ(isValidUsername(email), true);
+    EXPECT_EQ(isValidEmail(email), 0);
 }
 
-TEST(VALIDAION, INCORRECT_EMAIL) {
+TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_FIRST) {
     std::string email = "alexeymail.ru";
 
-    EXPECT_EQ(isValidUsername(email), false);
+    EXPECT_EQ(isValidEmail(email), 0);
 }
 
-TEST(VALIDAION, INCORRECT_EMAIL) {
+TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_SECOND) {
     std::string email = "ale_xe!y@mail.ru";
 
-    EXPECT_EQ(isValidUsername(email), false);
+    EXPECT_EQ(isValidEmail(email), 0);
 }
 
-TEST(VALIDAION, CORRECT_PASSWORD) {
+TEST(IS_VALID_PASSWORD, CORRECT_PASSWORD_FIRST) {
     // accept all types of symbols
     std::string password = "aLe_Xe!y123@mail.ru";
 
-    EXPECT_EQ(isValidUsername(password), true);
+    EXPECT_EQ(isValidPassword(password), 0);
 }
 
-TEST(VALIDAION, CORRECT_PASSWORD) {
+TEST(IS_VALID_PASSWORD, CORRECT_PASSWORD_SECOND) {
     // password should be more or equal than 8 symbols
     std::string password = "qweqw21";
 
-    EXPECT_EQ(isValidUsername(password), false);
+    EXPECT_EQ(isValidPassword(password), 0);
 }
 
 TEST(USECASES, INPUT_LOGIN_FIRST) {
@@ -60,7 +61,7 @@ TEST(USECASES, INPUT_LOGIN_FIRST) {
     cor_login.username = "alex";
     cor_login.password = "asd2das4ad2";
     LoginUC usecase;
-    EXPECT_EQ(usecase.onLoginButton(cor_login), 1);
+    EXPECT_EQ(usecase.onLoginButton(cor_login), ErrorStatus::noError);
 }
 
 TEST(USECASES, INPUT_LOGIN_SECOND) {
@@ -68,7 +69,7 @@ TEST(USECASES, INPUT_LOGIN_SECOND) {
     incor_login.username = "alexasd"; 
     incor_login.password = "asd2";
     LoginUC usecase;
-    EXPECT_EQ(usecase.onLoginButton(incor_login), 1);
+    EXPECT_EQ(usecase.onLoginButton(incor_login), ErrorStatus::noError);
 }
 
 TEST(USECASES, INPUT_REGISTER_FIRST) {
@@ -77,7 +78,7 @@ TEST(USECASES, INPUT_REGISTER_FIRST) {
     cor_reg.username = "alex";
     cor_reg.password = "asd2das4ad2";
     RegisterUC usecase;
-    EXPECT_EQ(usecase.onRegisterButton(cor_reg), 1);
+    EXPECT_EQ(usecase.onRegisterButton(cor_reg), ErrorStatus::noError);
 }
 
 TEST(USECASES, INPUT_REGISTER_SECOND) {
@@ -86,5 +87,5 @@ TEST(USECASES, INPUT_REGISTER_SECOND) {
     incor_reg.username = "alex!";
     incor_reg.password = "aad2";
     RegisterUC usecase;
-    EXPECT_EQ(usecase.onRegisterButton(incor_reg), 1);
+    EXPECT_EQ(usecase.onRegisterButton(incor_reg), ErrorStatus::noError);
 }
