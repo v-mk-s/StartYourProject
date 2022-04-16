@@ -13,7 +13,7 @@ class MockDB: public DataBase {
 
 TEST(LoginUCTest, GoodCase) {
     MockDB database;
-    EXPECT_CALL(database, FindIntoTable()).Times(AtLeast(1));
+    EXPECT_CALL(database, FindIntoTable()).Times(testing::AtLeast(1));
 
     LoginData test_data = {"John", "qwerty"};
     LoginUC usecase(&database);
@@ -33,7 +33,7 @@ TEST(LoginUCTest, WrongName) {
 
 TEST(RegisterUCTest, GoodCase) {
     MockDB database;
-    EXPECT_CALL(database, InsertIntoTable()).Times(AtLeast(1));
+    EXPECT_CALL(database, InsertIntoTable()).Times(testing::AtLeast(1));
 
     RegisterData test_data = {"Jack", "1234", "email@mail.ru"};
     RegisterUC usecase(&database);
@@ -53,7 +53,7 @@ TEST(RegisterUCTest, WrongEmail) {
 
 TEST(EditProfileUCTest, GoodCase) {
     MockDB database;
-    EXPECT_CALL(database, InsertIntoTable()).Times(AtLeast(1));
+    EXPECT_CALL(database, InsertIntoTable()).Times(testing::AtLeast(1));
 
     UserData test_data = {"Jack", "email@mail.ru", "Abc", "dfgh", "some text", "qwerty"};
     EditProfileUC usecase(&database);
@@ -78,8 +78,7 @@ TEST(GetUserProfileUCTest, GoodCase) {
     std::string test_username = "abcdefg";
     GetUserProfileUC usecase(&database);
 
-    Message<UserData> test_message;
-    test_message.type = ErrorStatus::wrong_data;
+    Message<UserData> test_message = {ErrorStatus::wrong_data, UserData()};
 
     EXPECT_EQ(test_message.type, usecase.getUserData(test_username).type);
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "router.hpp"
-#include "utils.hpp"
-#include "server_usecases.hpp"
+#include "../router/router.hpp"
+#include "../utils.hpp"
+#include "../server_uc/server_usecases.hpp"
 
 
 class IHandler {

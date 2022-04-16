@@ -10,24 +10,6 @@ enum class ErrorStatus {
     wrong_data
 };
 
-// enum class RequestType {
-//     unnown,
-//     login,
-//     register_user,
-//     edit_profile,
-//     publish_post,
-//     logout,
-//     get_main_page,
-//     subscribe,
-//     check_diversity,
-//     del_user,
-//     del_post
-// };
-
-// enum class ErrorType {
-    
-// };
-
 
 struct LoginData {
     std::string username;
@@ -55,5 +37,5 @@ struct Message {
     ErrorStatus type;
     MessageDataStruct data;
 
-    Messege(ResponseType type, MessageDataStruct data): type(type), data(data) {}
+    Message(ErrorStatus type, MessageDataStruct data): type(type), data(data) {}
 };
