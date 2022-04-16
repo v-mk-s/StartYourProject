@@ -1,19 +1,17 @@
 #pragma once
 
 
-class RequestInterface;
+class RequestInterface {
+ public:
+    virtual std::string get_path() = 0;
+    virtual std::string get_pass() = 0;
+    virtual std::string get_header() = 0;
+    virtual std::string get_files() = 0;
+    virtual std::string get_content() = 0;
+};
 
-class ResponseInterface;
+class ResponseInterface{
+ public:
+    virtual std::string get_header() = 0;
+};
 
-
-// class Router {
-//  public:
-//     Router();
-
-//     ErrorStatus addRoute(std::string url, IHandler handler);
-//     Request onNewRequest(RequestInterface url);
-//     ErrorStatus getParams(std::string url, Response response);
-
-//  private:
-//     std::list<IHandler> _handlers;
-// };

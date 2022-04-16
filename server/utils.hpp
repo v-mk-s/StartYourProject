@@ -4,8 +4,10 @@
 
 
 enum class ErrorStatus {
+    unnown,
+    no_error,
     error,
-    noError
+    wrong_data
 };
 
 // enum class RequestType {
@@ -22,11 +24,8 @@ enum class ErrorStatus {
 //     del_post
 // };
 
-// enum class ResponseType {
-//     unnown,
-//     error,
-//     work,
-//     done
+// enum class ErrorType {
+    
 // };
 
 
@@ -51,20 +50,10 @@ struct UserData {
 };
 
 
-// struct ResponseData;
+template <typename MessageDataStruct>
+struct Message {
+    ErrorStatus type;
+    MessageDataStruct data;
 
-
-// template <typename MessageTypeEnum, typename MessageDataStruct>
-// struct Message {
-//     using Type = MessageTypeEnum;
-//     using Data = MassageDataStruct;
-
-//     Type type;
-//     Data data;
-
-//     Messege(Type type, Data data): type(type), data(data) {}
-// };
-
-
-// using Request = Message<RequestType>;
-// using Response = Message<ResponseType>;
+    Messege(ResponseType type, MessageDataStruct data): type(type), data(data) {}
+};

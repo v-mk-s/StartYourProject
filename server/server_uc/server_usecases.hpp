@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "database.h"
 
 
 class IServerUseCases {
@@ -15,23 +16,57 @@ class IServerUseCases {
 
 class LoginUC {
  public:
+    LoginUC() = default;
+    LoginUC(DataBase* database): database(database) {}
+
     ErrorStatus checkUserInDB(LoginData user);
+
+ public:
+    DataBase* database = nullptr;
 };
 
 
 class RegisterUC {
  public:
+    RegisterUC() = default;
+    RegisterUC(DataBase* database): database(database) {}
     ErrorStatus addUserToDB(RegisterData user_data);
+
+ public:
+    DataBase* database = nullptr;
 };
 
 
 class EditProfileUC {
  public:
+    EditProfileUC() = default;
+    EditProfileUC(DataBase* database): database(database) {}
+
     ErrorStatus editUserData(UserData user_data);
+
+ public:
+    DataBase* database = nullptr;
 };
 
 
 class DelUserProfileUC {
  public:
+    DelUserProfileUC() = default;
+    DelUserProfileUC(DataBase* database): database(database) {}
     ErrorStatus delUserData(std::string username);
+
+ public:
+    DataBase* database = nullptr;
+};
+
+
+class GetUserProfileUC {
+ public:
+    GetUserProfileUC() = default;
+    GetUserProfileUC(DataBase* database): database(database) {}
+
+    Message<UserData> getUserData(std::string username);
+
+ public:
+    DataBase* database = nullptr;
 };
