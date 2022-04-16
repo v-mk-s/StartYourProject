@@ -1,4 +1,4 @@
-#include "../../server/handlers/handlers.hpp"
+#include "handlers.hpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 

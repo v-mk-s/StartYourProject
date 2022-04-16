@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../utils.hpp"
-#include "../database/database.hpp"
+#include "utils.hpp"
+#include "database.hpp"
 
 
 class IServerUseCases {
