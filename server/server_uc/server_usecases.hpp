@@ -21,7 +21,7 @@ class LoginUC {
 
     ErrorStatus checkUserInDB(LoginData user);
 
- public:
+ private:
     DataBase* database = nullptr;
 };
 
@@ -32,7 +32,7 @@ class RegisterUC {
     RegisterUC(DataBase* database): database(database) {}
     ErrorStatus addUserToDB(RegisterData user_data);
 
- public:
+ private:
     DataBase* database = nullptr;
 };
 
@@ -44,7 +44,7 @@ class EditProfileUC {
 
     ErrorStatus editUserData(UserData user_data);
 
- public:
+ private:
     DataBase* database = nullptr;
 };
 
@@ -55,7 +55,7 @@ class DelUserProfileUC {
     DelUserProfileUC(DataBase* database): database(database) {}
     ErrorStatus delUserData(std::string username);
 
- public:
+ private:
     DataBase* database = nullptr;
 };
 
@@ -67,6 +67,6 @@ class GetUserProfileUC {
 
     Message<UserData> getUserData(std::string username);
 
- public:
+ private:
     DataBase* database = nullptr;
 };
