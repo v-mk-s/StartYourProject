@@ -9,8 +9,3 @@ add_subdirectory(tests)
 
 message("SERVER_SYP_INCLUDE_DIRS = ${SERVER_SYP_INCLUDE_DIRS}")
 message("SERVER_SYP_LIBRARIES = ${SERVER_SYP_LIBRARIES}")
-
-add_executable(${PROJECT_NAME} executable/main.cpp)
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${SERVER_SYP_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${SERVER_SYP_LIBRARIES})
