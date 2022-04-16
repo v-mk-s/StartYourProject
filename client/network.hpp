@@ -1,9 +1,12 @@
 #pragma once
 #include "clientui.hpp"
 #include "usecases.hpp"
+#include <functional>
 // #include <QtNetwork/QNetworkAccessManager>
 // #include <QtNetwork/QNetworkReply>
 
+class IRequest {};
+class IResponse {};
 
 class INet {
 public:

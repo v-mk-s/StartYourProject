@@ -1,6 +1,6 @@
 #pragma once
 #include "clientui.hpp"
-#include "general.hpp"
+// #include "general.hpp"
 
 class LoginUC : IClientUseCase {
 public:
@@ -14,10 +14,10 @@ private:
 
 class RegisterUC : IClientUseCase {
 public:
-    LoginUC(LoginData _reg_data = {0}) : reg_data(_reg_data) {}
+    RegisterUC(RegisterData _reg_data = {0}) : reg_data(_reg_data) {}
     ErrorStatus onRegisterButton(RegisterData& reg_data);
 
 private:
-    LoginData reg_data;
+    RegisterData reg_data;
     // IClientUseCase* usecase;
 };

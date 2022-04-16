@@ -1,19 +1,8 @@
 #include <gtest/gtest.h>
-#include "gmock/gmock.h"
+// #include "gmock/gmock.h"
 #include "../../client/validation.hpp"
 #include "../../client/utils.hpp"
 #include "../../client/usecases.hpp"
-
-
-// class MockLoginUC : public LoginUC {
-// public:
-//     MOCK_METHOD1(onLoginButton, ErrorStatus(LoginData user_data));
-// };
-
-// class MockRegisterUC : public RegisterUC {
-// public:
-//     MOCK_METHOD1(onRegisterButton, ErrorStatus(RegisterData user_data));
-// };
 
 
 TEST(VALIDAION, CORRECT_USERNAME) {
@@ -70,16 +59,16 @@ TEST(USECASES, INPUT_LOGIN_FIRST) {
     LoginData cor_login = {0};
     cor_login.username = "alex";
     cor_login.password = "asd2das4ad2";
-    LoginUC usecase = {0};
-    EXPECT_EQ(usecase.onLoginButton(cor_login), noError);
+    LoginUC usecase;
+    EXPECT_EQ(usecase.onLoginButton(cor_login), 1);
 }
 
 TEST(USECASES, INPUT_LOGIN_SECOND) {
     LoginData incor_login = {0};
     incor_login.username = "alexasd"; 
     incor_login.password = "asd2";
-    LoginUC usecase = {0};
-    EXPECT_EQ(usecase.onLoginButton(incor_login), noError);
+    LoginUC usecase;
+    EXPECT_EQ(usecase.onLoginButton(incor_login), 1);
 }
 
 TEST(USECASES, INPUT_REGISTER_FIRST) {
@@ -87,8 +76,8 @@ TEST(USECASES, INPUT_REGISTER_FIRST) {
     cor_reg.email = "sklaa00@mail.ru";
     cor_reg.username = "alex";
     cor_reg.password = "asd2das4ad2";
-    RegisterUC reg = {0};
-    EXPECT_EQ(usecase.onLoginButton(cor_reg), noError);
+    RegisterUC usecase;
+    EXPECT_EQ(usecase.onRegisterButton(cor_reg), 1);
 }
 
 TEST(USECASES, INPUT_REGISTER_SECOND) {
@@ -96,6 +85,6 @@ TEST(USECASES, INPUT_REGISTER_SECOND) {
     incor_reg.email = "sklaa00mail.ru";
     incor_reg.username = "alex!";
     incor_reg.password = "aad2";
-    RegisterUC reg = {0};
-    EXPECT_EQ(usecase.onLoginButton(incor_reg), noError);
+    RegisterUC usecase;
+    EXPECT_EQ(usecase.onRegisterButton(incor_reg), 1);
 }
