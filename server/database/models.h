@@ -1,69 +1,54 @@
-#include <QObject>
-#include <QSqlQueryModel>
- 
-class ModelPostData : public QSqlQueryModel
+#include <vector>
+#include "../utils.h"
+
+class ModelPostData : 
 {
-    Q_OBJECT
-public:
-    // Перечисляем все роли, которые будут использоваться в TableView
-    enum Roles {
-        author_id_role,
-        project_name_role,
-        postdescription_role,
-        tags_role,
-        team_name_role,
-        date_role = Qt::UserRole + 1
-    };
+    public:
+    
     // объявляем конструктор класса
-    explicit ModelPostData(QObject *parent = 0);
+    explicit ModelPostData(MainDataBase *db );
  
-    // Переопределяем метод, который будет возвращать данные
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    // Метод, который будет возвращать данные
+    PostData* ViewData(PostData *data);
  
 protected:
-    /* хешированная таблица ролей для колонок.
-     * Метод используется в дебрях базового класса QAbstractItemModel,
-     * от которого наследован класс QSqlQueryModel
-     * */
-    QHash<int, QByteArray> roleNames() const;
+
+     std::vector <PostData> data_string;
     
 };
  
-class ModelUserData : public QSqlQueryModel
+class ModelUserData : 
 {
-    Q_OBJECT
-public:
-    enum Roles {
-        user_id_role,
-        user_name_role,
-        email_role,
-        name_role,
-        sur_name_role,
-        user_discription_role,
-        password_role
-    };
-    explicit ModelUserData(QObject *parent = 0);
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    public:
+    
+    // объявляем конструктор класса
+    explicit ModelUserData(MainDataBase *db );
+ 
+    // Метод, который будет возвращать данные
+    UserData* ViewData(UserData *data);
+ 
 protected:
-    QHash<int, QByteArray> roleNames() const;
+
+     std::vector <UserData> data_string;
+    
 };
 
 
 
-class ModelReqToPostData : public QSqlQueryModel
+class ModelRequestToPostData : 
 {
-    Q_OBJECT
-public:
-    enum Roles {
-        user_id_role,
-        post_id_role,
-        description_role
-    };
-    explicit ModelReqToPostData(QObject *parent = 0);
-
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    public:
+    
+    // объявляем конструктор класса
+    explicit ModelRequestToPostData(MainDataBase *db );
+ 
+    // Метод, который будет возвращать данные
+    RequestToPostData* ViewData(RequestToPostData *data);
+ 
 protected:
-    QHash<int, QByteArray> roleNames() const;
+
+     std::vector <RequestToPostData> data_string;
+    
 };
 
 #endif 

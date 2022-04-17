@@ -1,22 +1,19 @@
-#pragma once
+#include "../utils.h"
 
-#include "utils.h"
-#include <QObject>
-#include <QSqlQueryModel>
 
-class DataBase : public QObject
+
+class MainDataBase
 {
-    Q_OBJECT
     public:
-        explicit DataBase(QObject *parent = 0);
-        ~DataBase();
+        explicit MainDataBase();
+        ~MainDataBase();
         void connectToDataBase();
-        bool InsertIntoPostTable(const QvariantList &data)
-        bool InsertIntoPersonTable(const QvariantList &data)
-        bool InsertIntoRequestToPostTable(const QvariantList &data)
-        bool DeleteFromPostTable(const QvariantList &data)
-        bool DeleteFromPersonTable(const QvariantList &data)
-        bool DeleteFromRequestToPostTable(const QvariantList &data)
+        bool InsertIntoPostTable( PostData &data);
+        bool InsertIntoPersonTable( UserData &data);
+        bool InsertIntoRequestToPostTable(RequestToPostData &data);
+        bool DeleteFromPostTable(PostData &data);
+        bool DeleteFromPersonTable(UserData &data);
+        bool DeleteFromRequestToPostTable(RequestToPostData &data);
     private:
         bool openDataBase();
         bool restoreDataBase();
@@ -24,4 +21,4 @@ class DataBase : public QObject
         bool createPostTable();
         bool createPersonTable();
         bool createRequestToPostTable();
-}
+};

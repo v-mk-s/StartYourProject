@@ -1,7 +1,7 @@
-
 #include "database.h"
 
 
-void DataBase::connectToDataBase() {
+
+void MainDataBase::connectToDataBase() {
     
 }
