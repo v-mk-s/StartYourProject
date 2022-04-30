@@ -6,15 +6,17 @@
 
 class IServerUseCases {
  public:
-    virtual ErrorStatus checkUserInDB(LoginData user) = 0;
-    virtual ErrorStatus addUserToDB(RegisterData user_data) = 0;
-    virtual ErrorStatus editUserData(UserData user_data) = 0;
-    virtual ErrorStatus delUserData(std::string username) = 0;
-    virtual ErrorStatus getUserData(std::string username) = 0;
+    // virtual ErrorStatus checkUserInDB(LoginData) = 0;
+    // virtual ErrorStatus addUserToDB(RegisterData) = 0;
+    // virtual ErrorStatus editUserData(UserData) = 0;
+    // virtual ErrorStatus delUserData(std::string) = 0;
+    // virtual Message<UserData> getUserData(std::string) = 0;
+
+    virtual ~IServerUseCases() = 0;
 };
 
 
-class LoginUC {
+class LoginUC: public IServerUseCases {
  public:
     LoginUC() = default;
     LoginUC(DataBase* database): database(database) {}
@@ -26,10 +28,11 @@ class LoginUC {
 };
 
 
-class RegisterUC {
+class RegisterUC: public IServerUseCases {
  public:
     RegisterUC() = default;
     RegisterUC(DataBase* database): database(database) {}
+
     ErrorStatus addUserToDB(RegisterData user_data);
 
  private:
@@ -37,7 +40,7 @@ class RegisterUC {
 };
 
 
-class EditProfileUC {
+class EditProfileUC: public IServerUseCases {
  public:
     EditProfileUC() = default;
     EditProfileUC(DataBase* database): database(database) {}
@@ -49,10 +52,11 @@ class EditProfileUC {
 };
 
 
-class DelUserProfileUC {
+class DelUserProfileUC: public IServerUseCases {
  public:
     DelUserProfileUC() = default;
     DelUserProfileUC(DataBase* database): database(database) {}
+
     ErrorStatus delUserData(std::string username);
 
  private:
@@ -60,7 +64,7 @@ class DelUserProfileUC {
 };
 
 
-class GetUserProfileUC {
+class GetUserProfileUC: public IServerUseCases {
  public:
     GetUserProfileUC() = default;
     GetUserProfileUC(DataBase* database): database(database) {}

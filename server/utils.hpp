@@ -34,8 +34,9 @@ struct UserData {
 
 template <typename MessageDataStruct>
 struct Message {
-    ErrorStatus type;
-    MessageDataStruct data;
+    ErrorStatus type = ErrorStatus::unnown;
+    MessageDataStruct data = MessageDataStruct();
 
+    Message() = default;
     Message(ErrorStatus type, MessageDataStruct data): type(type), data(data) {}
 };

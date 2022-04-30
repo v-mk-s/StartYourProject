@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(StartYourProject)
 
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra -Werror")
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra")
 
 add_subdirectory(server)
 # add_subdirectory(client)

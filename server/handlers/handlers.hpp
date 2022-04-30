@@ -7,7 +7,7 @@
 
 class IHandler {
  public:
-    virtual void Handle(RequestInterface request, ResponseInterface response) = 0;
+    virtual void Handle(RequestInterface* request, ResponseInterface* response) = 0;
 };
 
 
@@ -16,7 +16,7 @@ class LoginHandler: public IHandler {
     LoginHandler() = default;
     LoginHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface request, ResponseInterface response);
+    void Handle(RequestInterface* request, ResponseInterface* response);
 
  private:
     IServerUseCases* usecase = nullptr;
@@ -28,7 +28,7 @@ class RegisterHandler: public IHandler {
     RegisterHandler() = default;
     RegisterHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface request, ResponseInterface response);
+    void Handle(RequestInterface* request, ResponseInterface* response);
 
  private:
     IServerUseCases* usecase = nullptr;
@@ -40,7 +40,7 @@ class EditProfileHandler: public IHandler {
     EditProfileHandler() = default;
     EditProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface request, ResponseInterface response);
+    void Handle(RequestInterface* request, ResponseInterface* response);
 
  private:
     IServerUseCases* usecase = nullptr;
@@ -52,7 +52,7 @@ class DelUserProfileHandler: public IHandler {
     DelUserProfileHandler() = default;
     DelUserProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface request, ResponseInterface response);
+    void Handle(RequestInterface* request, ResponseInterface* response);
 
  private:
     IServerUseCases* usecase = nullptr;
@@ -64,7 +64,7 @@ class GetUserProfileHandler: public IHandler {
     GetUserProfileHandler() = default;
     GetUserProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface request, ResponseInterface response);
+    void Handle(RequestInterface* request, ResponseInterface* response);
 
  private:
     IServerUseCases* usecase = nullptr;
