@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.14)
 project(test_client_syp)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -14,5 +14,5 @@ find_package(Threads REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC "../../client")
+target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} GTest::GTest gtest_main Threads::Threads)
