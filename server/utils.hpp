@@ -32,6 +32,22 @@ struct UserData {
 };
 
 
+struct PostData {
+    int user_id;
+    std::string projectname;
+    std::string postdescription;
+    std::string tags;
+    std::string teamname;
+};
+
+struct RequestToPostData {
+    int user_id;
+    int post_id;
+    std::string motivation_words;
+};
+
+
+
 template <typename MessageDataStruct>
 struct Message {
     ErrorStatus type = ErrorStatus::unnown;

@@ -12,3 +12,7 @@ bool DataBase::DeleteFromTable() {
 bool DataBase::FindIntoTable() {
     return true;
 }
+
+void MainDataBase::connectToDataBase() {
+    
+}
