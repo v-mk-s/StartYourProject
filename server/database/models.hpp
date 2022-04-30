@@ -1,7 +1,9 @@
-#include <vector>
-#include "utils.hpp"
+#pragma once
 
-class ModelPostData : 
+#include <vector>
+#include "database.hpp"
+
+class ModelPostData 
 {
     public:
     
@@ -13,11 +15,11 @@ class ModelPostData :
  
 protected:
 
-     std::vector <PostData> data_string;
+    std::vector <PostData> data_string;
     
 };
  
-class ModelUserData : 
+class ModelUserData
 {
     public:
     
@@ -29,13 +31,13 @@ class ModelUserData :
  
 protected:
 
-     std::vector <UserData> data_string;
+    std::vector <UserData> data_string;
     
 };
 
 
 
-class ModelRequestToPostData : 
+class ModelRequestToPostData
 {
     public:
     
@@ -47,8 +49,6 @@ class ModelRequestToPostData :
  
 protected:
 
-     std::vector <RequestToPostData> data_string;
+    std::vector <RequestToPostData> data_string;
     
 };
-
-#endif 

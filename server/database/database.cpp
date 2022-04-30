@@ -1,15 +1,15 @@
 #include "database.hpp"
 
 
-bool DataBase::InsertIntoTable() {
+bool MainDataBase::InsertIntoTable() {
     return true;
 }
 
-bool DataBase::DeleteFromTable() {
+bool MainDataBase::DeleteFromTable() {
     return true;
 }
 
-bool DataBase::FindIntoTable() {
+bool MainDataBase::FindIntoTable() {
     return true;
 }
 
