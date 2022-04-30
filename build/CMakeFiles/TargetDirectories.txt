@@ -1,0 +1,17 @@
+/home/ilya/documents/cCppProjects/StartYourProject/build/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/CMakeFiles/StartYourProject.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/server/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/server/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/server/CMakeFiles/server_syp.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/client/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/client/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/client/CMakeFiles/client_syp.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_server/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_server/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_server/CMakeFiles/test_server_syp.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_client/CMakeFiles/rebuild_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_client/CMakeFiles/edit_cache.dir
+/home/ilya/documents/cCppProjects/StartYourProject/build/tests/test_client/CMakeFiles/test_client_syp.dir

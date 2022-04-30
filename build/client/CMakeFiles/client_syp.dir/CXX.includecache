@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ilya/documents/cCppProjects/StartYourProject/client/basic/validation.cpp
+validation.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/client/basic/validation.hpp
+
+/home/ilya/documents/cCppProjects/StartYourProject/client/basic/validation.hpp
+string
+-
+

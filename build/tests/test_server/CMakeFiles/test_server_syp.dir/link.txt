@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Werror -fprofile-arcs -ftest-coverage -O0   -coverage -lgcov CMakeFiles/test_server_syp.dir/test_db.cpp.o CMakeFiles/test_server_syp.dir/test_handlers.cpp.o CMakeFiles/test_server_syp.dir/test_usecases.cpp.o  -o test_server_syp  /usr/local/lib/libgtest.a -lgtest_main -lpthread 

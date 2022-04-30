@@ -1,0 +1,2 @@
+/usr/bin/ar qc libserver_syp.a  CMakeFiles/server_syp.dir/database/database.cpp.o CMakeFiles/server_syp.dir/server_uc/server_usecases.cpp.o
+/usr/bin/ranlib libserver_syp.a

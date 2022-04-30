@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../server/database/database.hpp
+utils.hpp
+../server/database/utils.hpp
+
+../server/utils.hpp
+string
+-
+
+/home/ilya/documents/cCppProjects/StartYourProject/server/database/database.cpp
+database.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/server/database/database.hpp
+
+/home/ilya/documents/cCppProjects/StartYourProject/server/database/database.hpp
+utils.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/server/database/utils.hpp
+
+/home/ilya/documents/cCppProjects/StartYourProject/server/server_uc/server_usecases.cpp
+server_usecases.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/server/server_uc/server_usecases.hpp
+
+/home/ilya/documents/cCppProjects/StartYourProject/server/server_uc/server_usecases.hpp
+utils.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/server/server_uc/utils.hpp
+database.hpp
+/home/ilya/documents/cCppProjects/StartYourProject/server/server_uc/database.hpp
+
