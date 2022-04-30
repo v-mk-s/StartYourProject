@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utils.h"
-#include "server_usecases.h"
+#include "utils.hpp"
+#include "server_usecases.hpp"
 
 class IHandler {
  public:
