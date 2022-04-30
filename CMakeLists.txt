@@ -13,7 +13,7 @@ message("SERVER_SYP_LIBRARIES = ${SERVER_SYP_LIBRARIES}")
 message("CLIENT_SYP_INCLUDE_DIRS = ${CLIENT_SYP_INCLUDE_DIRS}")
 message("CLIENT_SYP_LIBRARIES = ${CLIENT_SYP_LIBRARIES}")
 
-add_executable(${PROJECT_NAME} main.cpp)
+# add_executable(${PROJECT_NAME} main.cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${CLIENT_SYP_LIBRARIES})
+# target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_INCLUDE_DIRS})
+# target_link_libraries(${PROJECT_NAME} PRIVATE ${CLIENT_SYP_LIBRARIES})

@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+
+
 struct LoginData {
     std::string username;
     std::string password;
@@ -28,7 +30,7 @@ struct UserEditData {
 };
 
 struct PhotoData {
-    std::array<int> photo;
+    std::vector<int> photo;
 };
 
 struct UserData {

@@ -1,13 +1,13 @@
 #include "validation.hpp"
 
-int isValidEmail(std::string) {
-    return -1;
+bool isValidEmail(std::string) {
+    return false;
 }
 
-int isValidUsername(std::string) {
-    return -1;
+bool isValidUsername(std::string) {
+    return false;
 }
 
-int isValidPassword(std::string){
-    return -1;
+bool isValidPassword(std::string){
+    return false;
 }
