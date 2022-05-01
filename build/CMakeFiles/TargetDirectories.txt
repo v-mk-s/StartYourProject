@@ -1,0 +1,11 @@
+/home/sklaa00/main_course/first/StartYourProject/build/CMakeFiles/rebuild_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/CMakeFiles/edit_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/CMakeFiles/StartYourProject.dir
+/home/sklaa00/main_course/first/StartYourProject/build/client/CMakeFiles/rebuild_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/client/CMakeFiles/edit_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/client/CMakeFiles/client_syp.dir
+/home/sklaa00/main_course/first/StartYourProject/build/tests/CMakeFiles/rebuild_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/tests/CMakeFiles/edit_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/tests/test_client/CMakeFiles/rebuild_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/tests/test_client/CMakeFiles/edit_cache.dir
+/home/sklaa00/main_course/first/StartYourProject/build/tests/test_client/CMakeFiles/test_client_syp.dir
