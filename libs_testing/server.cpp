@@ -28,12 +28,17 @@
 #include <thread>
 #include <vector>
 
+#include <atomic>
+#include <chrono>
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 using beast::iequals;
+
+std::atomic<int> output_num(1);
 
 // Return a reasonable mime type based on the extension of a file.
 // beast::string_view
@@ -111,6 +116,8 @@ handle_request(
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send)
 {
+    std::cout << output_num++ << " hadle_request" << std::endl;
+
     // Returns a bad request response
     auto const bad_request =
     [&req](beast::string_view why)
@@ -212,6 +219,8 @@ handle_request(
         return send(bad_request("Unknown target\nPlease use:\n/login\n/register\n/post\n/post/request\n"));
     }
 
+    // std::this_thread::sleep_for(std::chrono::seconds(10));
+
     // Respond to GET request
     http::response<http::string_body> res{http::status::ok, req.version()};
     res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
@@ -228,6 +237,8 @@ handle_request(
 void
 fail(beast::error_code ec, char const* what)
 {
+    std::cout << output_num++ << " fail" << std::endl;
+
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
@@ -250,6 +261,8 @@ class session : public std::enable_shared_from_this<session>
         void
         operator()(http::message<isRequest, Body, Fields>&& msg) const
         {
+            std::cout << output_num++ << " send_lambda" << std::endl;
+
             // The lifetime of the message has to extend
             // for the duration of the async operation so
             // we use a shared_ptr to manage it.
@@ -293,6 +306,8 @@ public:
     void
     run()
     {
+        std::cout << output_num++ << " session_run" << std::endl;
+
         // We need to be executing within a strand to perform async operations
         // on the I/O objects in this session. Although not strictly necessary
         // for single-threaded contexts, this example code is written to be
@@ -306,6 +321,8 @@ public:
     void
     do_read()
     {
+        std::cout << output_num++ << " session do_read" << std::endl;
+
         // Make the request empty before reading,
         // otherwise the operation behavior is undefined.
         req_ = {};
@@ -325,6 +342,8 @@ public:
         beast::error_code ec,
         std::size_t bytes_transferred)
     {
+        std::cout << output_num++ << " session on_read" << std::endl;
+
         boost::ignore_unused(bytes_transferred);
 
         // This means they closed the connection
@@ -344,6 +363,8 @@ public:
         beast::error_code ec,
         std::size_t bytes_transferred)
     {
+        std::cout << output_num++ << " session on_write" << std::endl;
+
         boost::ignore_unused(bytes_transferred);
 
         if(ec)
@@ -366,6 +387,9 @@ public:
     void
     do_close()
     {
+        std::cout << output_num++ << " session do_close\n" << std::endl;
+        output_num = 1;
+
         // Send a TCP shutdown
         beast::error_code ec;
         stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
@@ -439,6 +463,8 @@ private:
     void
     do_accept()
     {
+        std::cout << output_num++ << " listener do_accept" << std::endl;
+
         // The new connection gets its own strand
         acceptor_.async_accept(
             net::make_strand(ioc_),
@@ -450,6 +476,8 @@ private:
     void
     on_accept(beast::error_code ec, tcp::socket socket)
     {
+        std::cout << output_num++ << " listener on_accept" << std::endl;
+
         if(ec)
         {
             fail(ec, "accept");
