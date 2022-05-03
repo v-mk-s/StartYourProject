@@ -31,6 +31,9 @@
 #include <atomic>
 #include <chrono>
 
+#include "handlers.hpp"
+#include "router.hpp"
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
@@ -38,70 +41,7 @@ using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 using beast::iequals;
 
-std::atomic<int> output_num(1);
 
-// Return a reasonable mime type based on the extension of a file.
-// beast::string_view
-// mime_type(beast::string_view path)
-// {
-//     using beast::iequals;
-//     auto const ext = [&path]
-//     {
-//         auto const pos = path.rfind(".");
-//         if(pos == beast::string_view::npos)
-//             return beast::string_view{};
-//         return path.substr(pos);
-//     }();
-//     if(iequals(ext, ".htm"))  return "text/html";
-//     if(iequals(ext, ".html")) return "text/html";
-//     if(iequals(ext, ".php"))  return "text/html";
-//     if(iequals(ext, ".css"))  return "text/css";
-//     if(iequals(ext, ".txt"))  return "text/plain";
-//     if(iequals(ext, ".js"))   return "application/javascript";
-//     if(iequals(ext, ".json")) return "application/json";
-//     if(iequals(ext, ".xml"))  return "application/xml";
-//     if(iequals(ext, ".swf"))  return "application/x-shockwave-flash";
-//     if(iequals(ext, ".flv"))  return "video/x-flv";
-//     if(iequals(ext, ".png"))  return "image/png";
-//     if(iequals(ext, ".jpe"))  return "image/jpeg";
-//     if(iequals(ext, ".jpeg")) return "image/jpeg";
-//     if(iequals(ext, ".jpg"))  return "image/jpeg";
-//     if(iequals(ext, ".gif"))  return "image/gif";
-//     if(iequals(ext, ".bmp"))  return "image/bmp";
-//     if(iequals(ext, ".ico"))  return "image/vnd.microsoft.icon";
-//     if(iequals(ext, ".tiff")) return "image/tiff";
-//     if(iequals(ext, ".tif"))  return "image/tiff";
-//     if(iequals(ext, ".svg"))  return "image/svg+xml";
-//     if(iequals(ext, ".svgz")) return "image/svg+xml";
-//     return "application/text";
-// }
-
-// Append an HTTP rel-path to a local filesystem path.
-// The returned path is normalized for the platform.
-// std::string
-// path_cat(
-//     beast::string_view base,
-//     beast::string_view path)
-// {
-//     if(base.empty())
-//         return std::string(path);
-//     std::string result(base);
-// #ifdef BOOST_MSVC
-//     char constexpr path_separator = '\\';
-//     if(result.back() == path_separator)
-//         result.resize(result.size() - 1);
-//     result.append(path.data(), path.size());
-//     for(auto& c : result)
-//         if(c == '/')
-//             c = path_separator;
-// #else
-//     char constexpr path_separator = '/';
-//     if(result.back() == path_separator)
-//         result.resize(result.size() - 1);
-//     result.append(path.data(), path.size());
-// #endif
-//     return result;
-// }
 
 // This function produces an HTTP response for the given
 // request. The type of the response object depends on the
@@ -116,8 +56,6 @@ handle_request(
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send)
 {
-    std::cout << output_num++ << " hadle_request" << std::endl;
-
     // Returns a bad request response
     auto const bad_request =
     [&req](beast::string_view why)
@@ -168,67 +106,20 @@ handle_request(
         req.target().find("..") != beast::string_view::npos)
         return send(bad_request("Illegal request-target"));
 
-    // Build the path to the requested file
-    // std::string path = path_cat(doc_root, req.target());
-    // if(req.target().back() == '/')
-    //     path.append("index.html");
-
-    // Attempt to open the file
-    // beast::error_code ec;
-    // http::file_body::value_type body;
-    // body.open(path.c_str(), beast::file_mode::scan, ec);
-
-    // Handle the case where the file doesn't exist
-    // if(ec == beast::errc::no_such_file_or_directory)
-    //     return send(not_found(req.target()));
-
-    // // Handle an unknown error
-    // if(ec)
-    //     return send(server_error(ec.message()));
-
-    // Cache the size since we need it after the move
-    // auto const size = body.size();
-
-    // Respond to HEAD request
-    // if(req.method() == http::verb::head)
-    // {
-    //     http::response<http::empty_body> res{http::status::ok, req.version()};
-    //     res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-    //     res.set(http::field::content_type, mime_type(path));
-    //     res.content_length(size);
-    //     res.keep_alive(req.keep_alive());
-    //     return send(std::move(res));
-    // }
-
     beast::string_view target = req.target();
-    std::string response_text;
+    Request<http::string_body> request;
+    Response<http::string_body> response;
 
     if (iequals(target, "/login")) {
-        response_text = "This is login feature";
-    }
-    else if (iequals(target, "/register")) {
-        response_text = "This is register feature";
-    }
-    else if (iequals(target, "/post")) {
-        response_text = "This is publish post feature";
-    }
-    else if (iequals(target, "/post/request")) {
-        response_text = "This is request to join in team feature";
+        LoginHandler handler;
+
+        handler.handle(&request, &response);
     }
     else {
-        return send(bad_request("Unknown target\nPlease use:\n/login\n/register\n/post\n/post/request\n"));
+        return send(bad_request("Unknown target\n"));
     }
 
-    // std::this_thread::sleep_for(std::chrono::seconds(10));
-
-    // Respond to GET request
-    http::response<http::string_body> res{http::status::ok, req.version()};
-    res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(http::field::content_type, "text/plain");
-    res.content_length(response_text.size());
-    res.body() = response_text;
-    res.keep_alive(req.keep_alive());
-    return send(std::move(res));
+    return send(std::move(response.get_reference()));
 }
 
 //------------------------------------------------------------------------------
@@ -237,8 +128,6 @@ handle_request(
 void
 fail(beast::error_code ec, char const* what)
 {
-    std::cout << output_num++ << " fail" << std::endl;
-
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
@@ -261,8 +150,6 @@ class session : public std::enable_shared_from_this<session>
         void
         operator()(http::message<isRequest, Body, Fields>&& msg) const
         {
-            std::cout << output_num++ << " send_lambda" << std::endl;
-
             // The lifetime of the message has to extend
             // for the duration of the async operation so
             // we use a shared_ptr to manage it.
@@ -287,8 +174,13 @@ class session : public std::enable_shared_from_this<session>
     beast::tcp_stream stream_;
     beast::flat_buffer buffer_;
     std::shared_ptr<std::string const> doc_root_;
+    
     http::request<http::string_body> req_;
     std::shared_ptr<void> res_;
+
+    // Request<http::string_body> req_;
+    // Response<http::string_body> res_;
+
     send_lambda lambda_;
 
 public:
@@ -306,8 +198,6 @@ public:
     void
     run()
     {
-        std::cout << output_num++ << " session_run" << std::endl;
-
         // We need to be executing within a strand to perform async operations
         // on the I/O objects in this session. Although not strictly necessary
         // for single-threaded contexts, this example code is written to be
@@ -321,8 +211,6 @@ public:
     void
     do_read()
     {
-        std::cout << output_num++ << " session do_read" << std::endl;
-
         // Make the request empty before reading,
         // otherwise the operation behavior is undefined.
         req_ = {};
@@ -342,8 +230,6 @@ public:
         beast::error_code ec,
         std::size_t bytes_transferred)
     {
-        std::cout << output_num++ << " session on_read" << std::endl;
-
         boost::ignore_unused(bytes_transferred);
 
         // This means they closed the connection
@@ -355,6 +241,11 @@ public:
 
         // Send the response
         handle_request(*doc_root_, std::move(req_), lambda_);
+        // LoginHandler handler;
+        // Response res_temp;
+        // handler.handle(&req_, &res_temp);
+
+        // lambda_(std::move(res_temp.get_reference()));
     }
 
     void
@@ -363,8 +254,6 @@ public:
         beast::error_code ec,
         std::size_t bytes_transferred)
     {
-        std::cout << output_num++ << " session on_write" << std::endl;
-
         boost::ignore_unused(bytes_transferred);
 
         if(ec)
@@ -387,9 +276,6 @@ public:
     void
     do_close()
     {
-        std::cout << output_num++ << " session do_close\n" << std::endl;
-        output_num = 1;
-
         // Send a TCP shutdown
         beast::error_code ec;
         stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
@@ -463,8 +349,6 @@ private:
     void
     do_accept()
     {
-        std::cout << output_num++ << " listener do_accept" << std::endl;
-
         // The new connection gets its own strand
         acceptor_.async_accept(
             net::make_strand(ioc_),
@@ -476,8 +360,6 @@ private:
     void
     on_accept(beast::error_code ec, tcp::socket socket)
     {
-        std::cout << output_num++ << " listener on_accept" << std::endl;
-
         if(ec)
         {
             fail(ec, "accept");

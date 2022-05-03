@@ -6,8 +6,4 @@ jobs:
   BUILD:
     runs-on: ubuntu-latest
     steps:
-      - name: update
-        run: sudo apt update && sudo apt install build-essential libgtest-dev cmake gcc valgrind
-      - name: build
-        run: cmake . -Bbuild && cmake --build build --target Tests
   

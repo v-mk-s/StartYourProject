@@ -14,5 +14,5 @@ TEST(LoginHandlerTests, HandleRequest) {
     // EXPECT_CALL(login_uc, checkUserInDB(user)).Times(testing::AtLeast(1));
 
     // LoginHandler handler;
-    // handler.Handle();
+    // handler.handle();
 }
