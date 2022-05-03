@@ -6,8 +6,8 @@
 
 class IClientUseCase {
 public:
-    virtual ErrorStatus onLoginButton(LoginData user_data);
-    virtual ErrorStatus onRegisterButton(RegisterData reg_data);
+    virtual ErrorStatus onLoginButton() = 0;
+    virtual ErrorStatus onRegisterButton() = 0;
 
     virtual ErrorStatus onSearchButton(MainData search_data) = 0;
     virtual ErrorStatus onPublishPostButton(PublishPostData publish_post_data) = 0;
@@ -16,4 +16,6 @@ public:
     virtual ErrorStatus onPhotoButton(PhotoData photo_data) = 0;
     virtual ErrorStatus onProjectButton(ProjectData project_data) = 0;
     virtual ErrorStatus onNotificationButton(NotificationData notify_data) = 0;
+
+    // QWindow* ui;
 };

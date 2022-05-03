@@ -5,25 +5,34 @@
 
 
 
-class LoginUC : IClientUseCase {
+class LoginUC : public IClientUseCase, public IUIRequirements {
 public:
     LoginUC(LoginData _login_data = {0}) : login_data(_login_data) {}
-    ErrorStatus onLoginButton(LoginData& login_data);
+
+    ErrorStatus onLoginButton() override;
 
 private:
     LoginData login_data;
-    // IClientUseCase* usecase;
+
+    // ErrorStatus getUsername(std::string username);
+    // ErrorStatus getPassword(std::string password);
+
 };
 
-class RegisterUC : IClientUseCase {
+class RegisterUC : IClientUseCase, IUIRequirements {
 public:
     RegisterUC(RegisterData _reg_data = {0}) : reg_data(_reg_data) {}
-    ErrorStatus onRegisterButton(RegisterData& reg_data);
+
+    ErrorStatus onRegisterButton() override;
 
 private:
     RegisterData reg_data;
-    // IClientUseCase* usecase;
+
 };
+
+
+
+// divide front members
 
 
 class MainUC : IClientUseCase {

@@ -2,7 +2,9 @@
 
 #include "client_utils.hpp"
 
-
+std::string stop_symbols_email = "!#$%^&*()_-=+',./[]{}:;\"<>?/";
+std::string stop_symbols_username = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
+// std::string stop_symbols_password = "@#$%^&*()_-=+',./[]{}:;\"<>/";
 
 bool isValidEmail(std::string);
 bool isValidUsername(std::string);

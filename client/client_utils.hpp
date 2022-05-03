@@ -18,7 +18,9 @@ struct RegisterData {
 
     RegisterData(std::string _email = "", std::string _username = "", std::string _password = "") : email(_email), username(_username), password(_password) {}
 };
-// using namespace std;
+
+
+// divide front members
 
 struct UserEditData {
     std::string username;
