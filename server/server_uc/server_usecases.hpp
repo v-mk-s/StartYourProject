@@ -19,8 +19,6 @@ class IServerUseCases {
     //  virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
     //  virtual ErrorStatus showAllNotifications(int user_id) = 0;
     //  virtual ErrorStatus addPostToDB(PostData post) = 0;
-
-    virtual ~IServerUseCases() = 0;
 };
 
 
