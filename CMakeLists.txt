@@ -5,6 +5,7 @@ set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra")
 
 add_subdirectory(server)
 add_subdirectory(client)
+
 add_subdirectory(tests)
 
 message("SERVER_SYP_INCLUDE_DIRS = ${SERVER_SYP_INCLUDE_DIRS}")

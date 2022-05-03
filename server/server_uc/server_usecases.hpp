@@ -137,7 +137,7 @@ class AnswerTheRequest{
 public:
    AnswerTheRequest()=default;
    AnswerTheRequest(MainDataBase* database): database(database) {}
-   ErrorStatus getAnswer(bool answer, RequestToPostData request_info );
+   ErrorStatus getAnswer(bool answer, RequestToPostData request_info);
 private:
    MainDataBase* database = nullptr;
 };

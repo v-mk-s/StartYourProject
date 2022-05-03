@@ -9,5 +9,6 @@ jobs:
       - name: update
         run: sudo apt update && sudo apt install build-essential libgtest-dev cmake gcc valgrind
       - name: build
-        run: cmake . -Bbuild && cmake --build build --target Tests
+      - uses: actions/checkout@v2
+        run: make build
   
