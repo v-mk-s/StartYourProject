@@ -22,6 +22,7 @@ ErrorStatus LoginUC::onLoginButton() {
 }
 
 ErrorStatus RegisterUC::onRegisterButton() {
+    // need add interface class IGetData
     std::string email =     ui->email->text();
     std::string username =  ui->username->text();
     std::string password =  ui->password->text();
@@ -43,4 +44,8 @@ ErrorStatus RegisterUC::onRegisterButton() {
 
 const RegisterData& RegisterUC::getData() const {
     return reg_data;
+}
+
+const LoginData& LoginUC::getData() const {
+    return login_data;
 }

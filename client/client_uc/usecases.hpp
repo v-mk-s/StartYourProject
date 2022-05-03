@@ -4,18 +4,20 @@
 #include "general.hpp"
 
 
+class IGetData {
+    
+};
+
 
 class LoginUC : public IClientUseCase, public IUIRequirements {
 public:
     LoginUC(LoginData _login_data = {0}) : login_data(_login_data) {}
 
     ErrorStatus onLoginButton() override;
+    const LoginData& getData() const; 
 
 private:
     LoginData login_data;
-
-    // ErrorStatus getUsername(std::string username);
-    // ErrorStatus getPassword(std::string password);
 
 };
 
@@ -24,6 +26,7 @@ public:
     RegisterUC(RegisterData _reg_data = {0}) : reg_data(_reg_data) {}
 
     ErrorStatus onRegisterButton() override;
+    const RegisterData& getData() const;
 
 private:
     RegisterData reg_data;

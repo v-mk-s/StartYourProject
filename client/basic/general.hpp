@@ -13,8 +13,3 @@ public:
     virtual void showPublishPostDisplay() = 0;
     virtual void showNotificationDisplay() = 0;
 };
-
-class NetworkRequirements {
-public:
-    virtual void makeRequest();
-};
