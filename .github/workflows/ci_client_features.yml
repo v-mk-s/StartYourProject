@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: update
-        run: sudo apt update && sudo apt install build-essential libgtest-dev cmake gcc valgrind
+        run: |
+          sudo apt update -y && 
+          sudo apt install -y build-essential libgtest-dev cmake gcc clang-tidy python3-pip libc6-dbg lcov
       - name: build
       - uses: actions/checkout@v2
         run: make build
