@@ -11,7 +11,7 @@ bool MainDataBase::InsertIntoPostTable(PostData &data) {
 }
 
 
-bool MainDataBase::InsertIntoPersonTable(UserData &data) {
+bool MainDataBase::InsertIntoPersonTable(RegisterData &data) {
     return true;
 }
 
@@ -26,7 +26,7 @@ bool MainDataBase::DeleteFromPostTable(PostData &data) {
 }
 
 
-bool MainDataBase::DeleteFromPersonTable(UserData &data) {
+bool MainDataBase::DeleteFromPersonTable(std::string &data) {
     return true;
 }
 
@@ -41,6 +41,16 @@ bool MainDataBase::DeleteFromTable() {
 }
 
 
-bool MainDataBase::FindIntoPersonTable(std::string username) {
+bool MainDataBase::FindIntoPersonTable(LoginData &data) {
     return true;
+}
+
+
+bool MainDataBase::EditUserInPersonTable(UserData &data) {
+    return true;
+}
+
+UserData MainDataBase::getUserProfile(std::string &username) {
+    UserData data;
+    return data;
 }

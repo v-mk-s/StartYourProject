@@ -4,9 +4,10 @@
 
 
 enum class ErrorStatus {
-    unnown,
-    no_error,
-    error,
+    ok,
+    bad_req,
+    not_found,
+    server_error,
     wrong_data
 };
 
@@ -14,12 +15,20 @@ enum class ErrorStatus {
 struct LoginData {
     std::string username;
     std::string password;
+
+    bool operator==(const LoginData& other) const {
+        return username == other.username && password == other.password;
+    }
 };
 
 struct RegisterData {
     std::string username;
     std::string password;
     std::string email;
+
+    bool operator==(const RegisterData& other) const {
+        return username == other.username && password == other.password && email == other.email;
+    }
 };
 
 struct UserData {
@@ -29,6 +38,12 @@ struct UserData {
     std::string sur_name;
     std::string user_discription;
     std::string password;
+
+    bool operator==(const UserData& other) const {
+        return username == other.username && email == other.email &&
+                name == other.name && sur_name == other.sur_name &&
+                user_discription == other.user_discription && password == other.password;
+    }
 };
 
 
@@ -48,11 +63,12 @@ struct RequestToPostData {
 
 
 
-template <typename MessageDataStruct>
+template <typename MessageData>
 struct Message {
-    ErrorStatus type = ErrorStatus::unnown;
-    MessageDataStruct data = MessageDataStruct();
+    ErrorStatus status = ErrorStatus::server_error;
+    MessageData data = MessageData();
 
     Message() = default;
-    Message(ErrorStatus type, MessageDataStruct data): type(type), data(data) {}
+    Message(ErrorStatus status): status(status) {}
+    Message(ErrorStatus status, MessageData data): status(status), data(data) {}
 };

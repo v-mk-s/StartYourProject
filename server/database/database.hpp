@@ -8,17 +8,21 @@ class MainDataBase
     explicit MainDataBase() = default;
     
     void connectToDataBase();
-    
-    bool InsertIntoPostTable(PostData &data);
-    bool InsertIntoPersonTable(UserData &data);
-    bool InsertIntoRequestToPostTable(RequestToPostData &data);
 
-    bool DeleteFromPostTable(PostData &data);
-    bool DeleteFromPersonTable(UserData &data);
-    bool DeleteFromRequestToPostTable(RequestToPostData &data);
-    bool DeleteFromTable();
+    virtual bool InsertIntoPostTable(PostData &data);
+    virtual bool InsertIntoPersonTable(RegisterData &data);
+    virtual bool InsertIntoRequestToPostTable(RequestToPostData &data);
 
-    bool FindIntoPersonTable(std::string username);
+    virtual bool DeleteFromPostTable(PostData &data);
+    virtual bool DeleteFromPersonTable(std::string &data);
+    virtual bool DeleteFromRequestToPostTable(RequestToPostData &data);
+    virtual bool DeleteFromTable();
+
+    virtual bool EditUserInPersonTable(UserData &data);
+
+    virtual bool FindIntoPersonTable(LoginData &data);
+
+    virtual UserData getUserProfile(std::string &username);
 
  private:
     bool openDataBase();

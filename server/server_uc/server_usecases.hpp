@@ -2,34 +2,47 @@
 
 #include "server_utils.hpp"
 #include "database.hpp"
+#include <regex>
+
+#define WRONG_NAME "Username is incorrect"
+#define WRONG_PASSWORD "Password is incorrect"
+#define WRONG_EMAIL "Email is incorrect"
+#define LOGIN_DATA_DONT_MATCH "Username and password dont match"
+#define SAME_USER "A user with the same name already exists"
 
 
 class IServerUseCases {
  public:
-    // virtual ErrorStatus checkUserInDB(LoginData) = 0;
-    // virtual ErrorStatus addUserToDB(RegisterData) = 0;
+    // virtual ErrorStatus checkUser(LoginData) = 0;
+    // virtual ErrorStatus addUser(RegisterData) = 0;
     // virtual ErrorStatus editUserData(UserData) = 0;
     // virtual ErrorStatus delUserData(std::string) = 0;
     // virtual Message<UserData> getUserData(std::string) = 0;
-    //  virtual ErrorStatus editPostToDB(PostData post) = 0;
-    //  virtual ErrorStatus makePostSearch(PostData post) = 0;
-    //  virtual ErrorStatus makePersonSearch(std::string username) = 0;
-    //  virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
-    //  virtual ErrorStatus delPostData(int post_id) = 0;
-    //  virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
-    //  virtual ErrorStatus showAllNotifications(int user_id) = 0;
-    //  virtual ErrorStatus addPostToDB(PostData post) = 0;
+    // virtual ErrorStatus editPostToDB(PostData post) = 0;
+    // virtual ErrorStatus makePostSearch(PostData post) = 0;
+    // virtual ErrorStatus makePersonSearch(std::string username) = 0;
+    // virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
+    // virtual ErrorStatus delPostData(int post_id) = 0;
+    // virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
+    // virtual ErrorStatus showAllNotifications(int user_id) = 0;
+    // virtual ErrorStatus addPostToDB(PostData post) = 0;
 };
 
 
 /////////////////////// User UC /////////////////////////////////////
+
+bool checkUsername(std::string& name);
+bool checkPassword(std::string& password);
+bool checkEmail(std::string& email);
+
 
 class LoginUC: public IServerUseCases {
  public:
     LoginUC() = default;
     LoginUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus checkUserInDB(LoginData user);
+    Message<std::string> checkUser(LoginData user);
+    std::string generate_token(std::string key);
 
  private:
     MainDataBase* database = nullptr;
@@ -41,7 +54,7 @@ class RegisterUC: public IServerUseCases {
     RegisterUC() = default;
     RegisterUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus addUserToDB(RegisterData user_data);
+    Message<std::string> addUser(RegisterData user_data);
 
  private:
     MainDataBase* database = nullptr;
@@ -53,7 +66,7 @@ class EditProfileUC: public IServerUseCases {
     EditProfileUC() = default;
     EditProfileUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus editUserData(UserData user_data);
+    Message<std::string> editUserData(UserData user_data);
 
  private:
     MainDataBase* database = nullptr;
@@ -65,7 +78,7 @@ class DelUserProfileUC: public IServerUseCases {
     DelUserProfileUC() = default;
     DelUserProfileUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus delUserData(std::string username);
+    Message<std::string> delUserData(std::string username);
 
  private:
     MainDataBase* database = nullptr;
