@@ -2,14 +2,6 @@
 
 #include "network.hpp"
 
-void RegisterNet::onMakeRequest(std::any data) {
-    RegisterData temp = std::any_cast<RegisterData>(data);
+ErrorStatus LoginNet::onMakeRequest(const std::ostringstream& json_data) {
 
-    // later
 }
-
-void RegisterNet::onGetResponse(QNetworkReply* reply) {
-    // later
-}
-
-// add same impl of another usecases ...

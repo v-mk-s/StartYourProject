@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <sstream>
 
 
 
@@ -97,5 +98,9 @@ struct MainData {
 
 enum class ErrorStatus {
     error,
-    noError
+    username_not_valid,
+    password_not_valid,
+    email_not_valid,
+    json_error,
+    no_error
 };
