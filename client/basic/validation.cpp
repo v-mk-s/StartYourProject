@@ -35,7 +35,7 @@ bool isValidPassword(std::string password) {
 ///////////////////////
 
 bool isValidProjectName(std::string project) {
-    if (project.size() > MAX_PROJECT_NAME) {
+    if (project.size() > MAX_PROJECT_NAME || project.size() == 0) {
         return false;
     }
 
@@ -43,7 +43,7 @@ bool isValidProjectName(std::string project) {
 }
 
 bool isValidTeamName(std::string team) {
-    if (team.size() > MAX_TEAM_NAME) {
+    if (team.size() > MAX_TEAM_NAME || team.size() == 0) {
         return false;
     }
 
@@ -72,7 +72,7 @@ bool isValidPostTags(std::vector<std::string> post_tags) {
 
 bool isValidTeammates(std::vector<std::string> teammates) {
     std::for_each(teammates.begin(), teammates.end(), [](std::string mate) {
-        if (mate.size() > MAX_TAG_NAME) {
+        if (mate.size() > MAX_TAG_NAME || mate.size() == 0) {
             return false;
         }
     });
