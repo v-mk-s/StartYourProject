@@ -1,9 +1,15 @@
 #pragma once
 
 #include "client_utils.hpp"
+#include <algorithm>
+#define MAX_PROJECT_NAME 10
+#define MAX_PROJECT_SIZE 100
+#define MAX_TEAM_NAME 20
+#define MAX_REQUEST_SIZE 100
+#define MAX_TAG_NAME 5
 
 std::string stop_symbols_email = "!#$%^&*()_-=+',./[]{}:;\"<>?/";
-std::string stop_symbols_username = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
+std::string stop_symbols_all = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
 // std::string stop_symbols_password = "@#$%^&*()_-=+',./[]{}:;\"<>/";
 
 bool isValidEmail(std::string);
@@ -27,3 +33,5 @@ bool isValidPostData(MainPostData);
 bool isValidAgeFrom(int);
 bool isValidAgeTo(int);
 bool isValidLanguage(std::string);
+
+bool isValidTag(std::string);

@@ -16,10 +16,7 @@
 
 class LoginUC : public ILoginUseCase {
 public:
-    ErrorStatus onLoginButtonPress(LoginData login) override;
-
-private:
-    ErrorStatus isValidLoginData(LoginData login) const;
+    ErrorStatus onLoginButton(LoginData login) override;
 
 };
 
@@ -27,11 +24,18 @@ class RegisterUC : public IRegisterUseCase {
 public:
     ErrorStatus onRegisterButton(RegisterData reg) override;
 
-private:
-    ErrorStatus isValidRegisterData(RegisterData reg) const;
-
 };
 
+class ProjectUC : public IProject {
+public:
+    ErrorStatus onRequestToProjectButton(ProjectData request) override;
+    
+};
+
+class PublishPostUC : public IPublishPost {
+    ErrorStatus onGetDataButton(PublishPostData save) override;
+
+};
 
 
 // divide front members: Vlad's part

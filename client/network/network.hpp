@@ -4,8 +4,8 @@
 
 #include <functional>
 #include <sstream>
-// #include <any>
 
+// ask about out lib execution
 
 class IResponce {
 public:
@@ -36,3 +36,18 @@ public:
 
 };
 
+class ProjectNet : public INet {
+public:
+    ProjectNet() = default;
+
+    ErrorStatus onMakeRequest(const std::ostringstream& json_data) override;
+    ErrorStatus onGetResponse(IResponce* responce) override;
+};
+
+class PublishPostNet : public INet {
+public:
+    PublishPostNet() = default;
+
+    ErrorStatus onMakeRequest(const std::ostringstream& json_data) override;
+    ErrorStatus onGetResponse(IResponce* responce) override;
+};

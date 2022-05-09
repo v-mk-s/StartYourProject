@@ -101,6 +101,13 @@ enum class ErrorStatus {
     username_not_valid,
     password_not_valid,
     email_not_valid,
+    project_name_not_valid,
+    team_name_not_valid,
+    post_tags_not_valid,
+    teammates_not_valid,
+    project_description_not_valid,
+    diversity_not_valid,
+    request_description_not_valid,
     json_error,
     no_error
 };
