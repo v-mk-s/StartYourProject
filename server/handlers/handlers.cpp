@@ -6,8 +6,8 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
     JSON json(request->get_body());
     LoginData data;
 
-    data.username = json.get<std::string>("username", "");
-    data.password = json.get<std::string>("password", "");
+    data.username = json.template get<std::string>("username", "");
+    data.password = json.template get<std::string>("password", "");
 
     usecase->checkUser(data);
 }
@@ -17,9 +17,9 @@ void RegisterHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
     JSON json(request->get_body());
     RegisterData data;
 
-    data.username = json.get<std::string>("username", "");
-    data.password = json.get<std::string>("password", "");
-    data.email = json.get<std::string>("email", "");
+    data.username = json.template get<std::string>("username", "");
+    data.password = json.template get<std::string>("password", "");
+    data.email = json.template get<std::string>("email", "");
 
     usecase->addUser(data);
 }
@@ -29,12 +29,12 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     JSON json(request->get_body());
     UserData data;
 
-    data.username = json.get<std::string>("username", "");
-    data.password = json.get<std::string>("password", "");
-    data.email = json.get<std::string>("email", "");
-    data.name = json.get<std::string>("name", "");
-    data.sur_name = json.get<std::string>("sur_name", "");
-    data.user_discription = json.get<std::string>("user_discription", "");
+    data.username = json.template get<std::string>("username", "");
+    data.password = json.template get<std::string>("password", "");
+    data.email = json.template get<std::string>("email", "");
+    data.name = json.template get<std::string>("name", "");
+    data.sur_name = json.template get<std::string>("sur_name", "");
+    data.user_discription = json.template get<std::string>("user_discription", "");
 
     usecase->editUserData(data);
 }
@@ -42,9 +42,9 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
 template <typename JSON>
 void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
-    LoginData data;
+    std::string data;
 
-    data.username = json.get<std::string>("username", "");
+    data = json.template get<std::string>("username", "");
 
     usecase->delUserData(data);
 }
@@ -52,9 +52,9 @@ void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
 template <typename JSON>
 void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
-    LoginData data;
+    std::string data;
 
-    data.username = json.get<std::string>("username", "");
+    data = json.template get<std::string>("username", "");
 
     usecase->getUserData(data);
 }

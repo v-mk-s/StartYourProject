@@ -3,36 +3,7 @@
 
 ////////////////// User Use Cases /////////////////////////
 
-bool checkUsername(std::string& name) {
-    if (name.length() < 4 || name.length() > 30) {
-        return false;
-    }
-    static const std::regex r(R"([^a-zA-Z0-9_-])");
-    return !std::regex_search(name.data(), r);
-}
-
-bool checkPassword(std::string& password) {
-    if (password.length() < 8 || password.length() > 30) {
-        return false;
-    }
-    static const std::regex r(R"([\t \n\\])");
-    return !std::regex_search(password.data(), r);
-}
-
-bool checkEmail(std::string& email) {
-    auto at = std::find(email.begin(), email.end(), '@');
-    auto dot = std::find(at, email.end(), '.');
-    return (at != email.end()) && (dot != email.end());
-}
-
-
-Message<std::string> LoginUC::checkUser(LoginData user) {
-    if (!checkUsername(user.username)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_NAME);
-    }
-    if (!checkPassword(user.password)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_PASSWORD);
-    }
+Message<std::string> LoginUC::checkUser(LoginData& user) {
     if (!database->FindIntoPersonTable(user)) {
         return Message<std::string>(ErrorStatus::not_found, LOGIN_DATA_DONT_MATCH);
     }
@@ -48,17 +19,7 @@ std::string LoginUC::generate_token(std::string key) {
 }
 
 
-Message<std::string> RegisterUC::addUser(RegisterData user_data) {
-    if (!checkUsername(user_data.username)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_NAME);
-    }
-    if (!checkPassword(user_data.password)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_PASSWORD);
-    }
-    if (!checkEmail(user_data.email)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_EMAIL);
-    }
-
+Message<std::string> RegisterUC::addUser(RegisterData& user_data) {
     if (!database->InsertIntoPersonTable(user_data)) {
         return Message<std::string>(ErrorStatus::wrong_data, SAME_USER);
     }
@@ -66,16 +27,7 @@ Message<std::string> RegisterUC::addUser(RegisterData user_data) {
 }
 
 
-Message<std::string> EditProfileUC::editUserData(UserData user_data) {
-    if (!checkUsername(user_data.username)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_NAME);
-    }
-    if (!checkPassword(user_data.password)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_PASSWORD);
-    }
-    if (!checkEmail(user_data.email)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_EMAIL);
-    }
+Message<std::string> EditProfileUC::editUserData(UserData& user_data) {
     if (!database->EditUserInPersonTable(user_data)) {
         return Message<std::string>(ErrorStatus::not_found);
     }
@@ -83,10 +35,7 @@ Message<std::string> EditProfileUC::editUserData(UserData user_data) {
 }
 
 
-Message<std::string> DelUserProfileUC::delUserData(std::string username) {
-    if (!checkUsername(username)) {
-        return Message<std::string>(ErrorStatus::wrong_data, WRONG_NAME);
-    }
+Message<std::string> DelUserProfileUC::delUserData(std::string& username) {
     if (!database->DeleteFromPersonTable(username)) {
         return Message<std::string>(ErrorStatus::not_found);
     }
@@ -94,7 +43,7 @@ Message<std::string> DelUserProfileUC::delUserData(std::string username) {
 }
 
 
-Message<UserData> GetUserProfileUC::getUserData(std::string username) {
+Message<UserData> GetUserProfileUC::getUserData(std::string& username) {
     Message<UserData> msg(ErrorStatus::ok, database->getUserProfile(username));
     return msg;
 }

@@ -25,28 +25,28 @@ class IServerUseCases {
 
 class ILoginUC {
  public:
-    virtual Message<std::string> checkUser(LoginData user) = 0;
+    virtual Message<std::string> checkUser(LoginData& user) = 0;
 };
 
 
 class IRegisterUC {
  public:
-    virtual Message<std::string> addUser(RegisterData user_data) = 0;
+    virtual Message<std::string> addUser(RegisterData& user_data) = 0;
 };
 
 class IEditProfileUC {
  public:
-    virtual Message<std::string> editUserData(UserData user_data) = 0;
+    virtual Message<std::string> editUserData(UserData& user_data) = 0;
 };
 
 class IDelUserProfileUC {
  public:
-    virtual Message<std::string> delUserData(std::string username) = 0;
+    virtual Message<std::string> delUserData(std::string& username) = 0;
 };
 
 class IGetUserProfileUC {
  public:
-    virtual Message<UserData> getUserData(std::string username) = 0;
+    virtual Message<UserData> getUserData(std::string& username) = 0;
 };
 
 
@@ -62,7 +62,7 @@ class LoginUC: public ILoginUC {
     LoginUC() = default;
     LoginUC(MainDataBase* database): database(database) {}
 
-    Message<std::string> checkUser(LoginData user);
+    Message<std::string> checkUser(LoginData& user);
     std::string generate_token(std::string key);
 
  private:
@@ -75,7 +75,7 @@ class RegisterUC: public IRegisterUC {
     RegisterUC() = default;
     RegisterUC(MainDataBase* database): database(database) {}
 
-    Message<std::string> addUser(RegisterData user_data);
+    Message<std::string> addUser(RegisterData& user_data);
 
  private:
     MainDataBase* database = nullptr;
@@ -87,7 +87,7 @@ class EditProfileUC: public IEditProfileUC {
     EditProfileUC() = default;
     EditProfileUC(MainDataBase* database): database(database) {}
 
-    Message<std::string> editUserData(UserData user_data);
+    Message<std::string> editUserData(UserData& user_data);
 
  private:
     MainDataBase* database = nullptr;
@@ -99,7 +99,7 @@ class DelUserProfileUC: public IDelUserProfileUC {
     DelUserProfileUC() = default;
     DelUserProfileUC(MainDataBase* database): database(database) {}
 
-    Message<std::string> delUserData(std::string username);
+    Message<std::string> delUserData(std::string& username);
 
  private:
     MainDataBase* database = nullptr;
@@ -111,7 +111,7 @@ class GetUserProfileUC: public IGetUserProfileUC {
     GetUserProfileUC() = default;
     GetUserProfileUC(MainDataBase* database): database(database) {}
 
-    Message<UserData> getUserData(std::string username);
+    Message<UserData> getUserData(std::string& username);
 
  private:
     MainDataBase* database = nullptr;

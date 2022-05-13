@@ -17,7 +17,7 @@ template <typename JSON>
 class LoginHandler: public IHandler {
  public:
     LoginHandler() = default;
-    LoginHandler(ILoginUC* usecase, IJSON* json): usecase(usecase) {}
+    LoginHandler(ILoginUC* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -29,7 +29,7 @@ template <typename JSON>
 class RegisterHandler: public IHandler {
  public:
     RegisterHandler() = default;
-    RegisterHandler(IRegisterUC* usecase, IJSON* json): usecase(usecase) {}
+    RegisterHandler(IRegisterUC* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -41,7 +41,7 @@ template <typename JSON>
 class EditProfileHandler: public IHandler {
  public:
     EditProfileHandler() = default;
-    EditProfileHandler(IEditProfileUC* usecase, IJSON* json): usecase(usecase) {}
+    EditProfileHandler(IEditProfileUC* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -53,7 +53,7 @@ template <typename JSON>
 class DelUserProfileHandler: public IHandler {
  public:
     DelUserProfileHandler() = default;
-    DelUserProfileHandler(IDelUserProfileUC* usecase, IJSON* json): usecase(usecase) {}
+    DelUserProfileHandler(IDelUserProfileUC* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -65,7 +65,7 @@ template <typename JSON>
 class GetUserProfileHandler: public IHandler {
  public:
     GetUserProfileHandler() = default;
-    GetUserProfileHandler(IGetUserProfileUC* usecase, IJSON* json): usecase(usecase) {}
+    GetUserProfileHandler(IGetUserProfileUC* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -78,7 +78,7 @@ class GetUserProfileHandler: public IHandler {
 
 class EditPostHandler: public IHandler {
  public:
-    EditPostHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    EditPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -89,7 +89,7 @@ class EditPostHandler: public IHandler {
 
 class SearchPostHandler: public IHandler {
  public:
-    SearchPostHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    SearchPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -100,7 +100,7 @@ class SearchPostHandler: public IHandler {
 
 class SearchPersonHandler: public IHandler {
  public:
-    SearchPersonHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    SearchPersonHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -111,7 +111,7 @@ class SearchPersonHandler: public IHandler {
 
 class MakeRequestToPostHandler: public IHandler {
  public:
-    MakeRequestToPostHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    MakeRequestToPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -122,7 +122,7 @@ class MakeRequestToPostHandler: public IHandler {
 
 class ShowNotificationsHandler: public IHandler {
  public:
-    ShowNotificationsHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    ShowNotificationsHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -134,7 +134,7 @@ class ShowNotificationsHandler: public IHandler {
 
 class AnswerTheRequestHandler: public IHandler {
  public:
-    AnswerTheRequestHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    AnswerTheRequestHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
@@ -146,7 +146,7 @@ class AnswerTheRequestHandler: public IHandler {
 
 class DeletePostHandler: public IHandler {
  public:
-    DeletePostHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    DeletePostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 

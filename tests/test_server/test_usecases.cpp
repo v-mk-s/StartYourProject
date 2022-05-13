@@ -38,41 +38,6 @@ TEST(LoginUCTest, GoodCase) {
     EXPECT_TRUE(msg.data.length() != 0) << "Message: " << msg.data; 
 }
 
-TEST(LoginUCTest, WrongName) {
-    MockDB database;
-    LoginData test_data = {"User.1/@?)", "1234qwerty"};
-    LoginUC usecase(&database);
-
-    EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-    Message<std::string> msg = usecase.checkUser(test_data);
-    EXPECT_EQ(ErrorStatus::wrong_data, msg.status); 
-    EXPECT_EQ(WRONG_NAME, msg.data);
-}
-
-TEST(LoginUCTest, EmptyName) {
-    MockDB database;
-    LoginData test_data = {"", "1234qwerty"};
-    EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-    LoginUC usecase(&database);
-
-    Message<std::string> msg = usecase.checkUser(test_data);
-    EXPECT_EQ(ErrorStatus::wrong_data, msg.status); 
-    EXPECT_EQ(WRONG_NAME, msg.data);
-}
-
-TEST(LoginUCTest, EmptyPassword) {
-    MockDB database;
-    LoginData test_data = {"Password", ""};
-    EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-    LoginUC usecase(&database);
-
-    Message<std::string> msg = usecase.checkUser(test_data);
-    EXPECT_EQ(ErrorStatus::wrong_data, msg.status); 
-    EXPECT_EQ(WRONG_PASSWORD, msg.data);
-}
 
 TEST(RegisterUCTest, GoodCase) {
     MockDB database;
@@ -84,18 +49,6 @@ TEST(RegisterUCTest, GoodCase) {
     Message<std::string> msg = usecase.addUser(test_data);
     EXPECT_EQ(ErrorStatus::ok, msg.status);
     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
-}
-
-TEST(RegisterUCTest, WrongEmail) {
-    MockDB database;
-    RegisterData test_data = {"Jack", "1q2w3e4r5t6y", "email.ru@sldfj"};
-    EXPECT_CALL(database, InsertIntoPersonTable(test_data)).Times(0);
-
-    RegisterUC usecase(&database);
-
-    Message<std::string> msg = usecase.addUser(test_data);
-    EXPECT_EQ(ErrorStatus::wrong_data, msg.status);
-    EXPECT_EQ(WRONG_EMAIL, msg.data);
 }
 
 TEST(EditProfileUCTest, GoodCase) {

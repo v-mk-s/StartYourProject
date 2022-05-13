@@ -5,7 +5,7 @@
 
 class MockLoginUC: public LoginUC {
  public:
-    MOCK_METHOD1(checkUser, ErrorStatus(LoginData user));
+    // MOCK_METHOD(Message<std::string>, checkUser, (LoginData& user));
 };
 
 TEST(LoginHandlerTests, HandleRequest) {
