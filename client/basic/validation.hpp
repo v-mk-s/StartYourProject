@@ -10,7 +10,7 @@
 
 std::string stop_symbols_email = "!#$%^&*()_-=+',./[]{}:;\"<>?/";
 std::string stop_symbols_all = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
-// std::string stop_symbols_password = "@#$%^&*()_-=+',./[]{}:;\"<>/";
+
 
 bool isValidEmail(std::string);
 bool isValidUsername(std::string);

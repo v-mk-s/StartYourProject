@@ -32,7 +32,6 @@ bool isValidPassword(std::string password) {
 }
 
 
-///////////////////////
 
 bool isValidProjectName(std::string project) {
     if (project.size() > MAX_PROJECT_NAME || project.size() == 0) {

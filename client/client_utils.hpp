@@ -21,8 +21,6 @@ struct RegisterData {
 };
 
 
-// divide front members
-
 struct UserEditData {
     std::string username;
     std::string email;
