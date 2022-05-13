@@ -2,23 +2,28 @@
 #include "server_utils.hpp"
 
 
-
 class MainDataBase
 {
  public:
-    explicit MainDataBase();
-    ~MainDataBase();
+    explicit MainDataBase() = default;
+    
     void connectToDataBase();
-    bool InsertIntoPostTable( PostData &data);
-    bool InsertIntoPersonTable( UserData &data);
-    bool InsertIntoRequestToPostTable(RequestToPostData &data);
-    bool DeleteFromPostTable(PostData &data);
-    bool DeleteFromPersonTable(UserData &data);
-    bool DeleteFromRequestToPostTable(RequestToPostData &data);
 
-    bool InsertIntoTable();
-    bool DeleteFromTable();
-    bool FindIntoTable();
+    virtual bool InsertIntoPostTable(PostData &data);
+    virtual bool InsertIntoPersonTable(RegisterData &data);
+    virtual bool InsertIntoRequestToPostTable(RequestToPostData &data);
+
+    virtual bool DeleteFromPostTable(PostData &data);
+    virtual bool DeleteFromPersonTable(std::string &data);
+    virtual bool DeleteFromRequestToPostTable(RequestToPostData &data);
+    virtual bool DeleteFromTable();
+
+    virtual bool EditUserInPersonTable(UserData &data);
+
+    virtual bool FindIntoPersonTable(LoginData &data);
+
+    virtual UserData getUserProfile(std::string &username);
+
  private:
     bool openDataBase();
     bool restoreDataBase();
