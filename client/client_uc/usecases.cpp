@@ -34,30 +34,6 @@ ErrorStatus RegisterUC::onRegisterButton(RegisterData reg) {
 }
 
 ErrorStatus ProjectUC::onRequestToProjectButton(ProjectData request) {
-    if (!isValidProjectName(request.project_name)) {
-        return ErrorStatus::project_name_not_valid;
-    }
-
-    if (!isValidTeamName(request.team_name)) {
-        return ErrorStatus::team_name_not_valid;
-    }
-
-    if (!isValidPostTags(request.post_tags)) {
-        return ErrorStatus::post_tags_not_valid;
-    }
-
-    if (!isValidTeammates(request.teammates)) {
-        return ErrorStatus::teammates_not_valid;
-    }
-
-    if (!isValidProjectDescription(request.project_description)) {
-        return ErrorStatus::project_description_not_valid;
-    }
-
-    if (!isValidDiversity(request.diversity)) {
-        return ErrorStatus::diversity_not_valid;
-    }
-
     if (!isValidRequestDescription(request.request_description)) {
         return ErrorStatus::request_description_not_valid;
     }

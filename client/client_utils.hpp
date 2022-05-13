@@ -52,12 +52,8 @@ struct PublishPostData {
 };
 
 struct ProjectData {
-    std::string project_name;
-    std::string team_name;
-    std::vector<std::string> post_tags;
-    std::vector<std::string> teammates;
-    std::string project_description;
-    double diversity;
+    std::string project_id;
+    std::string username;
     std::string request_description;
 };
 
