@@ -4,11 +4,276 @@
 #include "general.hpp"
 #include "clientui.hpp"
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
-// using ::testing::AtLeast;
-// using ::testing::Return;
+// Alex /////////////////////////
+
+TEST(VALID_USERNAME_TEST, CORRECT_USERNAME) {
+    std::string username = "Alexey00";
+
+    EXPECT_EQ(isValidUsername(username), true);
+}
+
+TEST(VALID_USERNAME_TEST, INCORRECT_USERNAME_FIRST) {
+    std::string username = "Alexey!00";
+
+    EXPECT_EQ(isValidUsername(username), false);
+}
+
+TEST(VALID_USERNAME_TEST, INCORRECT_USERNAME_SECOND) {
+    std::string username = "";
+
+    EXPECT_EQ(isValidUsername(username), false);
+}
+
+TEST(IS_VALID_EMAIL, CORRECT_EMAIL) {
+    std::string email = "alexey@mail.ru";
+
+    EXPECT_EQ(isValidEmail(email), true);
+}
+
+TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_FIRST) {
+    std::string email = "alexeymail.ru";
+
+    EXPECT_EQ(isValidEmail(email), false);
+}
+
+TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_SECOND) {
+    std::string email = "ale_xe!y@mail.ru";
+
+    EXPECT_EQ(isValidEmail(email), false);
+}
+
+TEST(IS_VALID_PASSWORD, CORRECT_PASSWORD_FIRST) {
+    // accept all types of symbols
+    std::string password = "aLe_Xe!y123@mail.ru";
+
+    EXPECT_EQ(isValidPassword(password), true);
+}
+
+TEST(IS_VALID_PASSWORD, CORRECT_PASSWORD_SECOND) {
+    // password should be more or equal than 8 symbols
+    std::string password = "qweqw21";
+
+    EXPECT_EQ(isValidPassword(password), true);
+}
+
+TEST(USECASES_LOGIN, INPUT_LOGIN_FIRST) {
+    LoginData cor_login = {0};
+    cor_login.username = "alex";
+    cor_login.password = "asd2das4ad2";
+    LoginUC usecase;
+    EXPECT_EQ(usecase.onLoginButton(cor_login), ErrorStatus::no_error);
+}
+
+TEST(USECASES_LOGIN, INPUT_LOGIN_SECOND) {
+    LoginData incor_login = {0};
+    incor_login.username = "alexasd"; 
+    incor_login.password = "asd2";
+    LoginUC usecase;
+    EXPECT_EQ(usecase.onLoginButton(incor_login), ErrorStatus::no_error);
+}
+
+TEST(USECASES_REGISTER, INPUT_REGISTER_FIRST) {
+    RegisterData cor_reg = {0};
+    cor_reg.email = "sklaa00@mail.ru";
+    cor_reg.username = "alex";
+    cor_reg.password = "asd2das4ad2";
+    RegisterUC usecase;
+    EXPECT_EQ(usecase.onRegisterButton(cor_reg), ErrorStatus::no_error);
+}
+
+TEST(USECASES_REGISTER, INPUT_REGISTER_SECOND) {
+    RegisterData incor_reg = {0};
+    incor_reg.email = "sklaa00mail.ru";
+    incor_reg.username = "alex!";
+    incor_reg.password = "aad2";
+    RegisterUC usecase;
+    EXPECT_EQ(usecase.onRegisterButton(incor_reg), ErrorStatus::no_error);
+}
+
+TEST(USECASES_REQ_TO_PROJ, CORRECT) {
+    ProjectData request;
+    request.project_name = "the best project";
+    request.team_name = "bestTeam";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "dasdasd";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::no_error);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_PROJ_NAME) {
+    ProjectData request;
+    request.project_name = "";
+    request.team_name = "bestTeam";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "dasdasd";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::project_name_not_valid);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_TEAM_NAME) {
+    ProjectData request;
+    request.project_name = "0dfghf";
+    request.team_name = "bestTeamsdTooLongNameeeeee";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "dasdasd";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::team_name_not_valid);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_POST_TAGS) {
+    ProjectData request;
+    request.project_name = "";
+    request.team_name = "bestTeamsdT";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team!@");
+    post_tags.push_back("#pro$ject");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "dasdasd";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::post_tags_not_valid);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_TEAMMATES) {
+    ProjectData request;
+    request.project_name = "";
+    request.team_name = "bestTeamsdT";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "dasdasd";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::teammates_not_valid);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_PROJ_DESCRIPTION) {
+    ProjectData request;
+    request.project_name = "";
+    request.team_name = "bestTeamsdT";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "";
+    request.request_description = "asdasdasd";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::project_description_not_valid);
+}
+
+TEST(USECASES_REQ_TO_PROJ, INCORRECT_REQ_DESCRIPTION) {
+    ProjectData request;
+    request.project_name = "";
+    request.team_name = "bestTeamsdT";
+
+    std::vector<std::string> post_tags;
+    post_tags.push_back("#team");
+    post_tags.push_back("#project");
+    request.post_tags = post_tags;
+
+    std::vector<std::string> teammates;
+    teammates.push_back("Alexey");
+    teammates.push_back("Vladislav");
+    teammates.push_back("Ilya");
+    teammates.push_back("Daniil");
+    request.teammates = teammates;
+
+    // request.diversity = 77;
+
+    request.project_description = "asdasd";
+    request.request_description = "";
+
+    ProjectUC usecase;
+    EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::request_description_not_valid);
+}
+
+// no need tests for onGetDataButton (same)
 
 // Vlad ///////////////////////////////////////////////////////////////////
 
@@ -260,7 +525,7 @@ TEST(USECASES, INPUT_SEARCH_CORRECT) {
     search_data.post_tags = {"torch", "python"};
     search_data.diversity = 99;
     MainUC usecase = {0};
-    EXPECT_EQ(usecase.onSearchButton(search_data), noError);
+    EXPECT_EQ(usecase.onSearchButton(search_data), no_error);
 }
 
 TEST(USECASES, INPUT_SEARCH_INCORRECT) {
@@ -287,7 +552,7 @@ TEST(USECASES, INPUT_PUBLISHPOST_CORRECT)
     publish_post_data.teammates = {"Torch", "Tython"};
     publish_post_data.project_description = "Good project";
     PublishPostUC usecase = {0};
-    EXPECT_EQ(usecase.onPublishPostButton(publish_post_data), noError);
+    EXPECT_EQ(usecase.onPublishPostButton(publish_post_data), no_error);
 }
 
 TEST(USECASES, INPUT_PUBLISHPOST_INCORRECT)
@@ -312,7 +577,7 @@ TEST(USECASES, INPUT_PUBLISHPOST_CORRECT)
     user_edit_data.description = "Good project";
     user_edit_data.password = "Go1324a!";
     UserEditUC usecase = {0};
-    EXPECT_EQ(usecase.onUserEditButton(user_edit_data), noError);
+    EXPECT_EQ(usecase.onUserEditButton(user_edit_data), no_error);
 }
 
 TEST(USECASES, INPUT_NOTIFICATION_CORRECT)
@@ -320,7 +585,7 @@ TEST(USECASES, INPUT_NOTIFICATION_CORRECT)
     NotificationData notify_data = {0};
     notify_data.projects = {0};
     NotificationUC usecase = {0};
-    EXPECT_EQ(usecase.onNotificationButton(notify_data), noError);
+    EXPECT_EQ(usecase.onNotificationButton(notify_data), no_error);
 }
 
 TEST(USECASES, INPUT_PUBLISHPOST_INCORRECT)
@@ -346,206 +611,5 @@ TEST(USECASES, INPUT_PUBLISHPOST_CORRECT)
     user_data.description = "Good project";
     user_data.password = "Go1324a!";
     UserUC usecase = {0};
-    EXPECT_EQ(usecase.onUserEditButton(user_data), noError);
+    EXPECT_EQ(usecase.onUserEditButton(user_data), no_error);
 }
-
-// MOCK TESTS
-// 
-
-// class MockDB : public MainDataBase
-// {
-// public:
-//     MOCK_METHOD(bool, InsertIntoPersonTable, (RegisterData & data));
-//     MOCK_METHOD(bool, InsertIntoPostTable, ());
-//     MOCK_METHOD(bool, InsertIntoRequestToPostTable, ());
-
-//     MOCK_METHOD(bool, DeleteFromPostTable, ());
-//     MOCK_METHOD(bool, DeleteFromPersonTable, (std::string & data));
-//     MOCK_METHOD(bool, DeleteFromRequestToPostTable, (RequestToPostData & data));
-
-//     MOCK_METHOD(bool, EditUserInPersonTable, (UserData & data));
-
-//     MOCK_METHOD(bool, FindIntoPersonTable, (LoginData & data));
-
-//     MOCK_METHOD(UserData, getUserProfile, (std::string & username));
-// };
-
-// TEST(LoginUCTest, GoodCase)
-// {
-//     MockDB database;
-//     LoginData test_data = {"John_123-4", "qwerty1234"};
-//     EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(1).WillOnce(Return(true));
-
-//     LoginUC usecase(&database);
-
-//     Message<std::string> msg = usecase.checkUser(test_data);
-//     EXPECT_EQ(ErrorStatus::ok, msg.status);
-//     EXPECT_TRUE(msg.data.length() != 0) << "Message: " << msg.data;
-// }
-
-// TEST(LoginUCTest, WrongName)
-// {
-//     MockDB database;
-//     LoginData test_data = {"User.1/@?)", "1234qwerty"};
-//     LoginUC usecase(&database);
-
-//     EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-//     Message<std::string> msg = usecase.checkUser(test_data);
-//     EXPECT_EQ(ErrorStatus::wrong_data, msg.status);
-//     EXPECT_EQ(WRONG_NAME, msg.data);
-// }
-
-// TEST(LoginUCTest, EmptyName)
-// {
-//     MockDB database;
-//     LoginData test_data = {"", "1234qwerty"};
-//     EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-//     LoginUC usecase(&database);
-
-//     Message<std::string> msg = usecase.checkUser(test_data);
-//     EXPECT_EQ(ErrorStatus::wrong_data, msg.status);
-//     EXPECT_EQ(WRONG_NAME, msg.data);
-// }
-
-// TEST(LoginUCTest, EmptyPassword)
-// {
-//     MockDB database;
-//     LoginData test_data = {"Password", ""};
-//     EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(0);
-
-//     LoginUC usecase(&database);
-
-//     Message<std::string> msg = usecase.checkUser(test_data);
-//     EXPECT_EQ(ErrorStatus::wrong_data, msg.status);
-//     EXPECT_EQ(WRONG_PASSWORD, msg.data);
-// }
-
-// TEST(RegisterUCTest, GoodCase)
-// {
-//     MockDB database;
-//     RegisterData test_data = {"Jack", "1q2w3e4r5t6y", "email@mail.ru"};
-//     EXPECT_CALL(database, InsertIntoPersonTable(test_data)).Times(1).WillOnce(Return(true));
-
-//     RegisterUC usecase(&database);
-
-//     Message<std::string> msg = usecase.addUser(test_data);
-//     EXPECT_EQ(ErrorStatus::ok, msg.status);
-//     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
-// }
-
-// TEST(RegisterUCTest, WrongEmail)
-// {
-//     MockDB database;
-//     RegisterData test_data = {"Jack", "1q2w3e4r5t6y", "email.ru@sldfj"};
-//     EXPECT_CALL(database, InsertIntoPersonTable(test_data)).Times(0);
-
-//     RegisterUC usecase(&database);
-
-//     Message<std::string> msg = usecase.addUser(test_data);
-//     EXPECT_EQ(ErrorStatus::wrong_data, msg.status);
-//     EXPECT_EQ(WRONG_EMAIL, msg.data);
-// }
-
-// TEST(EditProfileUCTest, GoodCase)
-// {
-//     MockDB database;
-//     UserData test_data = {"Jack", "email@mail.ru", "Abc", "dfgh", "some text", "1234qwerty"};
-//     EXPECT_CALL(database, EditUserInPersonTable(test_data)).Times(1).WillOnce(Return(true));
-
-//     EditProfileUC usecase(&database);
-
-//     Message<std::string> msg = usecase.editUserData(test_data);
-//     EXPECT_EQ(ErrorStatus::ok, msg.status);
-//     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
-// }
-
-// TEST(DelUserProfileUCTest, GoodCase)
-// {
-//     MockDB database;
-//     std::string test_username = "abcdefg";
-//     EXPECT_CALL(database, DeleteFromPersonTable(test_username)).Times(1).WillOnce(Return(true));
-
-//     DelUserProfileUC usecase(&database);
-
-//     Message<std::string> msg = usecase.delUserData(test_username);
-//     EXPECT_EQ(ErrorStatus::ok, msg.status);
-//     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
-// }
-
-// TEST(GetUserProfileUCTest, GoodCase)
-// {
-//     MockDB database;
-//     std::string test_username = "abcdefg";
-//     EXPECT_CALL(database, getUserProfile(test_username)).Times(1);
-
-//     GetUserProfileUC usecase(&database);
-
-//     Message<UserData> msg = usecase.getUserData(test_username);
-//     EXPECT_EQ(ErrorStatus::ok, msg.status);
-// }
-
-// PostData post = {1, "проект", "классный проект", "Стартап", "PyTorchki"};
-// RequestToPostData req = {1, 2, "Очень хочу к вам в команду"};
-
-// TEST(EditPostTest, UC)
-// {
-//     MockDB db;
-//     EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
-//     EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
-//     EditPost Test_1(&db);
-//     EXPECT_EQ(Test_1.editPostToDB(post), ErrorStatus::ok);
-// }
-
-// TEST(SearchPostTest, UC)
-// {
-//     MockDB db;
-//     SearchPost Test_1(&db);
-//     EXPECT_EQ(Test_1.makePostSearch(post), ErrorStatus::ok);
-// }
-
-// TEST(SearchPersonTest, UC)
-// {
-//     MockDB db;
-//     SearchPerson Test_1(&db);
-//     EXPECT_EQ(Test_1.makePersonSearch("cool_username"), ErrorStatus::ok);
-// }
-
-// TEST(MakeRequestToPostTest, UC)
-// {
-//     MockDB db;
-//     EXPECT_CALL(db, InsertIntoRequestToPostTable()).Times(AtLeast(1));
-//     MakeRequestToPost Test_1(&db);
-//     EXPECT_EQ(Test_1.makeReqToPost(req), ErrorStatus::ok);
-// }
-
-// TEST(DeletePostTest, UC)
-// {
-//     MockDB db;
-//     EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
-//     DeletePost Test_1(&db);
-//     EXPECT_EQ(Test_1.delPostData(1), ErrorStatus::ok);
-// }
-
-// TEST(AnswerTheRequestTest, UC)
-// {
-//     MockDB db;
-//     AnswerTheRequest Test_1(&db);
-//     EXPECT_EQ(Test_1.getAnswer(false, req), ErrorStatus::ok);
-// }
-
-// TEST(ShowNotificationsTest, UC)
-// {
-//     MockDB db;
-//     ShowNotifications Test_1(&db);
-//     EXPECT_EQ(Test_1.showAllNotifications(1), ErrorStatus::ok);
-// }
-
-// TEST(CreatePostTest, UC)
-// {
-//     MockDB db;
-//     EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
-//     CreatePost Test_1(&db);
-//     EXPECT_EQ(Test_1.addPostToDB(post), ErrorStatus::ok);
-// }

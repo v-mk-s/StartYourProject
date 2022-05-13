@@ -14,19 +14,6 @@ public:
 
 // for each usecase own interface class
 
-// display_1 // Alex
-class ILoginUseCase : public IParentUseCase
-{
-public:
-    virtual ErrorStatus onLoginButtonPress(LoginData login) = 0;
-};
-
-// display_2 // Alex
-class IRegisterUseCase : public IParentUseCase
-{
-public:
-    virtual ErrorStatus onRegisterButton(RegisterData reg) = 0;
-};
 
 // display_3 // Vlad
 class IMainUseCase : public IParentUseCase
@@ -144,14 +131,26 @@ public:
     virtual ErrorStatus onNextPageButton() = 0;
 };
 
-// class IClientUseCase {
-// public:
+class ILoginUseCase {
+public:
+    virtual ErrorStatus onLoginButton(LoginData login) = 0;
 
-//     virtual ErrorStatus onSearchButton(SearchData search_data) = 0;
-//     virtual ErrorStatus onPublishPostButton(PublishPostData publish_post_data) = 0;
-//     virtual ErrorStatus onUserEditButton(UserEditData user_edit_data) = 0;
-//     virtual ErrorStatus onUserButton(UserData user_data) = 0;
-//     virtual ErrorStatus onPhotoButton(PhotoData photo_data) = 0;
-//     virtual ErrorStatus onProjectButton(ProjectData project_data) = 0;
-//     virtual ErrorStatus onNotificationButton(NotificationData notify_data) = 0;
-// };
+};
+
+class IRegisterUseCase {
+public:
+    virtual ErrorStatus onRegisterButton(RegisterData reg) = 0;
+
+};
+
+class IProject {
+public:
+    virtual ErrorStatus onRequestToProjectButton(ProjectData request) = 0;
+
+};
+
+class IPublishPost {
+public:
+    virtual ErrorStatus onGetDataButton(PublishPostData save) = 0;
+
+};

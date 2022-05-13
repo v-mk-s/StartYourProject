@@ -20,8 +20,16 @@ enum class ErrorStatus
     name_not_valid,
     surname_not_valid,
     user_description_not_valid,
+    project_name_not_valid,
+    team_name_not_valid,
+    post_tags_not_valid,
+    teammates_not_valid,
+    project_description_not_valid,
+    diversity_not_valid,
+    request_description_not_valid,
     photo_data_not_valid
 };
+
 
 struct LoginData
 {
@@ -30,6 +38,7 @@ struct LoginData
 
     LoginData(std::string _username = "", std::string _password = "") : username(_username), password(_password) {}
 };
+
 
 struct RegisterData
 {
@@ -63,6 +72,7 @@ struct SearchData // 8
                                           post_tags(_post_tags), diversity(_diversity) {}
 };
 
+
 struct ProjectDescriptionData
 {
     std::string project_id; // like username, but for internal DB
@@ -70,12 +80,14 @@ struct ProjectDescriptionData
     ProjectDescriptionData(std::string _project_id = "") : project_id(_project_id) {}
 };
 
+
 struct UserDescriptionData
 {
     std::string username;
 
     UserDescriptionData(std::string _username = "") : username(_username) {}
 };
+
 
 struct UserEditData // 6+1
 {
@@ -94,6 +106,7 @@ struct UserEditData // 6+1
                                                         user_description(_user_description), password(_password),
                                                         photo_data(_photo_data) {}
 };
+
 
 struct PhotoData
 {
@@ -114,6 +127,7 @@ struct UserData
     std::vector<std::string> project_names;
 };
 
+
 struct PublishPostData
 {
     std::string project_name;
@@ -122,6 +136,7 @@ struct PublishPostData
     std::vector<std::string> teammates;
     std::string project_description;
 };
+
 
 struct ProjectData
 {
@@ -134,6 +149,7 @@ struct ProjectData
     std::string request_description;
 };
 
+
 typedef struct NotificationProjectData
 {
     std::string project_name;
@@ -144,10 +160,12 @@ typedef struct NotificationProjectData
     std::vector<std::string> teammates;
 } NotificationProjectData;
 
+
 struct NotificationData
 {
     std::vector<NotificationProjectData> projects;
 };
+
 
 struct MainPostData
 {
