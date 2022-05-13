@@ -1,6 +1,6 @@
 #pragma once
 
-#include "client_utils.hpp"
+#include "utils.hpp"
 
 // global class: usual buttons on almost every page
 class IParentUseCase
@@ -28,7 +28,6 @@ public:
     // virtual ErrorStatus onToMainPageButton() = 0;
 
     virtual ErrorStatus onEditProfileButton() = 0;
-    virtual ErrorStatus onNextPageButton() = 0;
     virtual ErrorStatus onSearchButton(SearchData search_data) = 0;
     virtual ErrorStatus onPrevPageButton() = 0;
     virtual ErrorStatus onNextPageButton() = 0;

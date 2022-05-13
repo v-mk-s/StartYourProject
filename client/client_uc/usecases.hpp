@@ -2,7 +2,7 @@
 
 #include "clientui.hpp"
 #include "general.hpp"
-#include "client_utils.hpp"
+#include "utils.hpp"
 
 #define WRONG_AGE "Wrong age: TENET?"
 #define WRONG_NAME "Username is incorrect"
@@ -25,7 +25,6 @@ public:
     ErrorStatus onBackButton() override;
 
     ErrorStatus onEditProfileButton() override;
-    ErrorStatus onNextPageButton() override;
     ErrorStatus onSearchButton(SearchData search_data) override;
     ErrorStatus onPrevPageButton() override;
     ErrorStatus onNextPageButton() override;
@@ -137,7 +136,7 @@ public:
     
 };
 
-class PublishPostUC : public IPublishPost {
-    ErrorStatus onGetDataButton(PublishPostData save) override;
+// class PublishPostUC : public IPublishPost {
+//     ErrorStatus onGetDataButton(PublishPostData save) override;
 
-};
+// };

@@ -15,4 +15,4 @@ find_package(Threads REQUIRED)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SERVER_SYP_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} GTest::GTest gtest_main Threads::Threads)
+target_link_libraries(${PROJECT_NAME}  ${SERVER_SYP_LIBRARIES} GTest::GTest gtest_main Threads::Threads -lgmock -lgtest)

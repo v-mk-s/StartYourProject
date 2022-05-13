@@ -22,7 +22,6 @@ enum class ErrorStatus
     user_description_not_valid,
     project_name_not_valid,
     team_name_not_valid,
-    post_tags_not_valid,
     teammates_not_valid,
     project_description_not_valid,
     diversity_not_valid,
@@ -89,6 +88,14 @@ struct UserDescriptionData
 };
 
 
+struct PhotoData
+{
+    std::vector<std::int32_t> photo;
+
+    PhotoData(std::vector<std::int32_t> _photo = {}) : photo(_photo) {}
+};
+
+
 struct UserEditData // 6+1
 {
     std::string username;
@@ -105,14 +112,6 @@ struct UserEditData // 6+1
                                                         name(_name), surname(_surname),
                                                         user_description(_user_description), password(_password),
                                                         photo_data(_photo_data) {}
-};
-
-
-struct PhotoData
-{
-    std::vector<std::int32_t> photo;
-
-    PhotoData(std::vector<std::int32_t> _photo = {}) : photo(_photo) {}
 };
 
 // don't delete, data for refactoring

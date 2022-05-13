@@ -15,5 +15,8 @@ message("CLIENT_SYP_LIBRARIES = ${CLIENT_SYP_LIBRARIES}")
 
 # add_executable(${PROJECT_NAME} main.cpp)
 
+# file(GLOB INCLUDE_DIRS general_utils)
+# set(SYP_GENERAL_INCLUDE_DIRS general_utils CHI)
+
 # target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_INCLUDE_DIRS})
 # target_link_libraries(${PROJECT_NAME} PRIVATE ${CLIENT_SYP_LIBRARIES})

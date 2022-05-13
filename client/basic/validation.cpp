@@ -108,7 +108,7 @@ bool isValidUserDescription(std::string &description)
 
     for (auto c : description)
     {
-        if (stop_symbols_description.find(c) != -1)
+        if (stop_symbols_description.find(c) != std::string::npos)
         {
             return false;
         }
@@ -147,9 +147,7 @@ bool isValidNoSymbol(std::string tag) {
 
 bool isValidPostTags(std::vector<std::string> post_tags) {
     std::for_each(post_tags.begin(), post_tags.end(), [](std::string tag) {
-        if (tag.size() > MAX_TAG_NAME || !isValidNoSymbol(tag)) {
-            return false;
-        }
+        return !(tag.size() > MAX_TAG_NAME || !isValidNoSymbol(tag));
     });
 
     return true;
@@ -157,9 +155,7 @@ bool isValidPostTags(std::vector<std::string> post_tags) {
 
 bool isValidTeammates(std::vector<std::string> teammates) {
     std::for_each(teammates.begin(), teammates.end(), [](std::string mate) {
-        if (mate.size() > MAX_TAG_NAME || mate.size() == 0) {
-            return false;
-        }
+        return !(mate.size() > MAX_TAG_NAME || mate.size() == 0);
     });
 
     return true;

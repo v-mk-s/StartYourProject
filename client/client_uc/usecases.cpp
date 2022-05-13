@@ -281,25 +281,25 @@ ErrorStatus HelpUC::onNextPageButton()
 }
 
 
-ErrorStatus PublishPostUC::onGetDataButton(PublishPostData save) {
-    if (!isValidProjectName(save.project_name)) {
-        return ErrorStatus::project_name_not_valid;
-    }
+// ErrorStatus PublishPostUC::onGetDataButton(PublishPostData save) {
+//     if (!isValidProjectName(save.project_name)) {
+//         return ErrorStatus::project_name_not_valid;
+//     }
 
-    if (!isValidTeamName(save.team_name)) {
-        return ErrorStatus::team_name_not_valid;
-    }
+//     if (!isValidTeamName(save.team_name)) {
+//         return ErrorStatus::team_name_not_valid;
+//     }
 
-    if (!isValidPostTags(save.post_tags)) {
-        return ErrorStatus::post_tags_not_valid;
-    }
+//     if (!isValidPostTags(save.post_tags)) {
+//         return ErrorStatus::post_tags_not_valid;
+//     }
 
-    if (!isValidTeammates(save.teammates)) {
-        return ErrorStatus::teammates_not_valid;
-    }
+//     if (!isValidTeammates(save.teammates)) {
+//         return ErrorStatus::teammates_not_valid;
+//     }
 
-    if (!isValidProjectDescription(save.project_description)) {
-        return ErrorStatus::project_description_not_valid;
-    }
-    return ErrorStatus::no_error;
-}
+//     if (!isValidProjectDescription(save.project_description)) {
+//         return ErrorStatus::project_description_not_valid;
+//     }
+//     return ErrorStatus::no_error;
+// }
