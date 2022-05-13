@@ -72,3 +72,15 @@ struct Message {
     Message(ErrorStatus status): status(status) {}
     Message(ErrorStatus status, MessageData data): status(status), data(data) {}
 };
+
+
+class IJSON {
+ public:
+    IJSON(std::string &str);
+
+    template<class T>
+    T get(const std::string &str, T);
+
+    template<class T>
+    void put(const std::string &str, T);
+};
