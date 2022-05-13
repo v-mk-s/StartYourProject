@@ -13,19 +13,40 @@
 
 class IServerUseCases {
  public:
-    // virtual ErrorStatus checkUser(LoginData) = 0;
-    // virtual ErrorStatus addUser(RegisterData) = 0;
-    // virtual ErrorStatus editUserData(UserData) = 0;
-    // virtual ErrorStatus delUserData(std::string) = 0;
-    // virtual Message<UserData> getUserData(std::string) = 0;
-    // virtual ErrorStatus editPostToDB(PostData post) = 0;
-    // virtual ErrorStatus makePostSearch(PostData post) = 0;
-    // virtual ErrorStatus makePersonSearch(std::string username) = 0;
-    // virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
-    // virtual ErrorStatus delPostData(int post_id) = 0;
-    // virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
-    // virtual ErrorStatus showAllNotifications(int user_id) = 0;
-    // virtual ErrorStatus addPostToDB(PostData post) = 0;
+    virtual ErrorStatus editPostToDB(PostData post) = 0;
+    virtual ErrorStatus makePostSearch(PostData post) = 0;
+    virtual ErrorStatus makePersonSearch(std::string username) = 0;
+    virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
+    virtual ErrorStatus delPostData(int post_id) = 0;
+    virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
+    virtual ErrorStatus showAllNotifications(int user_id) = 0;
+    virtual ErrorStatus addPostToDB(PostData post) = 0;
+};
+
+class ILoginUC {
+ public:
+    virtual Message<std::string> checkUser(LoginData user) = 0;
+};
+
+
+class IRegisterUC {
+ public:
+    virtual Message<std::string> addUser(RegisterData user_data) = 0;
+};
+
+class IEditProfileUC {
+ public:
+    virtual Message<std::string> addUser(RegisterData user_data) = 0;
+};
+
+class IDelUserProfileUC {
+ public:
+    virtual Message<std::string> delUserData(std::string username) = 0;
+};
+
+class IGetUserProfileUC {
+ public:
+    virtual Message<UserData> getUserData(std::string username) = 0;
 };
 
 
@@ -36,7 +57,7 @@ bool checkPassword(std::string& password);
 bool checkEmail(std::string& email);
 
 
-class LoginUC: public IServerUseCases {
+class LoginUC: public ILoginUC {
  public:
     LoginUC() = default;
     LoginUC(MainDataBase* database): database(database) {}
@@ -49,7 +70,7 @@ class LoginUC: public IServerUseCases {
 };
 
 
-class RegisterUC: public IServerUseCases {
+class RegisterUC: public IRegisterUC {
  public:
     RegisterUC() = default;
     RegisterUC(MainDataBase* database): database(database) {}
@@ -61,7 +82,7 @@ class RegisterUC: public IServerUseCases {
 };
 
 
-class EditProfileUC: public IServerUseCases {
+class EditProfileUC: public IEditProfileUC {
  public:
     EditProfileUC() = default;
     EditProfileUC(MainDataBase* database): database(database) {}
@@ -73,7 +94,7 @@ class EditProfileUC: public IServerUseCases {
 };
 
 
-class DelUserProfileUC: public IServerUseCases {
+class DelUserProfileUC: public IDelUserProfileUC {
  public:
     DelUserProfileUC() = default;
     DelUserProfileUC(MainDataBase* database): database(database) {}
@@ -85,7 +106,7 @@ class DelUserProfileUC: public IServerUseCases {
 };
 
 
-class GetUserProfileUC: public IServerUseCases {
+class GetUserProfileUC: public IGetUserProfileUC {
  public:
     GetUserProfileUC() = default;
     GetUserProfileUC(MainDataBase* database): database(database) {}
