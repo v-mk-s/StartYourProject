@@ -278,7 +278,7 @@ TEST(USECASES_REQ_TO_PROJ, INCORRECT_REQ_DESCRIPTION) {
     EXPECT_EQ(usecase.onRequestToProjectButton(request), ErrorStatus::request_description_not_valid);
 }
 
-// no need tests for onGetDataButton (same)
+// no need tests for PublishPostUC::onGetDataButton (same)
 
 // Vlad ///////////////////////////////////////////////////////////////////
 

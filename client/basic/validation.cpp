@@ -82,7 +82,7 @@ bool isValidTeammates(std::vector<std::string> teammates) {
 
 
 bool isValidProjectDescription(std::string project) {
-    if (project.size() > MAX_PROJECT_SIZE) {
+    if (project.size() > MAX_PROJECT_SIZE || project.size() == 0) {
         return false;
     }
 
@@ -93,7 +93,7 @@ bool isValidProjectDescription(std::string project) {
 bool isValidDiversity(int);
 
 bool isValidRequestDescription(std::string request) {
-    if (request.size() > MAX_REQUEST_SIZE) {
+    if (request.size() > MAX_REQUEST_SIZE || request.size() == 0) {
         return false;
     }
 
