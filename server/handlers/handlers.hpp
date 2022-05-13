@@ -7,69 +7,70 @@
 
 class IHandler {
  public:
-    virtual void Handle(RequestInterface* request, ResponseInterface* response) = 0;
+    virtual void handle(RequestInterface* request, ResponseInterface* response) = 0;
 };
 
 
 /////////////////////// User Handlers ///////////////////////////////////
 
+template <typename JSON>
 class LoginHandler: public IHandler {
  public:
     LoginHandler() = default;
-    LoginHandler(IServerUseCases* usecase): usecase(usecase) {}
+    LoginHandler(ILoginUC* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    ILoginUC* usecase = nullptr;
 };
 
-
+template <typename JSON>
 class RegisterHandler: public IHandler {
  public:
     RegisterHandler() = default;
-    RegisterHandler(IServerUseCases* usecase): usecase(usecase) {}
+    RegisterHandler(IRegisterUC* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IRegisterUC* usecase = nullptr;
 };
 
-
+template <typename JSON>
 class EditProfileHandler: public IHandler {
  public:
     EditProfileHandler() = default;
-    EditProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
+    EditProfileHandler(IEditProfileUC* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IEditProfileUC* usecase = nullptr;
 };
 
-
+template <typename JSON>
 class DelUserProfileHandler: public IHandler {
  public:
     DelUserProfileHandler() = default;
-    DelUserProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
+    DelUserProfileHandler(IDelUserProfileUC* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IDelUserProfileUC* usecase = nullptr;
 };
 
-
+template <typename JSON>
 class GetUserProfileHandler: public IHandler {
  public:
     GetUserProfileHandler() = default;
-    GetUserProfileHandler(IServerUseCases* usecase): usecase(usecase) {}
+    GetUserProfileHandler(IGetUserProfileUC* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IGetUserProfileUC* usecase = nullptr;
 };
 
 
@@ -79,10 +80,10 @@ class EditPostHandler: public IHandler {
  public:
     EditPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -90,10 +91,10 @@ class SearchPostHandler: public IHandler {
  public:
     SearchPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -101,10 +102,10 @@ class SearchPersonHandler: public IHandler {
  public:
     SearchPersonHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -112,10 +113,10 @@ class MakeRequestToPostHandler: public IHandler {
  public:
     MakeRequestToPostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -123,10 +124,10 @@ class ShowNotificationsHandler: public IHandler {
  public:
     ShowNotificationsHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -135,10 +136,10 @@ class AnswerTheRequestHandler: public IHandler {
  public:
     AnswerTheRequestHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };
 
 
@@ -147,8 +148,8 @@ class DeletePostHandler: public IHandler {
  public:
     DeletePostHandler(IServerUseCases* usecase): usecase(usecase) {}
 
-    void Handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase;
+    IServerUseCases* usecase = nullptr;
 };

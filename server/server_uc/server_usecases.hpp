@@ -2,84 +2,116 @@
 
 #include "server_utils.hpp"
 #include "database.hpp"
+#include <regex>
+
+#define WRONG_NAME "Username is incorrect"
+#define WRONG_PASSWORD "Password is incorrect"
+#define WRONG_EMAIL "Email is incorrect"
+#define LOGIN_DATA_DONT_MATCH "Username and password dont match"
+#define SAME_USER "A user with the same name already exists"
 
 
 class IServerUseCases {
  public:
-    // virtual ErrorStatus checkUserInDB(LoginData) = 0;
-    // virtual ErrorStatus addUserToDB(RegisterData) = 0;
-    // virtual ErrorStatus editUserData(UserData) = 0;
-    // virtual ErrorStatus delUserData(std::string) = 0;
-    // virtual Message<UserData> getUserData(std::string) = 0;
-    //  virtual ErrorStatus editPostToDB(PostData post) = 0;
-    //  virtual ErrorStatus makePostSearch(PostData post) = 0;
-    //  virtual ErrorStatus makePersonSearch(std::string username) = 0;
-    //  virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
-    //  virtual ErrorStatus delPostData(int post_id) = 0;
-    //  virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
-    //  virtual ErrorStatus showAllNotifications(int user_id) = 0;
-    //  virtual ErrorStatus addPostToDB(PostData post) = 0;
+    virtual ErrorStatus editPostToDB(PostData post) = 0;
+    virtual ErrorStatus makePostSearch(PostData post) = 0;
+    virtual ErrorStatus makePersonSearch(std::string username) = 0;
+    virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
+    virtual ErrorStatus delPostData(int post_id) = 0;
+    virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
+    virtual ErrorStatus showAllNotifications(int user_id) = 0;
+    virtual ErrorStatus addPostToDB(PostData post) = 0;
+};
 
-    virtual ~IServerUseCases() = 0;
+class ILoginUC {
+ public:
+    virtual Message<std::string> checkUser(LoginData& user) = 0;
+};
+
+
+class IRegisterUC {
+ public:
+    virtual Message<std::string> addUser(RegisterData& user_data) = 0;
+};
+
+class IEditProfileUC {
+ public:
+    virtual Message<std::string> editUserData(UserData& user_data) = 0;
+};
+
+class IDelUserProfileUC {
+ public:
+    virtual Message<std::string> delUserData(std::string& username) = 0;
+};
+
+class IGetUserProfileUC {
+ public:
+    virtual Message<UserData> getUserData(std::string& username) = 0;
 };
 
 
 /////////////////////// User UC /////////////////////////////////////
 
-class LoginUC: public IServerUseCases {
+bool checkUsername(std::string& name);
+bool checkPassword(std::string& password);
+bool checkEmail(std::string& email);
+
+
+class LoginUC: public ILoginUC {
  public:
     LoginUC() = default;
     LoginUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus checkUserInDB(LoginData user);
+    Message<std::string> checkUser(LoginData& user);
+    std::string generate_token(std::string key);
 
  private:
     MainDataBase* database = nullptr;
 };
 
 
-class RegisterUC: public IServerUseCases {
+class RegisterUC: public IRegisterUC {
  public:
     RegisterUC() = default;
     RegisterUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus addUserToDB(RegisterData user_data);
+    Message<std::string> addUser(RegisterData& user_data);
 
  private:
     MainDataBase* database = nullptr;
 };
 
 
-class EditProfileUC: public IServerUseCases {
+class EditProfileUC: public IEditProfileUC {
  public:
     EditProfileUC() = default;
     EditProfileUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus editUserData(UserData user_data);
+    Message<std::string> editUserData(UserData& user_data);
 
  private:
     MainDataBase* database = nullptr;
 };
 
 
-class DelUserProfileUC: public IServerUseCases {
+class DelUserProfileUC: public IDelUserProfileUC {
  public:
     DelUserProfileUC() = default;
     DelUserProfileUC(MainDataBase* database): database(database) {}
 
-    ErrorStatus delUserData(std::string username);
+    Message<std::string> delUserData(std::string& username);
 
  private:
     MainDataBase* database = nullptr;
 };
 
 
-class GetUserProfileUC: public IServerUseCases {
+class GetUserProfileUC: public IGetUserProfileUC {
  public:
     GetUserProfileUC() = default;
     GetUserProfileUC(MainDataBase* database): database(database) {}
 
-    Message<UserData> getUserData(std::string username);
+    Message<UserData> getUserData(std::string& username);
 
  private:
     MainDataBase* database = nullptr;
@@ -137,7 +169,7 @@ class AnswerTheRequest{
 public:
    AnswerTheRequest()=default;
    AnswerTheRequest(MainDataBase* database): database(database) {}
-   ErrorStatus getAnswer(bool answer, RequestToPostData request_info );
+   ErrorStatus getAnswer(bool answer, RequestToPostData request_info);
 private:
    MainDataBase* database = nullptr;
 };

@@ -5,13 +5,13 @@
 
 class MockLoginUC: public LoginUC {
  public:
-    MOCK_METHOD1(checkUserInDB, ErrorStatus(LoginData user));
+    // MOCK_METHOD(Message<std::string>, checkUser, (LoginData& user));
 };
 
 TEST(LoginHandlerTests, HandleRequest) {
     // MockLoginUC login_uc;
     // LoginData user;
-    // EXPECT_CALL(login_uc, checkUserInDB(user)).Times(testing::AtLeast(1));
+    // EXPECT_CALL(login_uc, checkUser(user)).Times(testing::AtLeast(1));
 
     // LoginHandler handler;
     // handler.Handle();
