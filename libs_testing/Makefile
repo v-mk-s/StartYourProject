@@ -7,7 +7,7 @@ THREADS = 1
 all: build
 
 build:
-	g++ server.cpp -ggdb3 -o server.out -lpthread
+	# g++ server.cpp -ggdb3 -o server.out -lpthread
 	g++ client.cpp -ggdb3 -o client.out -lpthread
 
 run_server:

@@ -107,10 +107,13 @@ handle_request(
         return send(bad_request("Illegal request-target"));
 
     beast::string_view target = req.target();
-    Request<http::string_body> request;
+    Request<http::string_body> request(req);
     Response<http::string_body> response;
 
+    std::cout << "req.body(): " << req.body() << std::endl;
+
     if (iequals(target, "/login")) {
+        LoginUC login_uc;
         LoginHandler handler;
 
         handler.handle(&request, &response);

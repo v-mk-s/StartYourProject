@@ -20,7 +20,10 @@ build_server_example: clean
 	./build.sh -DSERVER_EXAMPLE=ON
 
 run_server_example:
-	./build/libs_testing/boost_testing $(HOST) $(PORT) . THREADS
+	./build/libs_testing/server $(HOST) $(PORT) . THREADS
+
+run_client_example:
+	./build/libs_testing/client $(HOST) $(PORT)
 	
 build_server_tests:
 	./build.sh -DWITH_SERVER_TESTS=ON

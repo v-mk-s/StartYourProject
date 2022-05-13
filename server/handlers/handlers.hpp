@@ -4,6 +4,11 @@
 #include "server_utils.hpp"
 #include "server_usecases.hpp"
 
+#include <boost/json.hpp>
+#include <iostream>
+
+namespace json = boost::json;
+
 
 class IHandler {
  public:

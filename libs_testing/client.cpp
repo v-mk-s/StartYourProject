@@ -43,7 +43,8 @@ class session : public std::enable_shared_from_this<session>
     tcp::resolver resolver_;
     beast::tcp_stream stream_;
     beast::flat_buffer buffer_; // (Must persist between reads)
-    http::request<http::empty_body> req_;
+    // http::request<http::empty_body> req_;
+    http::request<http::string_body> req_;
     http::response<http::string_body> res_;
 
 public:
@@ -62,6 +63,7 @@ public:
         std::string host,
         std::string port,
         std::string target,
+        // std::string body,
         int version)
     {
         // Set up an HTTP GET request message
@@ -70,6 +72,9 @@ public:
         req_.target(target);
         req_.set(http::field::host, host);
         req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+        // req_.body() = body;
+
+        std::cout << req_.body() << std::endl;
 
         // Look up the domain name
         resolver_.async_resolve(
@@ -177,6 +182,11 @@ int main(int argc, char** argv)
     std::cout << "Enter target\n" << "";
     std::string target;
     std::cin >> target;
+
+//     std::string login_data = R"({
+//     "Login": "User1234",
+//     "Password": "1234qwerty"
+// })";
 
     int version = argc == 5 && !std::strcmp("1.0", argv[3]) ? 10 : 11;
 
