@@ -36,7 +36,7 @@ class IRegisterUC {
 
 class IEditProfileUC {
  public:
-    virtual Message<std::string> addUser(RegisterData user_data) = 0;
+    virtual Message<std::string> editUserData(UserData user_data) = 0;
 };
 
 class IDelUserProfileUC {

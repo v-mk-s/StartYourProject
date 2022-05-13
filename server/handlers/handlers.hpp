@@ -17,60 +17,60 @@ template <typename JSON>
 class LoginHandler: public IHandler {
  public:
     LoginHandler() = default;
-    LoginHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    LoginHandler(ILoginUC* usecase, IJSON* json): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    ILoginUC* usecase = nullptr;
 };
 
 template <typename JSON>
 class RegisterHandler: public IHandler {
  public:
     RegisterHandler() = default;
-    RegisterHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    RegisterHandler(IRegisterUC* usecase, IJSON* json): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IRegisterUC* usecase = nullptr;
 };
 
 template <typename JSON>
 class EditProfileHandler: public IHandler {
  public:
     EditProfileHandler() = default;
-    EditProfileHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    EditProfileHandler(IEditProfileUC* usecase, IJSON* json): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IEditProfileUC* usecase = nullptr;
 };
 
 template <typename JSON>
 class DelUserProfileHandler: public IHandler {
  public:
     DelUserProfileHandler() = default;
-    DelUserProfileHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    DelUserProfileHandler(IDelUserProfileUC* usecase, IJSON* json): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IDelUserProfileUC* usecase = nullptr;
 };
 
 template <typename JSON>
 class GetUserProfileHandler: public IHandler {
  public:
     GetUserProfileHandler() = default;
-    GetUserProfileHandler(IServerUseCases* usecase, IJSON* json): usecase(usecase) {}
+    GetUserProfileHandler(IGetUserProfileUC* usecase, IJSON* json): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IGetUserProfileUC* usecase = nullptr;
 };
 
 
