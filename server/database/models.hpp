@@ -8,7 +8,7 @@ class ModelPostData
     public:
     
     // объявляем конструктор класса
-    explicit ModelPostData(MainDataBase *db );
+    explicit ModelPostData( );
  
     // Метод, который будет возвращать данные
     PostData* ViewData(PostData *data);

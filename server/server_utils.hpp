@@ -1,7 +1,9 @@
 #pragma once
-
+#include <mysql/mysql.h>
 #include <string>
-
+#include <map>
+#include <sstream>
+#include <algorithm>
 
 enum class ErrorStatus {
     ok,

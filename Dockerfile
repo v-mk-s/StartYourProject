@@ -16,7 +16,6 @@ RUN cd /home && wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/s
     cd boost_1_79_0 && \
     ./bootstrap.sh && \
     ./b2 install
-
+RUN apt-get install libmysqlcppconn-dev
 COPY . /usr/src/StartYourProject
 WORKDIR /usr/src/StartYourProject
-RUN make rebuild

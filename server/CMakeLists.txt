@@ -8,6 +8,7 @@ file(GLOB SOURCES
         handlers/handlers.cpp 
         server_uc/server_usecases.cpp 
         database/database.cpp
+        database/dbconection.cpp
 )
 
 file(GLOB SOURCES handlers/*.cpp router/*.cpp server_uc/*.cpp database/*.cpp)

@@ -3,6 +3,14 @@
     
 void MainDataBase::connectToDataBase() {
 
+this->sqlConn = new MySQLConnection();
+sqlConn->Connect("localhost", 3306, "root", "password", "ProjectData");
+}
+
+
+MySQLQuery * MainDataBase::ViewData(UserData* data){
+    MySQLQuery * view = new MySQLQuery(this->sqlConn, "SELECT username, email, password, name, sur_name, user_description from userdata where username like %" + data->username +"%;" );
+    return view;
 }
 
 
@@ -12,6 +20,7 @@ bool MainDataBase::InsertIntoPostTable(PostData &data) {
 
 
 bool MainDataBase::InsertIntoPersonTable(RegisterData &data) {
+    MySQLQuery * insertq = new MySQLQuery(this->sqlConn, "INSERT INTO userdata (username, email, password) VALUES "+data.username+" "+data.email+" "+data.password +";");
     return true;
 }
 

@@ -1,5 +1,8 @@
 #pragma once
-#include "server_utils.hpp"
+#include "dbconnection.hpp"
+
+
+
 
 
 class MainDataBase
@@ -8,6 +11,8 @@ class MainDataBase
     explicit MainDataBase() = default;
     
     void connectToDataBase();
+
+    MySQLQuery* ViewData(UserData *data);
 
     virtual bool InsertIntoPostTable(PostData &data);
     virtual bool InsertIntoPersonTable(RegisterData &data);
@@ -25,6 +30,7 @@ class MainDataBase
     virtual UserData getUserProfile(std::string &username);
 
  private:
+    MySQLConnection * sqlConn;
     bool openDataBase();
     bool restoreDataBase();
     void closeDataBase();
