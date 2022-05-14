@@ -30,24 +30,6 @@ enum class ErrorStatus
 };
 
 
-struct LoginData
-{
-    std::string username;
-    std::string password;
-
-    LoginData(std::string _username = "", std::string _password = "") : username(_username), password(_password) {}
-};
-
-
-struct RegisterData
-{
-    std::string email;
-    std::string username;
-    std::string password;
-
-    RegisterData(std::string _email = "", std::string _username = "", std::string _password = "") : email(_email), username(_username), password(_password) {}
-};
-
 // divide front members
 
 struct SearchData // 8
@@ -116,14 +98,59 @@ struct UserEditData // 6+1
 
 // don't delete, data for refactoring
 
-struct UserData
+struct LoginData
 {
+    std::string username;
+    std::string password;
+
+    LoginData(std::string _username = "", std::string _password = "") : username(_username), password(_password) {}
+    
+    bool operator==(const LoginData& other) const {
+        return username == other.username && password == other.password;
+    }
+};
+
+
+struct RegisterData
+{
+    std::string email;
+    std::string username;
+    std::string password;
+
+    RegisterData(std::string _email = "", std::string _username = "", std::string _password = "") : email(_email), username(_username), password(_password) {}
+    
+    bool operator==(const RegisterData& other) const {
+        return username == other.username && password == other.password && email == other.email;
+    }
+};
+
+struct UserData {
     std::string username;
     std::string email;
     std::string name;
-    std::string surname;
-    std::string description;
-    std::vector<std::string> project_names;
+    std::string sur_name;
+    std::string user_discription;
+    std::string password;
+
+    bool operator==(const UserData& other) const {
+        return username == other.username && email == other.email &&
+                name == other.name && sur_name == other.sur_name &&
+                user_discription == other.user_discription && password == other.password;
+    }
+};
+
+struct PostData {
+    int user_id;
+    std::string projectname;
+    std::string postdescription;
+    std::string tags;
+    std::string teamname;
+};
+
+struct RequestToPostData {
+    int user_id;
+    int post_id;
+    std::string motivation_words;
 };
 
 

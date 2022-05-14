@@ -1,6 +1,6 @@
 FROM gcc:latest
 RUN apt update -y && \
-    apt install -y cppcheck clang-tidy python3-pip libc6-dbg cmake libgtest-dev lcov
+    apt install -y cppcheck clang-tidy python3-pip libc6-dbg cmake libgtest-dev libgmock-dev lcov
 RUN pip install cpplint
 
 RUN cd /home && wget https://sourceware.org/pub/valgrind/valgrind-3.18.1.tar.bz2 && \

@@ -34,7 +34,7 @@ TEST(LoginUCTest, GoodCase) {
     LoginUC usecase(&database);
 
     Message<std::string> msg = usecase.checkUser(test_data);
-    EXPECT_EQ(ErrorStatus::ok, msg.status);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
     EXPECT_TRUE(msg.data.length() != 0) << "Message: " << msg.data; 
 }
 
@@ -47,7 +47,7 @@ TEST(RegisterUCTest, GoodCase) {
     RegisterUC usecase(&database);
 
     Message<std::string> msg = usecase.addUser(test_data);
-    EXPECT_EQ(ErrorStatus::ok, msg.status);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
 }
 
@@ -59,7 +59,7 @@ TEST(EditProfileUCTest, GoodCase) {
     EditProfileUC usecase(&database);
 
     Message<std::string> msg = usecase.editUserData(test_data);
-    EXPECT_EQ(ErrorStatus::ok, msg.status);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
 }
 
@@ -71,7 +71,7 @@ TEST(DelUserProfileUCTest, GoodCase) {
     DelUserProfileUC usecase(&database);
 
     Message<std::string> msg = usecase.delUserData(test_username);
-    EXPECT_EQ(ErrorStatus::ok, msg.status);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
 }
 
@@ -83,7 +83,7 @@ TEST(GetUserProfileUCTest, GoodCase) {
     GetUserProfileUC usecase(&database);
 
     Message<UserData> msg = usecase.getUserData(test_username);
-    EXPECT_EQ(ErrorStatus::ok, msg.status);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
 }
 
 
@@ -96,50 +96,50 @@ TEST(EditPostTest, UC) {
     EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
     EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
     EditPost Test_1(&db);
-    EXPECT_EQ(Test_1.editPostToDB(post), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.editPostToDB(post), ResponseStatus::ok);
 }
 
 TEST(SearchPostTest, UC) {
     MockDB db;
     SearchPost Test_1(&db);
-    EXPECT_EQ(Test_1.makePostSearch(post), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.makePostSearch(post), ResponseStatus::ok);
 }
 
 TEST(SearchPersonTest, UC) {
     MockDB db;
     SearchPerson Test_1(&db);
-    EXPECT_EQ(Test_1.makePersonSearch("cool_username"), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.makePersonSearch("cool_username"), ResponseStatus::ok);
 }
 
 TEST(MakeRequestToPostTest, UC) {
     MockDB db;
     EXPECT_CALL(db, InsertIntoRequestToPostTable()).Times(AtLeast(1));
     MakeRequestToPost Test_1(&db);
-    EXPECT_EQ(Test_1.makeReqToPost(req), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.makeReqToPost(req), ResponseStatus::ok);
 }
 
 TEST(DeletePostTest, UC) {
     MockDB db;
     EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
     DeletePost Test_1(&db);
-    EXPECT_EQ(Test_1.delPostData(1), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.delPostData(1), ResponseStatus::ok);
 }
 
 TEST(AnswerTheRequestTest, UC) {
     MockDB db;
     AnswerTheRequest Test_1(&db);
-    EXPECT_EQ(Test_1.getAnswer(false, req), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.getAnswer(false, req), ResponseStatus::ok);
 }
 
 TEST(ShowNotificationsTest, UC) {
     MockDB db;
     ShowNotifications Test_1(&db);
-    EXPECT_EQ(Test_1.showAllNotifications(1), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.showAllNotifications(1), ResponseStatus::ok);
 }
 
 TEST(CreatePostTest, UC) {
     MockDB db;
     EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
     CreatePost Test_1(&db);
-    EXPECT_EQ(Test_1.addPostToDB(post), ErrorStatus::ok);
+    EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);
 }

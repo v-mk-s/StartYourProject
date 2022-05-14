@@ -13,14 +13,14 @@
 
 class IServerUseCases {
  public:
-    virtual ErrorStatus editPostToDB(PostData post) = 0;
-    virtual ErrorStatus makePostSearch(PostData post) = 0;
-    virtual ErrorStatus makePersonSearch(std::string username) = 0;
-    virtual ErrorStatus makeReqToPost(RequestToPostData request_info) = 0;
-    virtual ErrorStatus delPostData(int post_id) = 0;
-    virtual ErrorStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
-    virtual ErrorStatus showAllNotifications(int user_id) = 0;
-    virtual ErrorStatus addPostToDB(PostData post) = 0;
+    virtual ResponseStatus editPostToDB(PostData post) = 0;
+    virtual ResponseStatus makePostSearch(PostData post) = 0;
+    virtual ResponseStatus makePersonSearch(std::string username) = 0;
+    virtual ResponseStatus makeReqToPost(RequestToPostData request_info) = 0;
+    virtual ResponseStatus delPostData(int post_id) = 0;
+    virtual ResponseStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
+    virtual ResponseStatus showAllNotifications(int user_id) = 0;
+    virtual ResponseStatus addPostToDB(PostData post) = 0;
 };
 
 class ILoginUC {
@@ -124,7 +124,7 @@ class EditPost{
 public:
    EditPost()=default;
    EditPost(MainDataBase* database): database(database) {}
-   ErrorStatus editPostToDB(PostData post);
+   ResponseStatus editPostToDB(PostData post);
 private:
    MainDataBase* database = nullptr;
 };
@@ -133,7 +133,7 @@ class SearchPost{
 public:
    SearchPost()=default;
    SearchPost(MainDataBase* database): database(database) {}
-   ErrorStatus makePostSearch(PostData post);
+   ResponseStatus makePostSearch(PostData post);
 private:
    MainDataBase* database = nullptr;
 };
@@ -142,7 +142,7 @@ class SearchPerson{
 public:
    SearchPerson()=default;
    SearchPerson(MainDataBase* database): database(database) {}
-   ErrorStatus makePersonSearch(std::string username);
+   ResponseStatus makePersonSearch(std::string username);
 private:
    MainDataBase* database = nullptr;
 };
@@ -151,7 +151,7 @@ class MakeRequestToPost{
 public:
    MakeRequestToPost()=default;
    MakeRequestToPost(MainDataBase* database): database(database) {}
-   ErrorStatus makeReqToPost(RequestToPostData request_info);
+   ResponseStatus makeReqToPost(RequestToPostData request_info);
 private:
    MainDataBase* database = nullptr;
 };
@@ -160,7 +160,7 @@ class DeletePost{
 public:
    DeletePost()=default;
    DeletePost(MainDataBase* database): database(database) {}
-   ErrorStatus delPostData(int post_id);
+   ResponseStatus delPostData(int post_id);
 private:
    MainDataBase* database = nullptr;
 };
@@ -169,7 +169,7 @@ class AnswerTheRequest{
 public:
    AnswerTheRequest()=default;
    AnswerTheRequest(MainDataBase* database): database(database) {}
-   ErrorStatus getAnswer(bool answer, RequestToPostData request_info);
+   ResponseStatus getAnswer(bool answer, RequestToPostData request_info);
 private:
    MainDataBase* database = nullptr;
 };
@@ -178,7 +178,7 @@ class ShowNotifications{
 public:
    ShowNotifications()=default;
    ShowNotifications(MainDataBase* database): database(database) {}
-   ErrorStatus showAllNotifications(int user_id);
+   ResponseStatus showAllNotifications(int user_id);
 private:
    MainDataBase* database = nullptr;
 };
@@ -187,7 +187,7 @@ class CreatePost{
 public:
    CreatePost()=default;
    CreatePost(MainDataBase* database): database(database) {}
-   ErrorStatus addPostToDB(PostData post);
+   ResponseStatus addPostToDB(PostData post);
 private:
    MainDataBase* database = nullptr;
 };
