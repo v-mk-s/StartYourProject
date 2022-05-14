@@ -19,4 +19,4 @@ RUN cd /home && wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/s
 
 COPY . /usr/src/StartYourProject
 WORKDIR /usr/src/StartYourProject
-RUN make build
+RUN make rebuild
