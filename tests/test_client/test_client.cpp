@@ -1,8 +1,9 @@
 #include "usecases.hpp"
 #include "validation.hpp"
-#include "client_utils.hpp"
+#include "utils.hpp"
 #include "general.hpp"
 #include "clientui.hpp"
+#include <gtest/gtest.h>
 
 
 // Alex /////////////////////////
