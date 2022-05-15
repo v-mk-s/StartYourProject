@@ -7,21 +7,30 @@ using ::testing::AtLeast;
 using ::testing::Return;
 
 
+
+
+
 class MockDB: public MainDataBase {
  public:
     MOCK_METHOD(bool, InsertIntoPersonTable, (RegisterData &data));
-    MOCK_METHOD(bool, InsertIntoPostTable, ());
-    MOCK_METHOD(bool, InsertIntoRequestToPostTable, ());
+    MOCK_METHOD(bool, InsertIntoPostTable, (ProjectData &data));
+    MOCK_METHOD(bool, InsertIntoRequestToPostTable, (RequestToPostData &data));
 
-    MOCK_METHOD(bool, DeleteFromPostTable, ());
+    MOCK_METHOD(bool, DeleteFromPostTable, (std::string &project_name));
     MOCK_METHOD(bool, DeleteFromPersonTable, (std::string &data));
     MOCK_METHOD(bool, DeleteFromRequestToPostTable, (RequestToPostData &data));
 
     MOCK_METHOD(bool, EditUserInPersonTable, (UserData &data));
+    MOCK_METHOD(bool, EditPostInPostTable, (ProjectData &data));
+    MOCK_METHOD(bool, EditRequestToPostTable, (RequestToPostData &data));
 
     MOCK_METHOD(bool, FindIntoPersonTable, (LoginData &data));
+    MOCK_METHOD(bool, FindIntoPostTable, (std::string &project_name));
+    MOCK_METHOD(NotificationData, FindRequestToPostTable, (int &user_id));
 
     MOCK_METHOD(UserData, getUserProfile, (std::string &username));
+    MOCK_METHOD(ProjectData, getPost, (std::string &project_name));
+    MOCK_METHOD(std::vector<ProjectData>, getMultiPost, (SearchData &data));
 };
 
 
@@ -87,14 +96,12 @@ TEST(GetUserProfileUCTest, GoodCase) {
 }
 
 
-PostData post={1,"проект", "классный проект","Стартап", "PyTorchki"};
-RequestToPostData req={1,2, "Очень хочу к вам в команду"};
-
+ProjectData post = {"project", "PyTorchki", {"Python"}, {"Teammate"}, "cool project", 0.99, "i want you"};
+RequestToPostData req = {1,2, "I really want to join your team", RequestToPostData::Status::unknown};
 
 TEST(EditPostTest, UC) {
     MockDB db;
-    EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
-    EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
+    EXPECT_CALL(db, EditPostInPostTable(post)).Times(AtLeast(1)).WillOnce(Return(true));
     EditPost Test_1(&db);
     EXPECT_EQ(Test_1.editPostToDB(post), ResponseStatus::ok);
 }
@@ -102,31 +109,35 @@ TEST(EditPostTest, UC) {
 TEST(SearchPostTest, UC) {
     MockDB db;
     SearchPost Test_1(&db);
-    EXPECT_EQ(Test_1.makePostSearch(post), ResponseStatus::ok);
+    Message<ProjectData> msg = Test_1.makePostSearch(post.project_name);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
 }
 
 TEST(SearchPersonTest, UC) {
     MockDB db;
+    std::string username = "cool_username";
     SearchPerson Test_1(&db);
-    EXPECT_EQ(Test_1.makePersonSearch("cool_username"), ResponseStatus::ok);
+    Message<UserData> msg = Test_1.makePersonSearch(username);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
 }
 
 TEST(MakeRequestToPostTest, UC) {
     MockDB db;
-    EXPECT_CALL(db, InsertIntoRequestToPostTable()).Times(AtLeast(1));
+    EXPECT_CALL(db, InsertIntoRequestToPostTable(req)).Times(AtLeast(1)).WillOnce(Return(true));
     MakeRequestToPost Test_1(&db);
     EXPECT_EQ(Test_1.makeReqToPost(req), ResponseStatus::ok);
 }
 
 TEST(DeletePostTest, UC) {
     MockDB db;
-    EXPECT_CALL(db, DeleteFromPostTable()).Times(AtLeast(1));
+    EXPECT_CALL(db, DeleteFromPostTable(post.project_name)).Times(AtLeast(1)).WillOnce(Return(true));
     DeletePost Test_1(&db);
-    EXPECT_EQ(Test_1.delPostData(1), ResponseStatus::ok);
+    EXPECT_EQ(Test_1.delPostData(post.project_name), ResponseStatus::ok);
 }
 
 TEST(AnswerTheRequestTest, UC) {
     MockDB db;
+    EXPECT_CALL(db, EditRequestToPostTable(req)).Times(AtLeast(1)).WillOnce(Return(true));
     AnswerTheRequest Test_1(&db);
     EXPECT_EQ(Test_1.getAnswer(false, req), ResponseStatus::ok);
 }
@@ -134,12 +145,14 @@ TEST(AnswerTheRequestTest, UC) {
 TEST(ShowNotificationsTest, UC) {
     MockDB db;
     ShowNotifications Test_1(&db);
-    EXPECT_EQ(Test_1.showAllNotifications(1), ResponseStatus::ok);
+    Message<NotificationData> msg = Test_1.showAllNotifications(1);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
 }
 
 TEST(CreatePostTest, UC) {
     MockDB db;
-    EXPECT_CALL(db, InsertIntoPostTable()).Times(AtLeast(1));
+    EXPECT_CALL(db, InsertIntoPostTable(post)).Times(AtLeast(1)).WillOnce(Return(true));
     CreatePost Test_1(&db);
     EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);
 }
+

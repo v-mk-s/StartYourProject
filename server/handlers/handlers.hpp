@@ -25,6 +25,7 @@ class LoginHandler: public IHandler {
     ILoginUC* usecase = nullptr;
 };
 
+
 template <typename JSON>
 class RegisterHandler: public IHandler {
  public:
@@ -36,6 +37,7 @@ class RegisterHandler: public IHandler {
  private:
     IRegisterUC* usecase = nullptr;
 };
+
 
 template <typename JSON>
 class EditProfileHandler: public IHandler {
@@ -49,6 +51,7 @@ class EditProfileHandler: public IHandler {
     IEditProfileUC* usecase = nullptr;
 };
 
+
 template <typename JSON>
 class DelUserProfileHandler: public IHandler {
  public:
@@ -60,6 +63,7 @@ class DelUserProfileHandler: public IHandler {
  private:
     IDelUserProfileUC* usecase = nullptr;
 };
+
 
 template <typename JSON>
 class GetUserProfileHandler: public IHandler {
@@ -76,80 +80,105 @@ class GetUserProfileHandler: public IHandler {
 
 /////////////////////////// Posts Handlers ////////////////////////////////
 
+template <typename JSON>
 class EditPostHandler: public IHandler {
  public:
-    EditPostHandler(IServerUseCases* usecase): usecase(usecase) {}
+    EditPostHandler() = default;
+    EditPostHandler(IEditPost* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IEditPost* usecase = nullptr;
 };
 
 
+template <typename JSON>
 class SearchPostHandler: public IHandler {
  public:
-    SearchPostHandler(IServerUseCases* usecase): usecase(usecase) {}
+    SearchPostHandler() = default;
+    SearchPostHandler(ISearchPost* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    ISearchPost* usecase = nullptr;
 };
 
 
+template <typename JSON>
 class SearchPersonHandler: public IHandler {
  public:
-    SearchPersonHandler(IServerUseCases* usecase): usecase(usecase) {}
+    SearchPersonHandler() = default;
+    SearchPersonHandler(ISearchPerson* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    ISearchPerson* usecase = nullptr;
 };
 
 
+template <typename JSON>
 class MakeRequestToPostHandler: public IHandler {
  public:
-    MakeRequestToPostHandler(IServerUseCases* usecase): usecase(usecase) {}
+    MakeRequestToPostHandler()=default;
+    MakeRequestToPostHandler(IMakeRequestToPost* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IMakeRequestToPost* usecase = nullptr;
 };
 
 
+template <typename JSON>
 class ShowNotificationsHandler: public IHandler {
  public:
-    ShowNotificationsHandler(IServerUseCases* usecase): usecase(usecase) {}
+    ShowNotificationsHandler() = default;
+    ShowNotificationsHandler(IShowNotifications* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IShowNotifications* usecase = nullptr;
 };
 
 
-
+template <typename JSON>
 class AnswerTheRequestHandler: public IHandler {
  public:
-    AnswerTheRequestHandler(IServerUseCases* usecase): usecase(usecase) {}
+    AnswerTheRequestHandler()=default;
+    AnswerTheRequestHandler(IAnswerTheRequest* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IAnswerTheRequest* usecase = nullptr;
 };
 
 
-
+template <typename JSON>
 class DeletePostHandler: public IHandler {
  public:
-    DeletePostHandler(IServerUseCases* usecase): usecase(usecase) {}
+    DeletePostHandler() = default;
+    DeletePostHandler(IDeletePost* usecase): usecase(usecase) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IServerUseCases* usecase = nullptr;
+    IDeletePost* usecase = nullptr;
+};
+
+
+template <typename JSON>
+class CreatePostHandler: public IHandler {
+ public:
+    CreatePostHandler() = default;
+    CreatePostHandler(ICreatePost* usecase): usecase(usecase) {}
+
+    void handle(RequestInterface* request, ResponseInterface* response);
+
+ private:
+    ICreatePost* usecase = nullptr;
 };

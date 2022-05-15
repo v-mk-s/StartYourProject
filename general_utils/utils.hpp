@@ -139,18 +139,25 @@ struct UserData {
     }
 };
 
-struct PostData {
-    int user_id;
-    std::string projectname;
-    std::string postdescription;
-    std::string tags;
-    std::string teamname;
-};
+// struct PostData {
+//     int user_id;
+//     std::string projectname;
+//     std::string postdescription;
+//     std::string tags;
+//     std::string teamname;
+// };
 
 struct RequestToPostData {
     int user_id;
     int post_id;
     std::string motivation_words;
+    enum class Status {yes, no, unknown};
+    Status status;
+
+    bool operator==(const RequestToPostData& other) const {
+        return user_id == other.user_id && 
+               post_id == other.post_id;
+    }
 };
 
 
@@ -173,6 +180,10 @@ struct ProjectData
     std::string project_description;
     double diversity;
     std::string request_description;
+
+    bool operator==(const ProjectData& other) const {
+        return project_name == other.project_name;
+    }
 };
 
 

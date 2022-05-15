@@ -11,23 +11,10 @@
 #define SAME_USER "A user with the same name already exists"
 
 
-class IServerUseCases {
- public:
-    virtual ResponseStatus editPostToDB(PostData post) = 0;
-    virtual ResponseStatus makePostSearch(PostData post) = 0;
-    virtual ResponseStatus makePersonSearch(std::string username) = 0;
-    virtual ResponseStatus makeReqToPost(RequestToPostData request_info) = 0;
-    virtual ResponseStatus delPostData(int post_id) = 0;
-    virtual ResponseStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
-    virtual ResponseStatus showAllNotifications(int user_id) = 0;
-    virtual ResponseStatus addPostToDB(PostData post) = 0;
-};
-
 class ILoginUC {
  public:
     virtual Message<std::string> checkUser(LoginData& user) = 0;
 };
-
 
 class IRegisterUC {
  public:
@@ -49,13 +36,53 @@ class IGetUserProfileUC {
     virtual Message<UserData> getUserData(std::string& username) = 0;
 };
 
+class IEditPost {
+ public:
+    virtual ResponseStatus editPostToDB(ProjectData post) = 0;
+};
+
+class ISearchPost {
+ public:
+    virtual Message<ProjectData> makePostSearch(std::string& project_name) = 0;
+    virtual Message<std::vector<ProjectData>> makePostSearch(SearchData& data) = 0;
+};
+
+class ISearchPerson {
+ public:
+    virtual Message<UserData> makePersonSearch(std::string& username) = 0;
+};
+
+class IMakeRequestToPost {
+ public:
+    virtual ResponseStatus makeReqToPost(RequestToPostData& request_info) = 0;
+};
+
+class IDeletePost {
+ public:
+    virtual ResponseStatus delPostData(std::string &project_name) = 0;
+};
+
+class IAnswerTheRequest {
+ public:
+    virtual ResponseStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
+};
+
+class IShowNotifications {
+ public:
+    virtual Message<NotificationData> showAllNotifications(int user_id) = 0;
+};
+
+class ICreatePost {
+ public:
+    virtual ResponseStatus addPostToDB(ProjectData post) = 0;
+};
+
 
 /////////////////////// User UC /////////////////////////////////////
 
 bool checkUsername(std::string& name);
 bool checkPassword(std::string& password);
 bool checkEmail(std::string& email);
-
 
 class LoginUC: public ILoginUC {
  public:
@@ -124,7 +151,9 @@ class EditPost{
 public:
    EditPost()=default;
    EditPost(MainDataBase* database): database(database) {}
-   ResponseStatus editPostToDB(PostData post);
+
+   ResponseStatus editPostToDB(ProjectData post);
+   
 private:
    MainDataBase* database = nullptr;
 };
@@ -133,7 +162,10 @@ class SearchPost{
 public:
    SearchPost()=default;
    SearchPost(MainDataBase* database): database(database) {}
-   ResponseStatus makePostSearch(PostData post);
+
+   Message<ProjectData> makePostSearch(std::string& project_name);
+   Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data);
+
 private:
    MainDataBase* database = nullptr;
 };
@@ -142,7 +174,9 @@ class SearchPerson{
 public:
    SearchPerson()=default;
    SearchPerson(MainDataBase* database): database(database) {}
-   ResponseStatus makePersonSearch(std::string username);
+
+   Message<UserData> makePersonSearch(std::string& username);
+
 private:
    MainDataBase* database = nullptr;
 };
@@ -151,7 +185,9 @@ class MakeRequestToPost{
 public:
    MakeRequestToPost()=default;
    MakeRequestToPost(MainDataBase* database): database(database) {}
-   ResponseStatus makeReqToPost(RequestToPostData request_info);
+
+   ResponseStatus makeReqToPost(RequestToPostData& request_info);
+
 private:
    MainDataBase* database = nullptr;
 };
@@ -160,7 +196,7 @@ class DeletePost{
 public:
    DeletePost()=default;
    DeletePost(MainDataBase* database): database(database) {}
-   ResponseStatus delPostData(int post_id);
+   ResponseStatus delPostData(std::string &project_name);
 private:
    MainDataBase* database = nullptr;
 };
@@ -178,7 +214,7 @@ class ShowNotifications{
 public:
    ShowNotifications()=default;
    ShowNotifications(MainDataBase* database): database(database) {}
-   ResponseStatus showAllNotifications(int user_id);
+   Message<NotificationData> showAllNotifications(int user_id);
 private:
    MainDataBase* database = nullptr;
 };
@@ -187,7 +223,7 @@ class CreatePost{
 public:
    CreatePost()=default;
    CreatePost(MainDataBase* database): database(database) {}
-   ResponseStatus addPostToDB(PostData post);
+   ResponseStatus addPostToDB(ProjectData post);
 private:
    MainDataBase* database = nullptr;
 };
