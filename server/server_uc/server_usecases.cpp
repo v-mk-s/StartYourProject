@@ -94,10 +94,10 @@ ResponseStatus DeletePost::delPostData(std::string &project_name) {
 
 ResponseStatus AnswerTheRequest::getAnswer(bool answer, RequestToPostData request_info) {
     if (answer)
-        request_info.status=RequestToPostData::Status::yes;
+        request_info.status = RequestToPostData::Status::yes;
     else
-        request_info.status=RequestToPostData::Status::no;
-    if (!database->EditRequestToPostTable(request_info)){
+        request_info.status = RequestToPostData::Status::no;
+    if (!database->EditRequestToPostTable(request_info)) {
         return ResponseStatus::bad_req;
     } 
     return ResponseStatus::ok;
@@ -112,7 +112,7 @@ Message<NotificationData> ShowNotifications::showAllNotifications(int user_id) {
 
 
 ResponseStatus CreatePost::addPostToDB(ProjectData post) {
-    if (!database->InsertIntoPostTable(post)){
+    if (!database->InsertIntoPostTable(post)) {
         return ResponseStatus::bad_req;
     } 
     return ResponseStatus::ok;

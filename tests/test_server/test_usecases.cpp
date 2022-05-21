@@ -97,7 +97,7 @@ TEST(GetUserProfileUCTest, GoodCase) {
 
 
 ProjectData post = {"project", "PyTorchki", {"Python"}, {"Teammate"}, "cool project", 0.99, "i want you"};
-RequestToPostData req = {1,2, "I really want to join your team", RequestToPostData::Status::unknown};
+RequestToPostData req = {1, 2, "I really want to join your team", RequestToPostData::Status::unknown};
 
 TEST(EditPostTest, UC) {
     MockDB db;

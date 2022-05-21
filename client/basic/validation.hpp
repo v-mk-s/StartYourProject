@@ -35,30 +35,32 @@
 std::string stop_symbols_email = "!#$%^&*()_-=+',./[]{}:;\"<>?/";
 std::string stop_symbols_all = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
 
-bool isValidEmail(std::string &email);
-bool isValidUsername(std::string &username);
-bool isValidPassword(std::string &password);
+bool isValidEmail(const std::string &email);
+bool isValidUsername(const std::string &username);
+bool isValidPassword(const std::string &password);
 
-bool isValidAgeToFrom(std::int32_t age_to, std::int32_t age_from);
-bool isValidPostTags(std::vector<std::string> &post_tags);
+bool isValidAgeToFrom(const std::int32_t &age_to, const std::int32_t &age_from);
+bool isValidPostTags(const std::vector<std::string> &post_tags);
 
-bool isValidPhoto(std::vector<std::int32_t> &photo);
-bool isValidName(std::string &name);
-bool isValidSurname(std::string &surname);
-bool isValidUserDescription(std::string &description);
+bool isValidPhoto(const std::vector<std::int32_t> &photo);
+bool isValidName(const std::string &name);
+bool isValidSurname(const std::string &surname);
+bool isValidUserDescription(const std::string &description);
 
 // may be redundant or Alex functions
-bool isValidDescription(std::string);
-bool isValidProjectDescription(std::string &project_description);
-bool isValidRequestDescription(std::string &request_description);
+bool isValidDescription(const std::string);
+bool isValidProjectDescription(const std::string &project_description);
+bool isValidRequestDescription(const std::string &request_description);
 
-bool isValidTeamName(std::string &team_name);
-bool isValidProjectName(std::string &project_name);
-bool isValidProjectNames(std::vector<std::string> &project_names);
+bool isValidTeamName(const std::string &team_name);
+bool isValidProjectName(const std::string &project_name);
+bool isValidProjectNames(const std::vector<std::string> &project_names);
 
-bool isValidTeammates(std::vector<std::string> &teammates);
-bool isValidDiversity(std::int32_t diversity);
-bool isValidQuestion(std::string &question);
-bool isValidProjects(std::vector<NotificationProjectData> &projects);
-bool isValidSearchData(std::string &search_data);
-bool isValidPostData(MainPostData &post_data);
+bool isValidTeammates(const std::vector<std::string> &teammates);
+bool isValidDiversity(const std::int32_t diversity);
+bool isValidQuestion(const std::string &question);
+bool isValidProjects(const std::vector<NotificationProjectData> &projects);
+bool isValidSearchData(const std::string &search_data);
+bool isValidPostData(const MainPostData &post_data);
+
+bool isValidLanguage(const std::string& language);

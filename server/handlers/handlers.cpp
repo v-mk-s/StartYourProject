@@ -34,8 +34,8 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     data.password = json.template get<std::string>("password", "");
     data.email = json.template get<std::string>("email", "");
     data.name = json.template get<std::string>("name", "");
-    data.sur_name = json.template get<std::string>("sur_name", "");
-    data.user_discription = json.template get<std::string>("user_discription", "");
+    data.surname = json.template get<std::string>("surname", "");
+    data.user_description = json.template get<std::string>("user_description", "");
 
     usecase->editUserData(data);
 }
