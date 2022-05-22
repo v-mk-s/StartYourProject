@@ -1,33 +1,11 @@
-cmake_minimum_required(VERSION 3.14)
-project(server_syp)
+add_subdirectory(core)
+add_subdirectory(network)
+add_subdirectory(database)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wpedantic -Wextra")
+set(SERVER_SYP_CORE_LIBRARIES ${SERVER_SYP_CORE_LIBRARIES} PARENT_SCOPE)
+set(SERVER_SYP_CORE_INCLUDE_DIRS ${SERVER_SYP_CORE_INCLUDE_DIRS} PARENT_SCOPE)
 
-file(GLOB SOURCES 
-        handlers/handlers.cpp 
-        server_uc/server_usecases.cpp 
-        database/database.cpp
-        server/network/listener/listener.cpp
-        network/router/router.cpp
-        /network/request_response/request_response.cpp
-)
+set(SERVER_SYP_NETWORK_LIBRARIES ${SERVER_SYP_NETWORK_LIBRARIES} PARENT_SCOPE)
+set(SERVER_SYP_NETWORK_INCLUDE_DIRS ${SERVER_SYP_NETWORK_INCLUDE_DIRS} PARENT_SCOPE)
 
-file(GLOB INCLUDE_DIRS
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_HOME_DIRECTORY}/general_utils
-        handlers
-        router
-        server_uc
-        database
-        network_interface
-        network/listener
-        network/router
-        network/request_response/
-)
-
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
-
-set(SERVER_SYP_LIBRARIES ${PROJECT_NAME} PARENT_SCOPE)
-set(SERVER_SYP_INCLUDE_DIRS ${INCLUDE_DIRS} PARENT_SCOPE)
+set(SERVER_SYP_DATABASE_INCLUDE_DIRS ${SERVER_SYP_DATABASE_INCLUDE_DIRS} PARENT_SCOPE)

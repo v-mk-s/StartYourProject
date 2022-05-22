@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+project(server_syp_database)
+
+# file(GLOB SOURCES)
+
+file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(SERVER_SYP_DATABASE_INCLUDE_DIRS ${INCLUDE_DIRS} PARENT_SCOPE)

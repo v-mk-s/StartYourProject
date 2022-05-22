@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "database.hpp"
+#include "idatabase.hpp"
 
 class ModelPostData 
 {

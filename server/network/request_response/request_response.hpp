@@ -1,5 +1,7 @@
-#include "server_utils.hpp"
+#pragma once
+
 #include "inetwork.hpp"
+#include "dependencies.hpp"
 
 
 template <typename BodyType = http::string_body>
@@ -38,4 +40,16 @@ class Response: public ResponseInterface {
 
  private:
     http::response<BodyType> res_;
+};
+
+
+class JSON: public IJSON {
+ public:
+    JSON(std::string &str);
+
+    template<class T>
+    T get(const std::string &str, T);
+
+    template<class T>
+    void put(const std::string &str, T);
 };

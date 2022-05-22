@@ -1,8 +1,7 @@
 #pragma once
 
 #include "server_utils.hpp"
-#include "database.hpp"
-#include <regex>
+#include "idatabase.hpp"
 
 #define WRONG_NAME "Username is incorrect"
 #define WRONG_PASSWORD "Password is incorrect"
