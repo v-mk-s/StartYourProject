@@ -45,11 +45,14 @@ class Response: public ResponseInterface {
 
 class JSON: public IJSON {
  public:
-    JSON(std::string &str);
+    JSON(const std::string &str);
 
     template<class T>
-    T get(const std::string &str, T);
+    T get(const std::string &key, T defaultValue);
 
     template<class T>
-    void put(const std::string &str, T);
+    void put(const std::string &key, T value);
+
+ private:
+    json::value value_;
 };

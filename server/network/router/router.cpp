@@ -41,7 +41,7 @@ void Session::on_read(beast::error_code ec, std::size_t bytes_transferred) {
     }
 
     if(ec) {
-        return fail(ec, "read");
+        std::cerr << "read" << ": " << ec.message() << "\n";
     }
 
     handle_request(*doc_root_, std::move(req_), lambda_);
@@ -51,7 +51,7 @@ void Session::on_write(bool close, beast::error_code ec, std::size_t bytes_trans
     boost::ignore_unused(bytes_transferred);
 
     if(ec) {
-        return fail(ec, "write");
+        std::cerr << "write" << ": " << ec.message() << "\n";
     }
     if(close) {
         return do_close();
@@ -108,19 +108,13 @@ void handle_request(beast::string_view doc_root,
     std::cout << "req.body(): " << req.body() << std::endl;
 
     if (iequals(target, "/login")) {
-        LoginUC login_uc;
-        LoginHandler<IJSON> handler;
+        // LoginHandler<JSON> handler;
 
-        handler.handle(&request, &response);
+        // handler.handle(&request, &response);
     }
     else {
         return send(bad_request("Unknown target\n"));
     }
 
     return send(std::move(response.get_reference()));
-}
-
-
-void fail(beast::error_code ec, char const* what) {
-    std::cerr << what << ": " << ec.message() << "\n";
 }

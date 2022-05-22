@@ -47,5 +47,3 @@ void handle_request(beast::string_view doc_root,
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send
 );
-
-void fail(beast::error_code ec, char const* what);

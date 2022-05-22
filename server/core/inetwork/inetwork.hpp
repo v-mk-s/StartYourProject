@@ -5,7 +5,6 @@
 
 class RequestInterface {
  public:
-    // virtual size_t get_content_size() const = 0;
     virtual std::string get_body() = 0;
 };
 
@@ -18,7 +17,7 @@ class ResponseInterface{
 
 class IJSON {
  public:
-    IJSON(std::string &str);
+    IJSON(const std::string &) {};
 
     template<class T>
     T get(const std::string &str, T);
