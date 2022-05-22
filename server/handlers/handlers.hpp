@@ -1,6 +1,6 @@
 #pragma once
 
-#include "router.hpp"
+#include "inetwork.hpp"
 #include "server_utils.hpp"
 #include "server_usecases.hpp"
 
