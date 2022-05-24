@@ -125,6 +125,7 @@ struct RegisterData
 };
 
 struct UserData {
+    int id;
     std::string username;
     std::string email;
     std::string name;
@@ -150,8 +151,9 @@ struct UserData {
 struct RequestToPostData {
     int user_id;
     int post_id;
+    std::string project_name;
     std::string motivation_words;
-    enum class Status {yes, no, unknown};
+    enum class Status {yes=1, no=2, unknown=3};
     Status status;
 
     bool operator==(const RequestToPostData& other) const {
@@ -173,6 +175,8 @@ struct PublishPostData
 
 struct ProjectData
 {
+    int id;
+    int userid;
     std::string project_name;
     std::string team_name;
     std::vector<std::string> post_tags;

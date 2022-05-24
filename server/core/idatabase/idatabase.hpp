@@ -11,7 +11,7 @@ class MainDataBase
     virtual bool InsertIntoRequestToPostTable(RequestToPostData &data) = 0;
 
     virtual bool DeleteFromPostTable(std::string &project_name) = 0;
-    virtual bool DeleteFromPersonTable(std::string &data) = 0;
+    virtual bool DeleteFromPersonTable(int  &id) = 0;
     virtual bool DeleteFromRequestToPostTable(RequestToPostData &data) = 0;
     virtual bool DeleteFromTable() = 0;
 
