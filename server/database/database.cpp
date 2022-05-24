@@ -198,9 +198,13 @@ bool EditRequestToPostTable(RequestToPostData &data){
 
 
 bool IsUnique(std::string &username){
-    
-
-
+    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id from userdata "
+    R"( where username = ? )");
+    selectQuery->setString(1,username);
+    selectQuery->ExecuteQuery();
+    if (selectQuery->GetResultRowCount()>0)
+    return true;
+    else return false;
 }
 
 
