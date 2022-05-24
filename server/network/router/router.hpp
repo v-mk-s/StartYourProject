@@ -1,7 +1,18 @@
-#pragma "once"
+#pragma once
 
 #include "request_response.hpp"
 #include "handlers.hpp"
+
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+#include <boost/asio/dispatch.hpp>
+
+namespace beast = boost::beast;
+namespace http = beast::http;
+namespace net = boost::asio;
+
+using tcp = boost::asio::ip::tcp;
+
 
 
 class Session : public std::enable_shared_from_this<Session> {

@@ -2,6 +2,14 @@
 
 #include "router.hpp"
 
+#include <boost/beast/core.hpp>
+#include <boost/asio/strand.hpp>
+
+namespace beast = boost::beast;
+namespace net = boost::asio;
+
+using tcp = boost::asio::ip::tcp;
+
 
 class Listener : public std::enable_shared_from_this<Listener> {
  public:

@@ -1,4 +1,9 @@
+#pragma once
+
 #include "handlers.hpp"
+
+#define HTTP_VER_1_1 11
+#define HTTP_VER_1_0 10
 
 
 /////////////////////////// User Handlers ///////////////////////////////
@@ -10,7 +15,9 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
     data.username = json.template get<std::string>("username", "");
     data.password = json.template get<std::string>("password", "");
 
-    usecase->checkUser(data);
+    Message<std::string> msg = usecase->checkUser(data);
+    response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
+    response->set_body(msg.data);
 }
 
 template <typename JSON>
@@ -22,7 +29,9 @@ void RegisterHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
     data.password = json.template get<std::string>("password", "");
     data.email = json.template get<std::string>("email", "");
 
-    usecase->addUser(data);
+    Message<std::string> msg = usecase->addUser(data);
+    response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
+    response->set_body(msg.data);
 }
 
 template <typename JSON>
@@ -37,7 +46,9 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     data.sur_name = json.template get<std::string>("sur_name", "");
     data.user_discription = json.template get<std::string>("user_discription", "");
 
-    usecase->editUserData(data);
+    Message<std::string> msg = usecase->editUserData(data);
+    response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
+    response->set_body(msg.data);
 }
 
 template <typename JSON>
@@ -47,7 +58,9 @@ void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
 
     data = json.template get<std::string>("username", "");
 
-    usecase->delUserData(data);
+    Message<std::string> msg = usecase->delUserData(data);
+    response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
+    response->set_body(msg.data);
 }
 
 template <typename JSON>
@@ -57,7 +70,9 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
 
     data = json.template get<std::string>("username", "");
 
-    usecase->getUserData(data);
+    Message<std::string> msg = usecase->getUserData(data);
+    response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
+    response->set_body(msg.data);
 }
 
 /////////////////////////// Posts Handlers ////////////////////////////////

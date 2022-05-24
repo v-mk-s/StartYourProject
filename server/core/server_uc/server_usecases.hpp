@@ -3,11 +3,6 @@
 #include "server_utils.hpp"
 #include "idatabase.hpp"
 
-#define WRONG_NAME "Username is incorrect"
-#define WRONG_PASSWORD "Password is incorrect"
-#define WRONG_EMAIL "Email is incorrect"
-#define LOGIN_DATA_DONT_MATCH "Username and password dont match"
-#define SAME_USER "A user with the same name already exists"
 
 
 class ILoginUC {

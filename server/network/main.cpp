@@ -1,12 +1,18 @@
 #include "listener.hpp"
 
+#include <boost/asio/signal_set.hpp>
 
-int main()
-{
-    auto const address = net::ip::make_address(ADDRESS);
-    auto const port = static_cast<unsigned short>(PORT);
-    auto const doc_root = std::make_shared<std::string>(DOC_ROOT);
-    auto const threads = std::max<int>(1, THREADS);
+
+int main(int argc, char* argv[]) {
+    if (argc != 5) {
+        std::cerr << "Invalid arguments" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    auto const address = net::ip::make_address(argv[1]);
+    auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
+    auto const doc_root = std::make_shared<std::string>(argv[3]);
+    auto const threads = std::max<int>(1, std::atoi(argv[4]));
 
     net::io_context ioc{threads};
 

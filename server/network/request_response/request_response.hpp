@@ -1,7 +1,17 @@
 #pragma once
 
 #include "inetwork.hpp"
-#include "dependencies.hpp"
+
+#include <boost/beast/http.hpp>
+#include <boost/asio/dispatch.hpp>
+#include <boost/json.hpp>
+
+namespace beast = boost::beast;
+namespace http = beast::http;
+namespace json = boost::json;
+
+#define SERVER_NAME "StartYourProject"
+
 
 
 template <typename BodyType = http::string_body>
@@ -10,7 +20,8 @@ class Request: public RequestInterface {
     Request() = default;
     Request(http::request<BodyType> req): req_(req) {}
 
-    std::string get_body() { return req_.body(); }
+    std::string get_body() override { return req_.body(); }
+    bool is_keep_alive() override {return req_.keep_alive() ;}
 
     http::request<BodyType>& get_reference() { return req_; }
 
@@ -24,17 +35,9 @@ class Response: public ResponseInterface {
  public:
     Response() = default;
 
-    void set_headers(std::string content_type, int ver) {
-        res_ = {http::status::ok, ver};
-        res_.set(http::field::server, SERVER_NAME);
-        res_.set(http::field::content_type, content_type);
-    };
+    void set_headers(ResponseStatus status, std::string content_type, int ver, bool keep_alive) override;
 
-    void set_body(std::string body, bool keep_alive) {
-        res_.content_length(body.size());
-        res_.body() = body;
-        res_.keep_alive(keep_alive);
-    }
+    void set_body(std::string& body) override;
 
     http::response<BodyType>& get_reference() { return res_; }
 
@@ -56,3 +59,5 @@ class JSON: public IJSON {
  private:
     json::value value_;
 };
+
+#include "request_response.impl"

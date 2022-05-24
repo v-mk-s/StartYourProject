@@ -73,33 +73,22 @@ void handle_request(beast::string_view doc_root,
     Send&& send) {
     auto const bad_request = [&req](beast::string_view why) {
         http::response<http::string_body> res{http::status::bad_request, req.version()};
-        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+        res.set(http::field::server, SERVER_NAME);
         res.set(http::field::content_type, "text/html");
         res.keep_alive(req.keep_alive());
         res.body() = std::string(why);
         res.prepare_payload();
         return res;
     };
+    
+    if(req.method() != http::verb::get && req.method() != http::verb::head) {
+        return send(bad_request("Unknown HTTP-method"));
+    }
 
-    auto const not_found = [&req](beast::string_view target) {
-        http::response<http::string_body> res{http::status::not_found, req.version()};
-        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(http::field::content_type, "text/html");
-        res.keep_alive(req.keep_alive());
-        res.body() = "The resource '" + std::string(target) + "' was not found.";
-        res.prepare_payload();
-        return res;
-    };
-
-    auto const server_error = [&req](beast::string_view what) {
-        http::response<http::string_body> res{http::status::internal_server_error, req.version()};
-        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(http::field::content_type, "text/html");
-        res.keep_alive(req.keep_alive());
-        res.body() = "An error occurred: '" + std::string(what) + "'";
-        res.prepare_payload();
-        return res;
-    };
+    if(req.target().empty() || req.target()[0] != '/' ||
+       req.target().find("..") != beast::string_view::npos) {
+        return send(bad_request("Illegal request-target"));
+    }
 
     beast::string_view target = req.target();
     Request<http::string_body> request(req);
@@ -107,8 +96,11 @@ void handle_request(beast::string_view doc_root,
 
     std::cout << "req.body(): " << req.body() << std::endl;
 
+    // хандлеры можно хранить в мапе
     if (iequals(target, "/login")) {
-        // LoginHandler<JSON> handler;
+        // response.set_headers("text/plain", 11);
+        // response.set_body("Known target" ,false);
+        LoginHandler<JSON> handler;
 
         // handler.handle(&request, &response);
     }

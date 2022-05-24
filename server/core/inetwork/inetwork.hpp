@@ -6,12 +6,13 @@
 class RequestInterface {
  public:
     virtual std::string get_body() = 0;
+    virtual bool is_keep_alive() = 0;
 };
 
 class ResponseInterface{
  public:
-    virtual void set_headers(std::string content_type, int ver) = 0;
-    virtual void set_body(std::string body, bool keep_alive) = 0;
+    virtual void set_headers(ResponseStatus status, std::string content_type, int ver, bool keep_alive) = 0;
+    virtual void set_body(std::string& body) = 0;
 };
 
 

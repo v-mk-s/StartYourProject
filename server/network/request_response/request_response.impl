@@ -1,0 +1,83 @@
+#pragma once
+
+#include "request_response.hpp"
+
+
+template <typename BodyType>
+void Response<BodyType>::set_headers(ResponseStatus status, std::string content_type, int ver, bool keep_alive) {
+    switch (status) {
+    case ResponseStatus::ok:
+        res_ = {http::status::ok, ver};
+        break;
+        
+    case ResponseStatus::not_found:
+        res_ = {http::status::not_found, ver};
+        break;
+        
+    case ResponseStatus::bad_req:
+        res_ = {http::status::bad_request, ver};
+        break;
+        
+    case ResponseStatus::server_error:
+        res_ = {http::status::internal_server_error, ver};
+        break;
+        
+    case ResponseStatus::wrong_data:
+        res_ = {http::status::forbidden, ver};
+        break;
+        
+    default:
+        res_ = {http::status::internal_server_error, ver};
+        break;
+    }
+    res_.set(http::field::server, SERVER_NAME);
+    res_.set(http::field::content_type, content_type);
+    res_.keep_alive(keep_alive);
+}
+
+template <typename BodyType>
+void Response<BodyType>::set_body(std::string& body) {
+    res_.body() = body;
+    res_.prepare_payload();
+}
+
+
+inline JSON::JSON(const std::string& str): IJSON(str) {
+    json::stream_parser p;
+    json::error_code ec;
+
+    p.write(str.data(), str.size(), ec);
+    if(ec) {
+        std::cerr << ec.message();
+    }
+
+    p.finish(ec);
+    if(ec) {
+        std::cerr << ec.message();
+    }
+
+    value_ =  p.release();
+}
+
+template<class T>
+T JSON::get(const std::string &key, T defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return json::serialize(obj[key]);
+}
+
+template<class T>
+void JSON::put(const std::string &key, T value) {
+    json::object* obj;
+    
+    if(value_.is_null()) {
+        obj = &value_.emplace_object();
+    } else {
+        obj = &value_.as_object();
+    }
+    (*obj)[key] = value;
+}

@@ -182,3 +182,6 @@ class CreatePostHandler: public IHandler {
  private:
     ICreatePost* usecase = nullptr;
 };
+
+
+#include "handlers.impl"
