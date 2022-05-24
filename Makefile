@@ -22,3 +22,6 @@ build_tests: build_server_tests build_client_tests
 
 run_server_tests:
 	./build/tests/test_server/test_server_syp --gtest_filter=${TEST_FILTER}
+
+run_client_tests:
+	./build/tests/test_client/test_client_syp --gtest_filter=${TEST_FILTER}

@@ -32,8 +32,7 @@
 
 
 
-std::string stop_symbols_email = "!#$%^&*()_-=+',./[]{}:;\"<>?/";
-std::string stop_symbols_all = "!@#$%^&*()_-=+',./[]{}:;\"<>?/";
+
 
 bool isValidEmail(const std::string &email);
 bool isValidUsername(const std::string &username);
@@ -48,7 +47,7 @@ bool isValidSurname(const std::string &surname);
 bool isValidUserDescription(const std::string &description);
 
 // may be redundant or Alex functions
-bool isValidDescription(const std::string);
+// bool isValidDescription(const std::string description);
 bool isValidProjectDescription(const std::string &project_description);
 bool isValidRequestDescription(const std::string &request_description);
 

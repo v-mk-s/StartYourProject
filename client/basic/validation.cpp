@@ -102,13 +102,13 @@ bool isValidSurname(const std::string &surname)
 
 bool isValidUserDescription(const std::string &description)
 {
-    std::string stop_symbols_description = "[]{}";
+    std::string stop_symbols_staples = "[]{}";
 
     // static const std::regex r(R"([^a-zA-Z])");
 
     for (auto c : description)
     {
-        if (stop_symbols_description.find(c) != std::string::npos)
+        if (stop_symbols_staples.find(c) != std::string::npos)
         {
             return false;
         }
@@ -136,13 +136,17 @@ bool isValidTeamName(const std::string& team) {
 }
 
 bool isValidNoSymbol(const std::string& tag) {
-    for (auto c : tag) {
-        if (std::find(stop_symbols_all.begin(), stop_symbols_all.end(), c) != stop_symbols_all.end()) {
-            return false;
-        }
-    }
+    // for (auto c : tag) {
+    //     if (std::find(stop_symbols_all.begin(), stop_symbols_all.end(), c) != stop_symbols_all.end()) {
+    //         return false;
+    //     }
+    // }
 
-    return true;
+    // return true;
+
+    static const std::regex r(R"([^a-zA-Z])");
+
+    return std::regex_search(tag.data(), r);
 }
 
 // redefinition
@@ -172,7 +176,13 @@ bool isValidProjectDescription(const std::string& project) {
 }
 
 // left for Vlad ;)
-bool isValidDiversity(int);
+bool isValidDiversity(int diversity) {
+    if (diversity > 100) {
+        return false;
+    }
+
+    return true;
+}
 
 bool isValidRequestDescription(const std::string& request) {
     if (request.size() > MAX_REQUEST_SIZE) {
