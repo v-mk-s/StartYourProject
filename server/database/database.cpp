@@ -11,7 +11,7 @@ bool DelFromTableUser(int id){
 
 }
 bool DelFromTableToken(int id){
-    MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from userdata where user_id=?");
+    MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from tokens where user_id=?");
     que->setInt(1,id);
     return que->ExecuteUpdate();
 }
@@ -109,9 +109,99 @@ ProjectData SelectPostByID(int &id)
 }
 
 
+bool InsertIntoPostTable(ProjectData &data){
+    MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into projectdata (userid, project_name,team_name,post_tags,teammates,project_description,diversity) values(?,?,?,?,?,?,?)");
+    insertQuery->setInt(1,data.userid);
+    insertQuery->setString(2, data.project_name);
+    insertQuery->setString(3, data.team_name);
+    insertQuery->setString(4, data.post_tags[0]);
+    insertQuery->setString(5, data.teammates[0]);
+    insertQuery->setString(6, data.project_description);
+    insertQuery->setDouble(7, data.diversity);
+
+    insertQuery->ExecuteInsert(); //insert возвращает последнюю строчку доваленную
+    return true;
+}
+
+bool InsertIntoUserTable(RegisterData &data){
+    MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into userdata (email, username,password) values(?,?,?)");
+    insertQuery->setString(1,data.email);
+    insertQuery->setString(2, data.username);
+    insertQuery->setString(3, data.password);
+    
+
+    insertQuery->ExecuteInsert(); //insert возвращает последнюю строчку доваленную
+
+    return true;
+}
 
 
 
+bool InsertIntoRequestToPostTable(RequestToPostData &data){
+    MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into requesttopost (user_id, post_id, motivation_words, status) values(?,?,?,?)");
+    insertQuery->setInt(1,data.user_id);
+    insertQuery->setInt(2, data.post_id);
+    insertQuery->setString(3, data.motivation_words);
+    insertQuery->setInt(4, 3);   //вставляем по умолчанию тройку, т.к. когда появляется опопвещение по усолчанию ответ на него неизвесте, тое состояние 3
+    
+    insertQuery->ExecuteInsert(); //insert возвращает последнюю строчку доваленную
+
+    return true;
+}
+
+
+bool InsertToken(std::string &username, std::string& token){
+    MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into tokens (username, post_id) values(?,?)");
+    insertQuery->setString(1,username);
+    insertQuery->setString(2,token);
+}
+
+//updatам дописать sql-запросы
+
+bool EditUserInPersonTable(UserData &data){
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ")
+    updateQuery->setString(1,data.username);
+    updateQuery->setString(2,data.email);
+    updateQuery->setString(3,data.name);
+    updateQuery->setString(4,data.sur_name);
+    updateQuery->setString(5,data.user_description);
+    updateQuery->setString(6,data.password);
+
+    updateQuery->ExecuteUpdate();
+    return true;
+}
+
+bool EditPostInPostTable(ProjectData &data){
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ")
+    updateQuery->setInt(1,data.userid);
+    updateQuery->setString(2,data.project_name);
+    updateQuery->setString(3,data.team_name);
+    updateQuery->setString(4,data.post_tags[0]);
+    updateQuery->setString(5,data.teammates[0]);
+    updateQuery->setString(6,data.project_description);
+    updateQuery->setDouble(7,data.diversity);
+
+    updateQuery->ExecuteUpdate();
+
+    return true;
+}
+
+
+bool EditRequestToPostTable(RequestToPostData &data){
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ...")
+    updateQuery->setInt(1,static_cast<Status>(data.status));
+
+    updateQuery->ExecuteUpdate();
+
+    return true;
+}
+
+
+bool IsUnique(std::string &username){
+    
+
+
+}
 
 
 
