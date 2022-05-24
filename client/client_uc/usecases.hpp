@@ -140,3 +140,12 @@ public:
 //     ErrorStatus onGetDataButton(PublishPostData save) override;
 
 // };
+
+//--------------remake all------------------//
+
+// class LoginUseCase : public ILoginUseCase, public ILoginUseCaseNetwork
+// {
+// public:
+//     LoginUseCase();
+
+// };
