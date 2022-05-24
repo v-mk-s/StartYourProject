@@ -22,7 +22,7 @@ class IEditProfileUC {
 
 class IDelUserProfileUC {
  public:
-    virtual Message<std::string> delUserData(std::string& username) = 0;
+    virtual Message<std::string> delUserData(int id) = 0;
 };
 
 class IGetUserProfileUC {
@@ -81,61 +81,61 @@ bool checkEmail(std::string& email);
 class LoginUC: public ILoginUC {
  public:
     LoginUC() = default;
-    LoginUC(MainDataBase* database): database(database) {}
+    LoginUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> checkUser(LoginData& user);
     std::string generate_token(std::string key);
 
  private:
-    MainDataBase* database = nullptr;
+    IMainDataBase* database = nullptr;
 };
 
 
 class RegisterUC: public IRegisterUC {
  public:
     RegisterUC() = default;
-    RegisterUC(MainDataBase* database): database(database) {}
+    RegisterUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> addUser(RegisterData& user_data);
 
  private:
-    MainDataBase* database = nullptr;
+    IMainDataBase* database = nullptr;
 };
 
 
 class EditProfileUC: public IEditProfileUC {
  public:
     EditProfileUC() = default;
-    EditProfileUC(MainDataBase* database): database(database) {}
+    EditProfileUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> editUserData(UserData& user_data);
 
  private:
-    MainDataBase* database = nullptr;
+    IMainDataBase* database = nullptr;
 };
 
 
 class DelUserProfileUC: public IDelUserProfileUC {
  public:
     DelUserProfileUC() = default;
-    DelUserProfileUC(MainDataBase* database): database(database) {}
+    DelUserProfileUC(IMainDataBase* database): database(database) {}
 
-    Message<std::string> delUserData(std::string& username);
+    Message<std::string> delUserData(int id);
 
  private:
-    MainDataBase* database = nullptr;
+    IMainDataBase* database = nullptr;
 };
 
 
 class GetUserProfileUC: public IGetUserProfileUC {
  public:
     GetUserProfileUC() = default;
-    GetUserProfileUC(MainDataBase* database): database(database) {}
+    GetUserProfileUC(IMainDataBase* database): database(database) {}
 
     Message<UserData> getUserData(std::string& username);
 
  private:
-    MainDataBase* database = nullptr;
+    IMainDataBase* database = nullptr;
 };
 
 
@@ -144,80 +144,80 @@ class GetUserProfileUC: public IGetUserProfileUC {
 class EditPost{
 public:
    EditPost()=default;
-   EditPost(MainDataBase* database): database(database) {}
+   EditPost(IMainDataBase* database): database(database) {}
 
    ResponseStatus editPostToDB(ProjectData post);
    
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class SearchPost{
 public:
    SearchPost()=default;
-   SearchPost(MainDataBase* database): database(database) {}
+   SearchPost(IMainDataBase* database): database(database) {}
 
    Message<ProjectData> makePostSearch(std::string& project_name);
    Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data);
 
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class SearchPerson{
 public:
    SearchPerson()=default;
-   SearchPerson(MainDataBase* database): database(database) {}
+   SearchPerson(IMainDataBase* database): database(database) {}
 
    Message<UserData> makePersonSearch(std::string& username);
 
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class MakeRequestToPost{
 public:
    MakeRequestToPost()=default;
-   MakeRequestToPost(MainDataBase* database): database(database) {}
+   MakeRequestToPost(IMainDataBase* database): database(database) {}
 
    ResponseStatus makeReqToPost(RequestToPostData& request_info);
 
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class DeletePost{
 public:
    DeletePost()=default;
-   DeletePost(MainDataBase* database): database(database) {}
+   DeletePost(IMainDataBase* database): database(database) {}
    ResponseStatus delPostData(std::string &project_name);
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class AnswerTheRequest{
 public:
    AnswerTheRequest()=default;
-   AnswerTheRequest(MainDataBase* database): database(database) {}
+   AnswerTheRequest(IMainDataBase* database): database(database) {}
    ResponseStatus getAnswer(bool answer, RequestToPostData request_info);
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class ShowNotifications{
 public:
    ShowNotifications()=default;
-   ShowNotifications(MainDataBase* database): database(database) {}
+   ShowNotifications(IMainDataBase* database): database(database) {}
    Message<NotificationData> showAllNotifications(int user_id);
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };
 
 class CreatePost{
 public:
    CreatePost()=default;
-   CreatePost(MainDataBase* database): database(database) {}
+   CreatePost(IMainDataBase* database): database(database) {}
    ResponseStatus addPostToDB(ProjectData post);
 private:
-   MainDataBase* database = nullptr;
+   IMainDataBase* database = nullptr;
 };

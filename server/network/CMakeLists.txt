@@ -9,6 +9,7 @@ file(GLOB SOURCES
         main.cpp
         listener/listener.cpp
         router/router.cpp
+        request_response/request_response.impl
 )
 
 file(GLOB INCLUDE_DIRS

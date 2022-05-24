@@ -1,4 +1,12 @@
-#include "server_utils.hpp"
+#pragma once
+
+#include <string>
+#include <sstream>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+#include <mysql/mysql.h>
 
 
 

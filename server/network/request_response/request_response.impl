@@ -59,8 +59,8 @@ inline JSON::JSON(const std::string& str): IJSON(str) {
     value_ =  p.release();
 }
 
-template<class T>
-T JSON::get(const std::string &key, T defaultValue) {
+template<>
+inline std::string JSON::get<std::string>(const std::string &key, std::string defaultValue) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -68,6 +68,45 @@ T JSON::get(const std::string &key, T defaultValue) {
         obj = value_.as_object();
     }
     return json::serialize(obj[key]);
+}
+
+template<>
+inline int JSON::get<int>(const std::string &key, int defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_int64();
+}
+
+template<>
+inline double JSON::get<double>(const std::string &key, double defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_double();
+}
+
+template<>
+inline std::vector<std::string> JSON::get<std::vector<std::string>>(
+        const std::string &key, std::vector<std::string> defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    
+    json::array arr = obj[key].as_array();
+    std::vector<std::string> result;
+    for (auto it : arr) {
+        result.push_back(it.as_string().data());
+    }
 }
 
 template<class T>

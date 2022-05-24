@@ -54,11 +54,11 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
 template <typename JSON>
 void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
-    std::string data;
+    int id;
 
-    data = json.template get<std::string>("username", "");
+    id = json.template get<int>("id", 0);
 
-    Message<std::string> msg = usecase->delUserData(data);
+    Message<std::string> msg = usecase->delUserData(id);
     response->set_headers(msg.status, "text/html", HTTP_VER_1_1, request->is_keep_alive());
     response->set_body(msg.data);
 }

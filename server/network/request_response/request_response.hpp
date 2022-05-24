@@ -21,7 +21,7 @@ class Request: public RequestInterface {
     Request(http::request<BodyType> req): req_(req) {}
 
     std::string get_body() override { return req_.body(); }
-    bool is_keep_alive() override {return req_.keep_alive() ;}
+    bool is_keep_alive() override { return req_.keep_alive(); }
 
     http::request<BodyType>& get_reference() { return req_; }
 

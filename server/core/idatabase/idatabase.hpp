@@ -3,7 +3,7 @@
 #include "server_utils.hpp"
 
 
-class MainDataBase
+class IMainDataBase
 {
  public:
     virtual bool InsertIntoPostTable(ProjectData &data) = 0;

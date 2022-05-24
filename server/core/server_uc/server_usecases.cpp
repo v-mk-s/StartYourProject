@@ -41,8 +41,8 @@ Message<std::string> EditProfileUC::editUserData(UserData& user_data) {
 }
 
 
-Message<std::string> DelUserProfileUC::delUserData(std::string& username) {
-    if (!database->DeleteFromPersonTable(username)) {
+Message<std::string> DelUserProfileUC::delUserData(int id) {
+    if (!database->DeleteFromPersonTable(id)) {
         return Message<std::string>(ResponseStatus::not_found);
     }
     return Message<std::string>(ResponseStatus::ok);
