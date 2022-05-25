@@ -1,6 +1,6 @@
 add_subdirectory(core)
-add_subdirectory(network)
 add_subdirectory(database)
+add_subdirectory(network)
 
 set(SERVER_SYP_CORE_LIBRARIES ${SERVER_SYP_CORE_LIBRARIES} PARENT_SCOPE)
 set(SERVER_SYP_CORE_INCLUDE_DIRS ${SERVER_SYP_CORE_INCLUDE_DIRS} PARENT_SCOPE)

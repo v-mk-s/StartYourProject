@@ -8,7 +8,7 @@
 class MainDataBase: public IMainDataBase 
 {
  public:
-    MainDataBase();
+    MainDataBase(MySQLConnection *sqlconn_);
 
     bool InsertIntoPostTable(ProjectData &data);
     bool InsertIntoPersonTable(RegisterData &data);

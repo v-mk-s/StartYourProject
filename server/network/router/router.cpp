@@ -94,13 +94,11 @@ void handle_request(beast::string_view doc_root,
     Request<http::string_body> request(req);
     Response<http::string_body> response;
 
-    std::cout << "req.body(): " << req.body() << std::endl;
-
     // хандлеры можно хранить в мапе
     if (iequals(target, "/login")) {
         // response.set_headers("text/plain", 11);
         // response.set_body("Known target" ,false);
-        LoginHandler<JSON> handler;
+        // LoginHandler<JSON> handler;
 
         // handler.handle(&request, &response);
     }
