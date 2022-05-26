@@ -12,7 +12,7 @@ class RequestInterface {
 class ResponseInterface{
  public:
     virtual void set_headers(ResponseStatus status, std::string content_type, int ver, bool keep_alive) = 0;
-    virtual void set_body(std::string& body) = 0;
+    virtual void set_body(const std::string& body) = 0;
 };
 
 
@@ -25,4 +25,6 @@ class IJSON {
 
     template<class T>
     void put(const std::string &str, T);
+
+    virtual std::string serialize() = 0;
 };

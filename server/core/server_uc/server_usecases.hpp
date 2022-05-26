@@ -30,43 +30,43 @@ class IGetUserProfileUC {
     virtual Message<UserData> getUserData(std::string& username) = 0;
 };
 
-class IEditPost {
+class IEditPostUC {
  public:
     virtual ResponseStatus editPostToDB(ProjectData post) = 0;
 };
 
-class ISearchPost {
+class ISearchPostUC {
  public:
     virtual Message<ProjectData> makePostSearch(std::string& project_name) = 0;
-    virtual Message<std::vector<ProjectData>> makePostSearch(SearchData& data) = 0;
+    virtual Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data) = 0;
 };
 
-class ISearchPerson {
+class ISearchPersonUC {
  public:
     virtual Message<UserData> makePersonSearch(std::string& username) = 0;
 };
 
-class IMakeRequestToPost {
+class IMakeRequestToPostUC {
  public:
     virtual ResponseStatus makeReqToPost(RequestToPostData& request_info) = 0;
 };
 
-class IDeletePost {
+class IDeletePostUC {
  public:
-    virtual ResponseStatus delPostData(std::string &project_name) = 0;
+    virtual ResponseStatus delPostData(int id) = 0;
 };
 
-class IAnswerTheRequest {
+class IAnswerTheRequestUC {
  public:
     virtual ResponseStatus getAnswer(bool answer, RequestToPostData request_info ) = 0;
 };
 
-class IShowNotifications {
+class IShowNotificationsUC {
  public:
     virtual Message<NotificationData> showAllNotifications(int user_id) = 0;
 };
 
-class ICreatePost {
+class ICreatePostUC {
  public:
     virtual ResponseStatus addPostToDB(ProjectData post) = 0;
 };
@@ -80,144 +80,152 @@ bool checkEmail(std::string& email);
 
 class LoginUC: public ILoginUC {
  public:
-    LoginUC() = default;
+    LoginUC() = delete;
     LoginUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> checkUser(LoginData& user);
     std::string generate_token(std::string key);
 
  private:
-    IMainDataBase* database = nullptr;
+    IMainDataBase* database;
 };
 
 
 class RegisterUC: public IRegisterUC {
  public:
-    RegisterUC() = default;
+    RegisterUC() = delete;
     RegisterUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> addUser(RegisterData& user_data);
 
  private:
-    IMainDataBase* database = nullptr;
+    IMainDataBase* database;
 };
 
 
 class EditProfileUC: public IEditProfileUC {
  public:
-    EditProfileUC() = default;
+    EditProfileUC() = delete;
     EditProfileUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> editUserData(UserData& user_data);
 
  private:
-    IMainDataBase* database = nullptr;
+    IMainDataBase* database;
 };
 
 
 class DelUserProfileUC: public IDelUserProfileUC {
  public:
-    DelUserProfileUC() = default;
+    DelUserProfileUC() = delete;
     DelUserProfileUC(IMainDataBase* database): database(database) {}
 
     Message<std::string> delUserData(int id);
 
  private:
-    IMainDataBase* database = nullptr;
+    IMainDataBase* database;
 };
 
 
 class GetUserProfileUC: public IGetUserProfileUC {
  public:
-    GetUserProfileUC() = default;
+    GetUserProfileUC() = delete;
     GetUserProfileUC(IMainDataBase* database): database(database) {}
 
     Message<UserData> getUserData(std::string& username);
 
  private:
-    IMainDataBase* database = nullptr;
+    IMainDataBase* database;
 };
 
 
 /////////////////////////// Posts UC /////////////////////////////////////
 
-class EditPost{
-public:
-   EditPost()=default;
-   EditPost(IMainDataBase* database): database(database) {}
+class EditPostUC: public IEditPostUC {
+ public:
+    EditPostUC() = delete;
+    EditPostUC(IMainDataBase* database): database(database) {}
 
-   ResponseStatus editPostToDB(ProjectData post);
-   
-private:
-   IMainDataBase* database = nullptr;
+    ResponseStatus editPostToDB(ProjectData post);
+    
+ private:
+    IMainDataBase* database;
 };
 
-class SearchPost{
-public:
-   SearchPost()=default;
-   SearchPost(IMainDataBase* database): database(database) {}
+class SearchPostUC: public ISearchPostUC {
+ public:
+    SearchPostUC() = delete;
+    SearchPostUC(IMainDataBase* database): database(database) {}
 
-   Message<ProjectData> makePostSearch(std::string& project_name);
-   Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data);
+    Message<ProjectData> makePostSearch(std::string& project_name);
+    Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data);
 
-private:
-   IMainDataBase* database = nullptr;
+ private:
+    IMainDataBase* database;
 };
 
-class SearchPerson{
-public:
-   SearchPerson()=default;
-   SearchPerson(IMainDataBase* database): database(database) {}
+class SearchPersonUC: public ISearchPersonUC {
+ public:
+    SearchPersonUC() = delete;
+    SearchPersonUC(IMainDataBase* database): database(database) {}
 
-   Message<UserData> makePersonSearch(std::string& username);
+    Message<UserData> makePersonSearch(std::string& username);
 
-private:
-   IMainDataBase* database = nullptr;
+ private:
+    IMainDataBase* database;
 };
 
-class MakeRequestToPost{
-public:
-   MakeRequestToPost()=default;
-   MakeRequestToPost(IMainDataBase* database): database(database) {}
+class MakeRequestToPostUC: public IMakeRequestToPostUC {
+ public:
+    MakeRequestToPostUC() = delete;
+    MakeRequestToPostUC(IMainDataBase* database): database(database) {}
 
-   ResponseStatus makeReqToPost(RequestToPostData& request_info);
+    ResponseStatus makeReqToPost(RequestToPostData& request_info);
 
-private:
-   IMainDataBase* database = nullptr;
+ private:
+    IMainDataBase* database;
 };
 
-class DeletePost{
-public:
-   DeletePost()=default;
-   DeletePost(IMainDataBase* database): database(database) {}
-   ResponseStatus delPostData(std::string &project_name);
-private:
-   IMainDataBase* database = nullptr;
+class DeletePostUC: public IDeletePostUC {
+ public:
+    DeletePostUC() = delete;
+    DeletePostUC(IMainDataBase* database): database(database) {}
+    
+    ResponseStatus delPostData(int id);
+
+ private:
+    IMainDataBase* database;
 };
 
-class AnswerTheRequest{
-public:
-   AnswerTheRequest()=default;
-   AnswerTheRequest(IMainDataBase* database): database(database) {}
-   ResponseStatus getAnswer(bool answer, RequestToPostData request_info);
-private:
-   IMainDataBase* database = nullptr;
+class AnswerTheRequestUC: public IAnswerTheRequestUC {
+ public:
+    AnswerTheRequestUC() = delete;
+    AnswerTheRequestUC(IMainDataBase* database): database(database) {}
+
+    ResponseStatus getAnswer(bool answer, RequestToPostData request_info);
+
+ private:
+    IMainDataBase* database;
 };
 
-class ShowNotifications{
-public:
-   ShowNotifications()=default;
-   ShowNotifications(IMainDataBase* database): database(database) {}
-   Message<NotificationData> showAllNotifications(int user_id);
-private:
-   IMainDataBase* database = nullptr;
+class ShowNotificationsUC: public IShowNotificationsUC {
+ public:
+    ShowNotificationsUC() = delete;
+    ShowNotificationsUC(IMainDataBase* database): database(database) {}
+
+    Message<NotificationData> showAllNotifications(int user_id);
+    
+ private:
+    IMainDataBase* database;
 };
 
-class CreatePost{
-public:
-   CreatePost()=default;
-   CreatePost(IMainDataBase* database): database(database) {}
-   ResponseStatus addPostToDB(ProjectData post);
-private:
-   IMainDataBase* database = nullptr;
+class CreatePostUC: public ICreatePostUC {
+ public:
+    CreatePostUC() = delete;
+    CreatePostUC(IMainDataBase* database): database(database) {}
+
+    ResponseStatus addPostToDB(ProjectData post);
+
+ private:
+    IMainDataBase* database;
 };

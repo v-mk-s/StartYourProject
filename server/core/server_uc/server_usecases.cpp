@@ -57,7 +57,7 @@ Message<UserData> GetUserProfileUC::getUserData(std::string& username) {
 
 //////////////////// Posts Use Cases ////////////////////////
 
-ResponseStatus EditPost::editPostToDB(ProjectData post) {
+ResponseStatus EditPostUC::editPostToDB(ProjectData post) {
     if (!database->EditPostInPostTable(post)) {
         return ResponseStatus::not_found;
     }
@@ -65,24 +65,24 @@ ResponseStatus EditPost::editPostToDB(ProjectData post) {
 }
 
 
-Message<ProjectData> SearchPost::makePostSearch(std::string& project_name) {
+Message<ProjectData> SearchPostUC::makePostSearch(std::string& project_name) {
     Message<ProjectData> msg(ResponseStatus::ok, database->getPost(project_name));
     return msg;
 }
 
-Message<std::vector<ProjectData>> SearchPost::makeMultiPostSearch(SearchData& data) {
+Message<std::vector<ProjectData>> SearchPostUC::makeMultiPostSearch(SearchData& data) {
     Message<std::vector<ProjectData>> msg(ResponseStatus::ok, database->getMultiPost(data));
     return msg;
 }
 
 
-Message<UserData> SearchPerson::makePersonSearch(std::string& username) {
+Message<UserData> SearchPersonUC::makePersonSearch(std::string& username) {
     Message<UserData> msg(ResponseStatus::ok, database->getUserProfile(username));
     return msg;
 }
 
 
-ResponseStatus MakeRequestToPost::makeReqToPost(RequestToPostData& request_info) {
+ResponseStatus MakeRequestToPostUC::makeReqToPost(RequestToPostData& request_info) {
     if (!database->InsertIntoRequestToPostTable(request_info)) {
         return ResponseStatus::server_error;
     }
@@ -90,15 +90,15 @@ ResponseStatus MakeRequestToPost::makeReqToPost(RequestToPostData& request_info)
 }
 
 
-ResponseStatus DeletePost::delPostData(std::string &project_name) {
-    if (!database->DeleteFromPostTable(project_name)){
+ResponseStatus DeletePostUC::delPostData(int id) {
+    if (!database->DeleteFromPostTable(id)){
         return ResponseStatus::bad_req;
     } 
     return ResponseStatus::ok;
 }
 
 
-ResponseStatus AnswerTheRequest::getAnswer(bool answer, RequestToPostData request_info) {
+ResponseStatus AnswerTheRequestUC::getAnswer(bool answer, RequestToPostData request_info) {
     if (answer)
         request_info.status=RequestToPostData::Status::yes;
     else
@@ -110,14 +110,14 @@ ResponseStatus AnswerTheRequest::getAnswer(bool answer, RequestToPostData reques
 }
 
 
-Message<NotificationData> ShowNotifications::showAllNotifications(int user_id) {
+Message<NotificationData> ShowNotificationsUC::showAllNotifications(int user_id) {
     Message<NotificationData> msg(ResponseStatus::ok, database->FindRequestToPostTable(user_id));
     return msg;
 }
 
 
 
-ResponseStatus CreatePost::addPostToDB(ProjectData post) {
+ResponseStatus CreatePostUC::addPostToDB(ProjectData post) {
     if (!database->InsertIntoPostTable(post)){
         return ResponseStatus::bad_req;
     } 

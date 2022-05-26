@@ -16,65 +16,65 @@ class IHandler {
 template <typename JSON>
 class LoginHandler: public IHandler {
  public:
-    LoginHandler() = default;
-    LoginHandler(ILoginUC* usecase): usecase(usecase) {}
+    LoginHandler() = delete;
+    LoginHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    ILoginUC* usecase = nullptr;
+    LoginUC usecase;
 };
 
 
 template <typename JSON>
 class RegisterHandler: public IHandler {
  public:
-    RegisterHandler() = default;
-    RegisterHandler(IRegisterUC* usecase): usecase(usecase) {}
+    RegisterHandler() = delete;
+    RegisterHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IRegisterUC* usecase = nullptr;
+    RegisterUC usecase;
 };
 
 
 template <typename JSON>
 class EditProfileHandler: public IHandler {
  public:
-    EditProfileHandler() = default;
-    EditProfileHandler(IEditProfileUC* usecase): usecase(usecase) {}
+    EditProfileHandler() = delete;
+    EditProfileHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IEditProfileUC* usecase = nullptr;
+    EditProfileUC usecase;
 };
 
 
 template <typename JSON>
 class DelUserProfileHandler: public IHandler {
  public:
-    DelUserProfileHandler() = default;
-    DelUserProfileHandler(IDelUserProfileUC* usecase): usecase(usecase) {}
+    DelUserProfileHandler() = delete;
+    DelUserProfileHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IDelUserProfileUC* usecase = nullptr;
+    DelUserProfileUC usecase;
 };
 
 
 template <typename JSON>
 class GetUserProfileHandler: public IHandler {
  public:
-    GetUserProfileHandler() = default;
-    GetUserProfileHandler(IGetUserProfileUC* usecase): usecase(usecase) {}
+    GetUserProfileHandler() = delete;
+    GetUserProfileHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IGetUserProfileUC* usecase = nullptr;
+    GetUserProfileUC usecase;
 };
 
 
@@ -83,104 +83,104 @@ class GetUserProfileHandler: public IHandler {
 template <typename JSON>
 class EditPostHandler: public IHandler {
  public:
-    EditPostHandler() = default;
-    EditPostHandler(IEditPost* usecase): usecase(usecase) {}
+    EditPostHandler() = delete;
+    EditPostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IEditPost* usecase = nullptr;
+    EditPostUC usecase;
 };
 
 
 template <typename JSON>
 class SearchPostHandler: public IHandler {
  public:
-    SearchPostHandler() = default;
-    SearchPostHandler(ISearchPost* usecase): usecase(usecase) {}
+    SearchPostHandler() = delete;
+    SearchPostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    ISearchPost* usecase = nullptr;
+    SearchPostUC usecase;
 };
 
 
 template <typename JSON>
 class SearchPersonHandler: public IHandler {
  public:
-    SearchPersonHandler() = default;
-    SearchPersonHandler(ISearchPerson* usecase): usecase(usecase) {}
+    SearchPersonHandler() = delete;
+    SearchPersonHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    ISearchPerson* usecase = nullptr;
+    SearchPersonUC usecase;
 };
 
 
 template <typename JSON>
 class MakeRequestToPostHandler: public IHandler {
  public:
-    MakeRequestToPostHandler()=default;
-    MakeRequestToPostHandler(IMakeRequestToPost* usecase): usecase(usecase) {}
+    MakeRequestToPostHandler() = delete;
+    MakeRequestToPostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IMakeRequestToPost* usecase = nullptr;
+    MakeRequestToPostUC usecase;
 };
 
 
 template <typename JSON>
 class ShowNotificationsHandler: public IHandler {
  public:
-    ShowNotificationsHandler() = default;
-    ShowNotificationsHandler(IShowNotifications* usecase): usecase(usecase) {}
+    ShowNotificationsHandler() = delete;
+    ShowNotificationsHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IShowNotifications* usecase = nullptr;
+    ShowNotificationsUC usecase;
 };
 
 
 template <typename JSON>
 class AnswerTheRequestHandler: public IHandler {
  public:
-    AnswerTheRequestHandler()=default;
-    AnswerTheRequestHandler(IAnswerTheRequest* usecase): usecase(usecase) {}
+    AnswerTheRequestHandler() = delete;
+    AnswerTheRequestHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IAnswerTheRequest* usecase = nullptr;
+    AnswerTheRequestUC usecase;
 };
 
 
 template <typename JSON>
 class DeletePostHandler: public IHandler {
  public:
-    DeletePostHandler() = default;
-    DeletePostHandler(IDeletePost* usecase): usecase(usecase) {}
+    DeletePostHandler() = delete;
+    DeletePostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    IDeletePost* usecase = nullptr;
+    DeletePostUC usecase;
 };
 
 
 template <typename JSON>
 class CreatePostHandler: public IHandler {
  public:
-    CreatePostHandler() = default;
-    CreatePostHandler(ICreatePost* usecase): usecase(usecase) {}
+    CreatePostHandler() = delete;
+    CreatePostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response);
 
  private:
-    ICreatePost* usecase = nullptr;
+    CreatePostUC usecase;
 };
 
 

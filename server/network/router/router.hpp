@@ -1,6 +1,7 @@
 #pragma once
 
 #include "request_response.hpp"
+#include "handlers.hpp"
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
@@ -16,10 +17,11 @@ using tcp = boost::asio::ip::tcp;
 
 class Session : public std::enable_shared_from_this<Session> {
  public:
-    Session(tcp::socket&& socket, std::shared_ptr<std::string const> const& doc_root):
+    Session(tcp::socket&& socket, std::shared_ptr<std::string const> const& doc_root,
+    std::shared_ptr<std::map<std::string, IHandler*>> handlers):
         stream_(std::move(socket)),
         doc_root_(doc_root),
-        lambda_(*this) {}
+        lambda_(*this), handlers_(handlers) {}
 
     void run();
 
@@ -45,15 +47,15 @@ class Session : public std::enable_shared_from_this<Session> {
     http::request<http::string_body> req_;
     std::shared_ptr<void> res_;
 
-    // Request<http::string_body> req_;
-    // Response<http::string_body> res_;
-
     send_lambda lambda_;
+
+    std::shared_ptr<std::map<std::string, IHandler*>> handlers_;
 };
 
 
 template<class Body, class Allocator, class Send>
 void handle_request(beast::string_view doc_root, 
     http::request<Body, http::basic_fields<Allocator>>&& req,
-    Send&& send
+    Send&& send,
+    std::shared_ptr<std::map<std::string, IHandler*>> handlers
 );

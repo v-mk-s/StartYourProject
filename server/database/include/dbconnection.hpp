@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <mysql/mysql.h>
+#include <mysql_connection.h>
 
 
 

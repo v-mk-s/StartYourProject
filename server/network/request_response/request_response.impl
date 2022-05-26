@@ -36,7 +36,7 @@ void Response<BodyType>::set_headers(ResponseStatus status, std::string content_
 }
 
 template <typename BodyType>
-void Response<BodyType>::set_body(std::string& body) {
+void Response<BodyType>::set_body(const std::string& body) {
     res_.body() = body;
     res_.prepare_payload();
 }
@@ -119,4 +119,8 @@ void JSON::put(const std::string &key, T value) {
         obj = &value_.as_object();
     }
     (*obj)[key] = value;
+}
+
+inline std::string JSON::serialize() {
+    return json::serialize(value_);
 }

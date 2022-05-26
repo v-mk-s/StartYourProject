@@ -10,10 +10,9 @@ class IMainDataBase
     virtual bool InsertIntoPersonTable(RegisterData &data) = 0;
     virtual bool InsertIntoRequestToPostTable(RequestToPostData &data) = 0;
 
-    virtual bool DeleteFromPostTable(std::string &project_name) = 0;
-    virtual bool DeleteFromPersonTable(int  &id) = 0;
+    virtual bool DeleteFromPostTable(int id) = 0;
+    virtual bool DeleteFromPersonTable(int id) = 0;
     virtual bool DeleteFromRequestToPostTable(RequestToPostData &data) = 0;
-    virtual bool DeleteFromTable() = 0;
 
     virtual bool EditUserInPersonTable(UserData &data) = 0;
     virtual bool EditPostInPostTable(ProjectData &data) = 0;

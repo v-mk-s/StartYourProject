@@ -2,9 +2,10 @@
 
 
 Listener::Listener(net::io_context& ioc, tcp::endpoint endpoint,
-    std::shared_ptr<std::string const> const& doc_root):
+    std::shared_ptr<std::string const> const& doc_root,
+    std::shared_ptr<std::map<std::string, IHandler*>> handlers):
     ioc_(ioc), acceptor_(net::make_strand(ioc)),
-    doc_root_(doc_root) {
+    doc_root_(doc_root), handlers_(handlers) {
         beast::error_code ec;
 
         acceptor_.open(endpoint.protocol(), ec);
@@ -33,13 +34,16 @@ Listener::Listener(net::io_context& ioc, tcp::endpoint endpoint,
 }
 
 void Listener::run() {
-    do_accept();
+    net::dispatch(
+        acceptor_.get_executor(),
+        beast::bind_front_handler(&Listener::do_accept, this->shared_from_this())
+    );
 }
 
 void Listener::do_accept() {
-    acceptor_.async_accept(net::make_strand(ioc_), beast::bind_front_handler(
-        &Listener::on_accept,
-        shared_from_this())
+    acceptor_.async_accept(
+        net::make_strand(ioc_),
+        beast::bind_front_handler(&Listener::on_accept, shared_from_this())
     );
 }
 
@@ -48,7 +52,7 @@ void Listener::on_accept(beast::error_code ec, tcp::socket socket) {
         std::cerr << "accept" << ": " << ec.message() << "\n";
         return;
     } else {
-        std::make_shared<Session>(std::move(socket), doc_root_)->run();
+        std::make_shared<Session>(std::move(socket), doc_root_, handlers_)->run();
     }
 
     do_accept();

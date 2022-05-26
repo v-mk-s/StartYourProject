@@ -10,16 +10,19 @@ void Session::send_lambda::operator()(http::message<isRequest, Body, Fields>&& m
     self_.res_ = sp;
 
     http::async_write(self_.stream_, *sp, beast::bind_front_handler(
-        &Session::on_write,
-        self_.shared_from_this(),
-        sp->need_eof())
+            &Session::on_write,
+            self_.shared_from_this(),
+            sp->need_eof()
+        )
     );
 }
 
 
 void Session::run() {
-    net::dispatch(stream_.get_executor(), beast::bind_front_handler(&Session::do_read,
-        shared_from_this())
+    net::dispatch(stream_.get_executor(), beast::bind_front_handler(
+            &Session::do_read,
+            shared_from_this()
+        )
     );
 }
 
@@ -28,8 +31,9 @@ void Session::do_read() {
     stream_.expires_after(std::chrono::seconds(30));
 
     http::async_read(stream_, buffer_, req_, beast::bind_front_handler(
-        &Session::on_read,
-        shared_from_this())
+            &Session::on_read,
+            shared_from_this()
+        )
     );
 }
 
@@ -44,7 +48,7 @@ void Session::on_read(beast::error_code ec, std::size_t bytes_transferred) {
         std::cerr << "read" << ": " << ec.message() << "\n";
     }
 
-    handle_request(*doc_root_, std::move(req_), lambda_);
+    handle_request(*doc_root_, std::move(req_), lambda_, handlers_);
 }
 
 void Session::on_write(bool close, beast::error_code ec, std::size_t bytes_transferred) {
@@ -70,7 +74,8 @@ void Session::do_close() {
 template<class Body, class Allocator, class Send>
 void handle_request(beast::string_view doc_root,
     http::request<Body, http::basic_fields<Allocator>>&& req,
-    Send&& send) {
+    Send&& send,
+    std::shared_ptr<std::map<std::string, IHandler*>> handlers) {
     auto const bad_request = [&req](beast::string_view why) {
         http::response<http::string_body> res{http::status::bad_request, req.version()};
         res.set(http::field::server, SERVER_NAME);
@@ -94,13 +99,9 @@ void handle_request(beast::string_view doc_root,
     Request<http::string_body> request(req);
     Response<http::string_body> response;
 
-    // хандлеры можно хранить в мапе
-    if (iequals(target, "/login")) {
-        // response.set_headers("text/plain", 11);
-        // response.set_body("Known target" ,false);
-        // LoginHandler<JSON> handler;
-
-        // handler.handle(&request, &response);
+    auto handler = handlers->find(target.data());
+    if (handler != handlers->end()) {
+        handler->second->handle(&request, &response);
     }
     else {
         return send(bad_request("Unknown target\n"));

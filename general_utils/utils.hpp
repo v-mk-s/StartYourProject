@@ -4,6 +4,22 @@
 #include <vector>
 #include <sstream>
 
+#define LOGIN_URL "/login"
+#define REGISTER_URL "/register"
+
+#define EDIT_PROFILE_URL "/profile/edit"
+#define DELETE_PROFILE_URL "/profile/delete"
+#define GET_PROFILE_URL "/profile"
+#define FIND_USER_URL "/profile/find"
+#define GET_NOTIFICATIONS_URL "/profile/notifications"
+
+#define EDIT_POST_URL "/post/edit"
+#define FIND_POST_URL "/post/find"
+#define MAKE_REQUEST_URL "/post/request/make"
+#define DELETE_POST_URL "/post/delete"
+#define ANSWER_REQUEST_URL "/post/request/answer"
+#define CREATE_POST_URL "/post/create"
+
 // username == nick, nickname
 
 enum class ErrorStatus

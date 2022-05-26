@@ -2,7 +2,6 @@
 
 
 MainDataBase::MainDataBase(MySQLConnection *sqlconn_): sqlconn(sqlconn_) {
-    MySQLConnection * sqlconn = new MySQLConnection();
     sqlconn->Connect("127.0.0.1", 3306, "root", "password", "Projectdata");
 }
 

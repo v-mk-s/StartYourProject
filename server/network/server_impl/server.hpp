@@ -3,6 +3,7 @@
 #include "listener.hpp"
 #include "handlers.hpp"
 #include "database.hpp"
+#include "utils.hpp"
 
 #include <boost/beast/core.hpp>
 #include <boost/asio/signal_set.hpp>
@@ -33,6 +34,33 @@ class Server {
     void start();
 
  private:
-    class ServerImpl;
+    class ServerImpl {
+     public:
+        ServerImpl(boost::asio::ip::address address, unsigned short port,
+                    std::shared_ptr<std::string> doc_root, int threads);
+
+        ServerImpl(const ServerImpl& other) = delete;
+        ServerImpl& operator=(const ServerImpl& other) = delete;
+
+        void start();
+
+        ~ServerImpl();
+
+     private:
+        boost::asio::ip::address address_;
+        unsigned short port_;
+        std::shared_ptr<std::string> doc_root_;
+        int n_threads_;
+
+        net::io_context ioc_;
+        net::signal_set signals_;
+        std::vector<std::thread> threads_;
+
+        MySQLConnection sql_conn_;
+        MainDataBase database_;
+
+        std::map<std::string, IHandler*> handlers_;
+    };
+    
     std::unique_ptr<ServerImpl> impl_;
 };
