@@ -1,7 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
-
+#include <mysql.h>
 #include <algorithm>
 #include <cstdlib>
 #include <functional>
