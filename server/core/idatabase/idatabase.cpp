@@ -1,4 +1,4 @@
-include "idatabase.cpp"
+include "idatabase.hpp"
 
 MainDataBase::MainDataBase(){
     sqlconn = new MySQLConnection();
