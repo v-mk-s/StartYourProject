@@ -125,7 +125,7 @@ struct RegisterData
 };
 
 struct UserData {
-    int id
+    int id;
     std::string username;
     std::string email;
     std::string name;
@@ -175,8 +175,8 @@ struct PublishPostData
 
 struct ProjectData
 {
-    int id
-    int userid
+    int id;
+    int userid;
     std::string project_name;
     std::string team_name;
     std::vector<std::string> post_tags;
