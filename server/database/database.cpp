@@ -10,9 +10,9 @@ bool DelFromTableUser(int id){
     return que->ExecuteUpdate();
 
 }
-bool DelFromTableToken(int id){
-    MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from tokens where user_id=?");
-    que->setInt(1,id);
+bool DelFromTableToken(std::string username){
+    MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from tokens where username=?");
+    que->setInt(1,username);
     return que->ExecuteUpdate();
 }
 
@@ -159,20 +159,22 @@ bool InsertToken(std::string &username, std::string& token){
 //updatам дописать sql-запросы
 
 bool EditUserInPersonTable(UserData &data){
-    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ")
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update userdata set username=?, email=?, name=? sur_name=?, user_description=?, password=? where id=?")
     updateQuery->setString(1,data.username);
     updateQuery->setString(2,data.email);
     updateQuery->setString(3,data.name);
     updateQuery->setString(4,data.sur_name);
     updateQuery->setString(5,data.user_description);
     updateQuery->setString(6,data.password);
+    updateQuery->setInt(7,data.id);
+    
 
     updateQuery->ExecuteUpdate();
     return true;
 }
 
 bool EditPostInPostTable(ProjectData &data){
-    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ")
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update projectdata set userid=?, project_name=?, team_name=?, post_tags=?,teammates=?,project_description=?, diversity=? where id_project=?")
     updateQuery->setInt(1,data.userid);
     updateQuery->setString(2,data.project_name);
     updateQuery->setString(3,data.team_name);
@@ -180,7 +182,7 @@ bool EditPostInPostTable(ProjectData &data){
     updateQuery->setString(5,data.teammates[0]);
     updateQuery->setString(6,data.project_description);
     updateQuery->setDouble(7,data.diversity);
-
+    updateQuery->setInt(8,data.id);
     updateQuery->ExecuteUpdate();
 
     return true;
@@ -188,8 +190,10 @@ bool EditPostInPostTable(ProjectData &data){
 
 
 bool EditRequestToPostTable(RequestToPostData &data){
-    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update ...")
+    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update requesttopost set status=? where post_id=?, user_id=?")
     updateQuery->setInt(1,static_cast<Status>(data.status));
+    updateQuery->setInt(2,data.user_id);
+    updateQuery->setInt(3,data.post_id);
 
     updateQuery->ExecuteUpdate();
 
@@ -199,6 +203,16 @@ bool EditRequestToPostTable(RequestToPostData &data){
 
 bool IsUnique(std::string &username){
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id from userdata "
+    R"( where username = ? )");
+    selectQuery->setString(1,username);
+    selectQuery->ExecuteQuery();
+    if (selectQuery->GetResultRowCount()>0)
+    return true;
+    else return false;
+}
+
+bool FindToken(std::string &username, std::string& token){
+    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select  from tokens "
     R"( where username = ? )");
     selectQuery->setString(1,username);
     selectQuery->ExecuteQuery();
