@@ -7,26 +7,25 @@ Server::ServerImpl::ServerImpl(boost::asio::ip::address address, unsigned short 
             ioc_(threads), signals_(net::signal_set(ioc_, SIGINT, SIGTERM)), database_(&sql_conn_) {
     threads_.reserve(n_threads_ - 1);
 
-    handlers_[LOGIN_URL] = new LoginHandler<JSON>(&database_);
-    handlers_[REGISTER_URL] = new RegisterHandler<JSON>(&database_);
+    handlers_.emplace(LOGIN_URL, std::make_unique<LoginHandler<JSON>>(&database_));
+    handlers_.emplace(REGISTER_URL, std::make_unique<RegisterHandler<JSON>>(&database_));
 
-    handlers_[EDIT_PROFILE_URL] = new EditProfileHandler<JSON>(&database_);
-    handlers_[DELETE_PROFILE_URL] = new DelUserProfileHandler<JSON>(&database_);
-    handlers_[GET_PROFILE_URL] = new GetUserProfileHandler<JSON>(&database_);
-    handlers_[FIND_USER_URL] = new SearchPersonHandler<JSON>(&database_);
-    handlers_[GET_NOTIFICATIONS_URL] = new ShowNotificationsHandler<JSON>(&database_);
+    handlers_.emplace(EDIT_PROFILE_URL, std::make_unique<EditProfileHandler<JSON>>(&database_));
+    handlers_.emplace(DELETE_PROFILE_URL, std::make_unique<DelUserProfileHandler<JSON>>(&database_));
+    handlers_.emplace(GET_PROFILE_URL, std::make_unique<GetUserProfileHandler<JSON>>(&database_));
+    handlers_.emplace(FIND_USER_URL, std::make_unique<SearchPersonHandler<JSON>>(&database_));
+    handlers_.emplace(GET_NOTIFICATIONS_URL, std::make_unique<ShowNotificationsHandler<JSON>>(&database_));
 
-    handlers_[EDIT_POST_URL] = new EditPostHandler<JSON>(&database_);
-    handlers_[FIND_POST_URL] = new SearchPostHandler<JSON>(&database_);
-    handlers_[MAKE_REQUEST_URL] = new MakeRequestToPostHandler<JSON>(&database_);
-    handlers_[DELETE_POST_URL] = new DeletePostHandler<JSON>(&database_);
-    handlers_[ANSWER_REQUEST_URL] = new AnswerTheRequestHandler<JSON>(&database_);
-    handlers_[CREATE_POST_URL] = new CreatePostHandler<JSON>(&database_);
+    handlers_.emplace(EDIT_POST_URL, std::make_unique<EditPostHandler<JSON>>(&database_));
+    handlers_.emplace(FIND_POST_URL, std::make_unique<SearchPostHandler<JSON>>(&database_));
+    handlers_.emplace(MAKE_REQUEST_URL, std::make_unique<MakeRequestToPostHandler<JSON>>(&database_));
+    handlers_.emplace(DELETE_POST_URL, std::make_unique<DeletePostHandler<JSON>>(&database_));
+    handlers_.emplace(ANSWER_REQUEST_URL, std::make_unique<AnswerTheRequestHandler<JSON>>(&database_));
+    handlers_.emplace(CREATE_POST_URL, std::make_unique<CreatePostHandler<JSON>>(&database_));
 }
 
 void Server::ServerImpl::start() {
-    std::make_shared<Listener>(ioc_, tcp::endpoint{address_, port_}, doc_root_,
-        std::make_shared<std::map<std::string, IHandler*>>(handlers_))->run();
+    std::make_shared<Listener>(ioc_, tcp::endpoint{address_, port_}, doc_root_, handlers_)->run();
 
     signals_.async_wait([&] (beast::error_code const&, int) {ioc_.stop();});
 
@@ -47,10 +46,4 @@ Server::Server(boost::asio::ip::address address, unsigned short port,
 
 void Server::start() {
     impl_->start();
-}
-
-Server::ServerImpl::~ServerImpl() {
-    for (auto &pair : handlers_) {
-        delete pair.second;
-    }
 }

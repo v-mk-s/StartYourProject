@@ -3,7 +3,7 @@
 
 Listener::Listener(net::io_context& ioc, tcp::endpoint endpoint,
     std::shared_ptr<std::string const> const& doc_root,
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers):
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers):
     ioc_(ioc), acceptor_(net::make_strand(ioc)),
     doc_root_(doc_root), handlers_(handlers) {
         beast::error_code ec;

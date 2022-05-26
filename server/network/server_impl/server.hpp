@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <thread>
+#include <any>
 
 namespace beast = boost::beast;
 namespace net = boost::asio;
@@ -44,8 +45,6 @@ class Server {
 
         void start();
 
-        ~ServerImpl();
-
      private:
         boost::asio::ip::address address_;
         unsigned short port_;
@@ -59,7 +58,7 @@ class Server {
         MySQLConnection sql_conn_;
         MainDataBase database_;
 
-        std::map<std::string, IHandler*> handlers_;
+        std::map<std::string, std::unique_ptr<IHandler>> handlers_;
     };
     
     std::unique_ptr<ServerImpl> impl_;

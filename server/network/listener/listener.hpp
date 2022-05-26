@@ -16,7 +16,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
  public:
     Listener(net::io_context& ioc, tcp::endpoint endpoint, 
         std::shared_ptr<std::string const> const& doc_root,
-        std::shared_ptr<std::map<std::string, IHandler*>> handlers);
+        const std::map<std::string, std::unique_ptr<IHandler>>& handlers);
 
     void run();
 
@@ -25,8 +25,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
     tcp::acceptor acceptor_;
     std::shared_ptr<std::string const> doc_root_;
 
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers_;
-    
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers_;
 
     void do_accept();
     void on_accept(beast::error_code ec, tcp::socket socket);

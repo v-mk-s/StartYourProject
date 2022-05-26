@@ -12,6 +12,7 @@ file(GLOB SOURCES
         router/router.cpp
         request_response/request_response.impl
         server_impl/server.cpp
+        temp/database.cpp
 )
 
 file(GLOB INCLUDE_DIRS
@@ -20,6 +21,7 @@ file(GLOB INCLUDE_DIRS
         listener
         request_response
         server_impl
+        temp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -18,7 +18,7 @@ using tcp = boost::asio::ip::tcp;
 class Session : public std::enable_shared_from_this<Session> {
  public:
     Session(tcp::socket&& socket, std::shared_ptr<std::string const> const& doc_root,
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers):
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers):
         stream_(std::move(socket)),
         doc_root_(doc_root),
         lambda_(*this), handlers_(handlers) {}
@@ -49,7 +49,7 @@ class Session : public std::enable_shared_from_this<Session> {
 
     send_lambda lambda_;
 
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers_;
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers_;
 };
 
 
@@ -57,5 +57,5 @@ template<class Body, class Allocator, class Send>
 void handle_request(beast::string_view doc_root, 
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send,
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers
 );

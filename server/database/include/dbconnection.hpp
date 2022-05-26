@@ -13,32 +13,32 @@
 
 class MySQLConnection
 {
-public:
-    MySQLConnection();
-    ~MySQLConnection();
+// public:
+    // MySQLConnection();
+    // ~MySQLConnection();
 
-    bool Connect(const std::string &sHostname, const uint16_t &wPort, const std::string &sUsername, const std::string &sPassword, const std::string &sDB);
+    // bool Connect(const std::string &sHostname, const uint16_t &wPort, const std::string &sUsername, const std::string &sPassword, const std::string &sDB);
 
-    bool SelectDB(const std::string &sSchemaName);
+    // bool SelectDB(const std::string &sSchemaName);
 
-    void Disconnect();
+    // void Disconnect();
 
-    const std::string GetLastError() const;
+    // const std::string GetLastError() const;
 
-    MYSQL *getConn();
+    // MYSQL *getConn();
 
-    bool IsConnected();
+    // bool IsConnected();
 
-    const std::string EscapeString(const std::string &value) const;
+    // const std::string EscapeString(const std::string &value) const;
 
-private:
-    MYSQL *m_MySQLConn;
-    bool m_bIsConnected;
-    std::string m_sHostname;
-    std::string m_sUsername;
-    std::string m_sPassword;
-    std::string m_sSchemaName;
-    uint16_t m_wPort;
+// private:
+    // MYSQL *m_MySQLConn;
+    // bool m_bIsConnected;
+    // std::string m_sHostname;
+    // std::string m_sUsername;
+    // std::string m_sPassword;
+    // std::string m_sSchemaName;
+    // uint16_t m_wPort;
 };
 
 

@@ -93,6 +93,17 @@ inline double JSON::get<double>(const std::string &key, double defaultValue) {
 }
 
 template<>
+inline bool JSON::get<bool>(const std::string &key, bool defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_bool();
+}
+
+template<>
 inline std::vector<std::string> JSON::get<std::vector<std::string>>(
         const std::string &key, std::vector<std::string> defaultValue) {
     json::object obj;

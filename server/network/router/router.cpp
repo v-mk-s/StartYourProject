@@ -75,7 +75,7 @@ template<class Body, class Allocator, class Send>
 void handle_request(beast::string_view doc_root,
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send,
-    std::shared_ptr<std::map<std::string, IHandler*>> handlers) {
+    const std::map<std::string, std::unique_ptr<IHandler>>& handlers) {
     auto const bad_request = [&req](beast::string_view why) {
         http::response<http::string_body> res{http::status::bad_request, req.version()};
         res.set(http::field::server, SERVER_NAME);
@@ -99,8 +99,8 @@ void handle_request(beast::string_view doc_root,
     Request<http::string_body> request(req);
     Response<http::string_body> response;
 
-    auto handler = handlers->find(target.data());
-    if (handler != handlers->end()) {
+    auto handler = handlers.find(target.data());
+    if (handler != handlers.end()) {
         handler->second->handle(&request, &response);
     }
     else {

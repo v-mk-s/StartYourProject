@@ -122,6 +122,20 @@ void SearchPersonHandler<JSON>::handle(RequestInterface* request, ResponseInterf
     usecase.makePersonSearch(username);
 }
 
+template <typename JSON>
+void MakeRequestToPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
+    JSON json(request->get_body());
+    RequestToPostData data;
+
+    data.user_id = json.template get<int>("user_id", 0);
+    data.post_id = json.template get<int>("post_id", 0);
+    data.project_name = json.template get<std::string>("project_name", "");
+    data.status = static_cast<RequestToPostData::Status>(json.template get<int>("status", 0));
+    data.motivation_words = json.template get<std::string>("motivation_words", 0);
+
+    usecase.makeReqToPost(data);
+}
+
 
 
 ////////////////////////////////

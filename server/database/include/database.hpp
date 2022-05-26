@@ -4,10 +4,14 @@
 #include "server_utils.hpp"
 #include "dbconnection.hpp"
 
+// fake
+#include <map>
+
 
 class MainDataBase: public IMainDataBase 
 {
  public:
+    // MainDataBase() = default;
     MainDataBase(MySQLConnection *sqlconn_);
 
     bool InsertIntoPostTable(ProjectData &data);
@@ -42,6 +46,16 @@ class MainDataBase: public IMainDataBase
     std::vector<RequestToPostData> SelectNotifications(int &user_id);
     ProjectData SelectPostByID(int &id);
 
+    ~MainDataBase() = default;
+
  private:
     MySQLConnection *sqlconn;
+
+    // fake bd
+    std::unordered_map<int, std::vector<std::string>> table_;
+
+    bool add_record(int id, const std::vector<std::string>& record);
+    bool delete_record(int id);
+    bool find_record(int id);
+    std::vector<std::string> get_record(int id);
 };
