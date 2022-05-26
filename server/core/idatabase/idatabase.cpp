@@ -1,34 +1,37 @@
 
 
-
-MySQLConnection * sqlconn = new MySQLConnection();
-sqlconn->Connect("127.0.0.1", 3306, "root", "password", "Projectdata")
-
-bool DelFromTableUser(int id){
+MainDataBase::MainDataBase(){
+    MySQLConnection * sqlconn = new MySQLConnection();
+    sqlconn->Connect("127.0.0.1", 3306, "root", "password", "Projectdata")
+}
+MainDataBase::~MainDataBase(){
+    sqlconn.Disconnect();
+}
+bool MainDataBase::DeleteFromPersonTable(int id){
     MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from userdata where id=?");
     que->setInt(1,id);
     return que->ExecuteUpdate();
 
 }
-bool DelFromTableToken(std::string username){
+bool MainDataBase::DeleteToken(std::string username){
     MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from tokens where username=?");
     que->setInt(1,username);
     return que->ExecuteUpdate();
 }
 
-bool DelFromTableProjects(int id){
+bool MainDataBase::DeleteFromPostTable(int id){
     MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from projectdata where project_id=?");
     que->setInt(1,id);
     return que->ExecuteUpdate();
 }
-bool DelFromTableNotifications(RequestToPostData data){
+bool MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data){
     MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from requesttopost where user_id=? and project_id=?");
     que->setInt(1,data->user_id);
     que->setInt(2,data->post_id);
     return que->ExecuteUpdate();
 }
 
-std::vector<RequestToPostData> SelectNotifications(int &user_id)
+std::vector<RequestToPostData> MainDataBase::FindRequestToPostTable(int &user_id)
 {
     //выводим оповещения-ответы на пост юзера, либо ответы на его отклики
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select r.user_id, \
@@ -58,7 +61,7 @@ std::vector<RequestToPostData> SelectNotifications(int &user_id)
     return data;
 }
 
-UserData FindIntoPersonByUsername(std::string &username){
+UserData MainDataBase::FindIntoPersonByUsername(std::string &username){
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, username, email, name, sur_name, user_discription, password from userdata "
     R"( where username = ? )");
     selectQuery->setString(1,username);
@@ -73,7 +76,7 @@ UserData FindIntoPersonByUsername(std::string &username){
     data.password=selectQuery->getString(1,7);
     return data;
 }
-UserData FindIntoPersonByID(int &id){
+UserData MainDataBase::FindIntoPersonByID(int &id){
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, username, email, name, sur_name, user_discription, password from userdata "
     R"( where id = ? )");
     selectQuery->setInt(1,id);
@@ -89,7 +92,7 @@ UserData FindIntoPersonByID(int &id){
     return data;
 }
 
-ProjectData SelectPostByID(int &id)
+ProjectData MainDataBase::SelectPostByID(int &id)
 {
    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, userid, project_name, team_name, post_tag, teammates, project_description, diversity from projectdata "
    "where id=?");
@@ -109,7 +112,7 @@ ProjectData SelectPostByID(int &id)
 }
 
 
-bool InsertIntoPostTable(ProjectData &data){
+bool MainDataBase::InsertIntoPostTable(ProjectData &data){
     MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into projectdata (userid, project_name,team_name,post_tags,teammates,project_description,diversity) values(?,?,?,?,?,?,?)");
     insertQuery->setInt(1,data.userid);
     insertQuery->setString(2, data.project_name);
@@ -123,7 +126,7 @@ bool InsertIntoPostTable(ProjectData &data){
     return true;
 }
 
-bool InsertIntoUserTable(RegisterData &data){
+bool MainDataBase::InsertIntoUserTable(RegisterData &data){
     MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into userdata (email, username,password) values(?,?,?)");
     insertQuery->setString(1,data.email);
     insertQuery->setString(2, data.username);
@@ -137,7 +140,7 @@ bool InsertIntoUserTable(RegisterData &data){
 
 
 
-bool InsertIntoRequestToPostTable(RequestToPostData &data){
+bool MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data){
     MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into requesttopost (user_id, post_id, motivation_words, status) values(?,?,?,?)");
     insertQuery->setInt(1,data.user_id);
     insertQuery->setInt(2, data.post_id);
@@ -150,7 +153,7 @@ bool InsertIntoRequestToPostTable(RequestToPostData &data){
 }
 
 
-bool InsertToken(std::string &username, std::string& token){
+bool MainDataBase::InsertToken(std::string &username, std::string& token){
     MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into tokens (username, post_id) values(?,?)");
     insertQuery->setString(1,username);
     insertQuery->setString(2,token);
@@ -158,7 +161,7 @@ bool InsertToken(std::string &username, std::string& token){
 
 //updatам дописать sql-запросы
 
-bool EditUserInPersonTable(UserData &data){
+bool MainDataBase::EditUserInPersonTable(UserData &data){
     MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update userdata set username=?, email=?, name=? sur_name=?, user_description=?, password=? where id=?")
     updateQuery->setString(1,data.username);
     updateQuery->setString(2,data.email);
@@ -173,7 +176,7 @@ bool EditUserInPersonTable(UserData &data){
     return true;
 }
 
-bool EditPostInPostTable(ProjectData &data){
+bool MainDataBase::EditPostInPostTable(ProjectData &data){
     MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update projectdata set userid=?, project_name=?, team_name=?, post_tags=?,teammates=?,project_description=?, diversity=? where id_project=?")
     updateQuery->setInt(1,data.userid);
     updateQuery->setString(2,data.project_name);
@@ -189,7 +192,7 @@ bool EditPostInPostTable(ProjectData &data){
 }
 
 
-bool EditRequestToPostTable(RequestToPostData &data){
+bool MainDataBase::EditRequestToPostTable(RequestToPostData &data){
     MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update requesttopost set status=? where post_id=?, user_id=?")
     updateQuery->setInt(1,static_cast<Status>(data.status));
     updateQuery->setInt(2,data.user_id);
@@ -201,7 +204,7 @@ bool EditRequestToPostTable(RequestToPostData &data){
 }
 
 
-bool IsUnique(std::string &username){
+bool MainDataBase::IsUnique(std::string &username){
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id from userdata "
     R"( where username = ? )");
     selectQuery->setString(1,username);
@@ -211,7 +214,7 @@ bool IsUnique(std::string &username){
     else return false;
 }
 
-bool FindToken(std::string &username, std::string& token){
+bool MainDataBase::FindToken(std::string &username, std::string& token){
     MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select  from tokens "
     R"( where username = ? )");
     selectQuery->setString(1,username);
