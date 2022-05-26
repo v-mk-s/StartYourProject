@@ -1,7 +1,7 @@
 
 
 MainDataBase::MainDataBase(){
-    MySQLConnection * sqlconn = new MySQLConnection();
+    sqlconn = new MySQLConnection();
     sqlconn->Connect("127.0.0.1", 3306, "root", "password", "Projectdata")
 }
 MainDataBase::~MainDataBase(){
@@ -223,14 +223,3 @@ bool MainDataBase::FindToken(std::string &username, std::string& token){
     return true;
     else return false;
 }
-
-
-
-
-
-
-
-
-
-
-
