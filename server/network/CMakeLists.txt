@@ -27,9 +27,9 @@ file(GLOB INCLUDE_DIRS
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
-        ${SERVER_SYP_CORE_INCLUDE_DIRS} 
-        ${SERVER_SYP_DATABASE_INCLUDE_DIRS}
         ${INCLUDE_DIRS} 
+        ${SERVER_SYP_DATABASE_INCLUDE_DIRS}
+        ${SERVER_SYP_CORE_INCLUDE_DIRS} 
 )
 
 target_link_libraries(${PROJECT_NAME} 

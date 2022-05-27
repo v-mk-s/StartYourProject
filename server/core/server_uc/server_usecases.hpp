@@ -12,7 +12,7 @@ class ILoginUC {
 
 class IRegisterUC {
  public:
-    virtual Message<std::string> addUser(RegisterData& user_data) = 0;
+    virtual Message<std::string> addUser(UserData& user_data) = 0;
 };
 
 class IEditProfileUC {
@@ -74,16 +74,13 @@ class ICreatePostUC {
 
 /////////////////////// User UC /////////////////////////////////////
 
-bool checkUsername(std::string& name);
-bool checkPassword(std::string& password);
-bool checkEmail(std::string& email);
 
 class LoginUC: public ILoginUC {
  public:
     LoginUC() = delete;
     LoginUC(IMainDataBase* database): database(database) {}
 
-    Message<std::string> checkUser(LoginData& user);
+    Message<std::string> checkUser(LoginData& user) override;
     std::string generate_token(std::string key);
 
  private:
@@ -96,7 +93,7 @@ class RegisterUC: public IRegisterUC {
     RegisterUC() = delete;
     RegisterUC(IMainDataBase* database): database(database) {}
 
-    Message<std::string> addUser(RegisterData& user_data);
+    Message<std::string> addUser(UserData& user_data) override;
 
  private:
     IMainDataBase* database;
@@ -108,7 +105,7 @@ class EditProfileUC: public IEditProfileUC {
     EditProfileUC() = delete;
     EditProfileUC(IMainDataBase* database): database(database) {}
 
-    Message<std::string> editUserData(UserData& user_data);
+    Message<std::string> editUserData(UserData& user_data) override;
 
  private:
     IMainDataBase* database;
@@ -120,7 +117,7 @@ class DelUserProfileUC: public IDelUserProfileUC {
     DelUserProfileUC() = delete;
     DelUserProfileUC(IMainDataBase* database): database(database) {}
 
-    Message<std::string> delUserData(int id);
+    Message<std::string> delUserData(int id) override;
 
  private:
     IMainDataBase* database;
@@ -132,7 +129,7 @@ class GetUserProfileUC: public IGetUserProfileUC {
     GetUserProfileUC() = delete;
     GetUserProfileUC(IMainDataBase* database): database(database) {}
 
-    Message<UserData> getUserData(std::string& username);
+    Message<UserData> getUserData(std::string& username) override;
 
  private:
     IMainDataBase* database;
@@ -146,7 +143,7 @@ class EditPostUC: public IEditPostUC {
     EditPostUC() = delete;
     EditPostUC(IMainDataBase* database): database(database) {}
 
-    ResponseStatus editPostToDB(ProjectData post);
+    ResponseStatus editPostToDB(ProjectData post) override;
     
  private:
     IMainDataBase* database;
@@ -157,8 +154,8 @@ class SearchPostUC: public ISearchPostUC {
     SearchPostUC() = delete;
     SearchPostUC(IMainDataBase* database): database(database) {}
 
-    Message<ProjectData> makePostSearch(std::string& project_name);
-    Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data);
+    Message<ProjectData> makePostSearch(std::string& project_name) override;
+    Message<std::vector<ProjectData>> makeMultiPostSearch(SearchData& data) override;
 
  private:
     IMainDataBase* database;
@@ -169,7 +166,7 @@ class SearchPersonUC: public ISearchPersonUC {
     SearchPersonUC() = delete;
     SearchPersonUC(IMainDataBase* database): database(database) {}
 
-    Message<UserData> makePersonSearch(std::string& username);
+    Message<UserData> makePersonSearch(std::string& username) override;
 
  private:
     IMainDataBase* database;
@@ -180,7 +177,7 @@ class MakeRequestToPostUC: public IMakeRequestToPostUC {
     MakeRequestToPostUC() = delete;
     MakeRequestToPostUC(IMainDataBase* database): database(database) {}
 
-    ResponseStatus makeReqToPost(RequestToPostData& request_info);
+    ResponseStatus makeReqToPost(RequestToPostData& request_info) override;
 
  private:
     IMainDataBase* database;
@@ -191,7 +188,7 @@ class DeletePostUC: public IDeletePostUC {
     DeletePostUC() = delete;
     DeletePostUC(IMainDataBase* database): database(database) {}
     
-    ResponseStatus delPostData(int id);
+    ResponseStatus delPostData(int id) override;
 
  private:
     IMainDataBase* database;
@@ -202,7 +199,7 @@ class AnswerTheRequestUC: public IAnswerTheRequestUC {
     AnswerTheRequestUC() = delete;
     AnswerTheRequestUC(IMainDataBase* database): database(database) {}
 
-    ResponseStatus getAnswer(bool answer, RequestToPostData request_info);
+    ResponseStatus getAnswer(bool answer, RequestToPostData request_info) override;
 
  private:
     IMainDataBase* database;
@@ -213,7 +210,7 @@ class ShowNotificationsUC: public IShowNotificationsUC {
     ShowNotificationsUC() = delete;
     ShowNotificationsUC(IMainDataBase* database): database(database) {}
 
-    Message<NotificationData> showAllNotifications(int user_id);
+    Message<NotificationData> showAllNotifications(int user_id) override;
     
  private:
     IMainDataBase* database;
@@ -224,7 +221,7 @@ class CreatePostUC: public ICreatePostUC {
     CreatePostUC() = delete;
     CreatePostUC(IMainDataBase* database): database(database) {}
 
-    ResponseStatus addPostToDB(ProjectData post);
+    ResponseStatus addPostToDB(ProjectData post) override;
 
  private:
     IMainDataBase* database;

@@ -88,7 +88,7 @@ UserData MainDataBase::FindIntoPersonByUsername(std::string &username) {
     return UserData();
 }
 
-UserData MainDataBase::FindIntoPersonByID(int &id) {
+bool MainDataBase::FindIntoPersonByID(int &id) {
     // MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, username, email, name, sur_name, user_discription, password from userdata "
     // R"( where id = ? )");
 
@@ -105,9 +105,7 @@ UserData MainDataBase::FindIntoPersonByID(int &id) {
     // data.password = selectQuery->getString(1,7);
     // return data;
 
-    UserData data;
-    data.username = get_record(id)[0];
-    return data;
+    return find_record(id);
 }
 
 ProjectData MainDataBase::SelectPostByID(int &id) {
@@ -134,68 +132,73 @@ ProjectData MainDataBase::SelectPostByID(int &id) {
 }
 
 
-bool InsertIntoPostTable(ProjectData &data) {
+bool MainDataBase::InsertIntoPostTable(ProjectData &data) {
     data;
     return true;
 }
-bool InsertIntoPersonTable(RegisterData &data) {
-    data;
+bool MainDataBase::InsertIntoPersonTable(UserData &data) {
+    std::vector<std::string> record = {data.username, data.password, data.email};
+    add_record(data.id, record);
     return true;
 }
-bool InsertIntoRequestToPostTable(RequestToPostData &data) {
-    data;
-    return true;
-}
-
-bool DeleteFromRequestToPostTable(RequestToPostData &data) {
+bool MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
     data;
     return true;
 }
 
-bool EditUserInPersonTable(UserData &data) {
-    data;
-    return true;
-}
-bool EditPostInPostTable(ProjectData &data) {
-    data;
-    return true;
-}
-bool EditRequestToPostTable(RequestToPostData &data) {
+bool MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
     data;
     return true;
 }
 
-bool FindIntoPersonTable(LoginData &data) {
+bool MainDataBase::EditUserInPersonTable(UserData &data) {
+    data;
+    return true;
+}
+bool MainDataBase::EditPostInPostTable(ProjectData &data) {
+    data;
+    return true;
+}
+bool MainDataBase::EditRequestToPostTable(RequestToPostData &data) {
     data;
     return true;
 }
 
-bool FindIntoPostTable(std::string &project_name) {
+bool MainDataBase::FindIntoPersonTable(LoginData &data) {
+    for (auto it : table_) {
+        if (it.second[0] == data.username && it.second[1] == data.password) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MainDataBase::FindIntoPostTable(std::string &project_name) {
     project_name;
     return true;
 }
-NotificationData FindRequestToPostTable(int &user_id) {
+NotificationData MainDataBase::FindRequestToPostTable(int &user_id) {
     user_id;
     return NotificationData();
 }
 
-bool InsertToken(std::string &username, std::string& token) {
+bool MainDataBase::InsertToken(std::string &username, std::string& token) {
     return true;
 }
-bool FindToken(std::string &username, std::string& token) {
+bool MainDataBase::FindToken(std::string &username, std::string& token) {
     return true;
 }
-bool DeleteToken(std::string &username) {
+bool MainDataBase::DeleteToken(std::string &username) {
     return true;
 }
 
-UserData getUserProfile(std::string &username) {
+UserData MainDataBase::getUserProfile(std::string &username) {
     return UserData();
 }
-ProjectData getPost(std::string &project_name) {
+ProjectData MainDataBase::getPost(std::string &project_name) {
     return ProjectData();
 }
-std::vector<ProjectData> getMultiPost(SearchData &data) {
+std::vector<ProjectData> MainDataBase::getMultiPost(SearchData &data) {
     return std::vector<ProjectData>();
 }
 

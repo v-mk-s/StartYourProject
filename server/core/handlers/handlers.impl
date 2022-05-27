@@ -23,8 +23,9 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
 template <typename JSON>
 void RegisterHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
-    RegisterData data;
+    UserData data;
 
+    data.id = json.template get<int>("id", 0);
     data.username = json.template get<std::string>("username", "");
     data.password = json.template get<std::string>("password", "");
     data.email = json.template get<std::string>("email", "");

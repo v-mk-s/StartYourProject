@@ -86,9 +86,9 @@ void handle_request(beast::string_view doc_root,
         return res;
     };
     
-    if(req.method() != http::verb::get && req.method() != http::verb::head) {
-        return send(bad_request("Unknown HTTP-method"));
-    }
+    // if(req.method() != http::verb::get && req.method() != http::verb::head) {
+    //     return send(bad_request("Unknown HTTP-method"));
+    // }
 
     if(req.target().empty() || req.target()[0] != '/' ||
        req.target().find("..") != beast::string_view::npos) {

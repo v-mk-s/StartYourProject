@@ -14,37 +14,37 @@ class MainDataBase: public IMainDataBase
     // MainDataBase() = default;
     MainDataBase(MySQLConnection *sqlconn_);
 
-    bool InsertIntoPostTable(ProjectData &data);
-    bool InsertIntoPersonTable(RegisterData &data);
-    bool InsertIntoRequestToPostTable(RequestToPostData &data);
+    bool InsertIntoPostTable(ProjectData &data) override;
+    bool InsertIntoPersonTable(UserData &data) override;
+    bool InsertIntoRequestToPostTable(RequestToPostData &data) override;
 
-    bool DeleteFromPostTable(int id);
-    bool DeleteFromPersonTable(int id);
-    bool DeleteFromRequestToPostTable(RequestToPostData &data);
-    bool DelFromTableToken(int id);
-    bool DelFromTableNotifications(RequestToPostData& data);
+    bool DeleteFromPostTable(int id) override;
+    bool DeleteFromPersonTable(int id) override;
+    bool DeleteFromRequestToPostTable(RequestToPostData &data) override;
+    bool DelFromTableToken(int id) override;
+    bool DelFromTableNotifications(RequestToPostData& data) override;
 
-    bool EditUserInPersonTable(UserData &data);
-    bool EditPostInPostTable(ProjectData &data);
-    bool EditRequestToPostTable(RequestToPostData &data);
+    bool EditUserInPersonTable(UserData &data) override;
+    bool EditPostInPostTable(ProjectData &data) override;
+    bool EditRequestToPostTable(RequestToPostData &data) override;
 
 
-    bool FindIntoPersonTable(LoginData &data);
-    UserData FindIntoPersonByUsername(std::string &username);
-    UserData FindIntoPersonByID(int &id);
-    bool FindIntoPostTable(std::string &project_name);
-    NotificationData FindRequestToPostTable(int &user_id);
+    bool FindIntoPersonTable(LoginData &data) override;
+    UserData FindIntoPersonByUsername(std::string &username) override;
+    bool FindIntoPersonByID(int &id) override;
+    bool FindIntoPostTable(std::string &project_name) override;
+    NotificationData FindRequestToPostTable(int &user_id) override;
 
-    bool InsertToken(std::string &username, std::string& token);
-    bool FindToken(std::string &username, std::string& token);
-    bool DeleteToken(std::string &username);
+    bool InsertToken(std::string &username, std::string& token) override;
+    bool FindToken(std::string &username, std::string& token) override;
+    bool DeleteToken(std::string &username) override;
 
-    UserData getUserProfile(std::string &username);
-    ProjectData getPost(std::string &project_name);
-    std::vector<ProjectData> getMultiPost(SearchData &data);
+    UserData getUserProfile(std::string &username) override;
+    ProjectData getPost(std::string &project_name) override;
+    std::vector<ProjectData> getMultiPost(SearchData &data) override;
 
-    std::vector<RequestToPostData> SelectNotifications(int &user_id);
-    ProjectData SelectPostByID(int &id);
+    std::vector<RequestToPostData> SelectNotifications(int &user_id) override;
+    ProjectData SelectPostByID(int &id) override;
 
     ~MainDataBase() = default;
 
