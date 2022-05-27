@@ -111,6 +111,26 @@ ProjectData MainDataBase::SelectPostByID(int &id)
     return data;
 }
 
+ProjectData MainDataBase::SelectPostByProjectname(std::string &project_name)
+{
+   MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, userid, project_name, team_name, post_tag, teammates, project_description, diversity from projectdata "
+   "where project_name=?");
+   selectQuery->setInt(1,project_name)
+   selectQuery->ExecuteQuery();
+   ProjectData data;
+   data.id=selectQuery->getInt(1,1);
+   data.userid=selectQuery->getString(1,2);
+   data.project_name=selectQuery->getString(1,2);
+   data.team_name=selectQuery->getString(1,2);
+   data.post_tags.push_back(selectQuery->getString(1,2));
+   data.teammates.push_back(selectQuery->getString(1,2));
+   data.project_description=selectQuery->getString(1,2);
+   data.diversity=selectQuery->getDouble(1,2);
+
+    return data;
+}
+
+
 
 bool MainDataBase::InsertIntoPostTable(ProjectData &data){
     MySQLQuery * insertQuery = new MySQLQuery(sqlconn,"insert into projectdata (userid, project_name,team_name,post_tags,teammates,project_description,diversity) values(?,?,?,?,?,?,?)");
@@ -215,7 +235,7 @@ bool MainDataBase::IsUnique(std::string &username){
 }
 
 bool MainDataBase::FindToken(std::string &username, std::string& token){
-    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select  from tokens "
+    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select * from tokens "
     R"( where username = ? )");
     selectQuery->setString(1,username);
     selectQuery->ExecuteQuery();
