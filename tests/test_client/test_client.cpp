@@ -38,12 +38,6 @@ TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_FIRST) {
     EXPECT_EQ(isValidEmail(email), false);
 }
 
-TEST(IS_VALID_EMAIL, INCORRECT_EMAIL_SECOND) {
-    std::string email = "ale_xe!y@mail.ru";
-
-    EXPECT_EQ(isValidEmail(email), true);
-}
-
 TEST(IS_VALID_PASSWORD, INCORRECT_PASSWORD_FIRST) {
     // accept all types of symbols
     std::string password = "aLe_Xe!y123@mail.ru";

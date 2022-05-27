@@ -1,5 +1,7 @@
 #include "validation.hpp"
 
+static const std::string stop_symbols = "!@#$%^&*(){}[]?:;№/|,.";
+static const std::string stop_symbols_email = "!#$%^&*(){}[]?:;№/|,";
 // ------------------------------------------------------------------
 bool isValidEmail(const std::string &email)
 {
@@ -11,16 +13,22 @@ bool isValidEmail(const std::string &email)
     auto at = std::find(email.begin(), email.end(), '@');
     auto dot = std::find(at, email.end(), '.');
 
-    static const std::regex r(R"([^a-zA-Z0-9])");
+    if (at == email.end() && dot == email.end()) {
+        return false;
+    }
 
-    return (at != email.end()) && (dot != email.end()) && (std::regex_search(email.data(), r));
+    for (auto c : email) {
+        if (std::find(stop_symbols_email.begin(), stop_symbols_email.end(), c) != stop_symbols_email.end()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool isValidUserDescription(const std::string &description)
 {
     std::string stop_symbols_staples = "[]{}";
-
-    // static const std::regex r(R"([^a-zA-Z])");
 
     for (auto c : description)
     {
@@ -40,9 +48,13 @@ bool isValidSurname(const std::string &surname)
         return false;
     }
 
-    static const std::regex r(R"([^a-zA-Z])");
+    for (auto c : surname) {
+        if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+            return false;
+        }
+    }
 
-    return !std::regex_search(surname.data(), r);
+    return true;
 }
 
 bool isValidUsername(const std::string &username)
@@ -52,9 +64,13 @@ bool isValidUsername(const std::string &username)
         return false;
     }
 
-    static const std::regex r(R"([^a-zA-Z0-9])");
+    for (auto c : username) {
+        if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+            return false;
+        }
+    }
 
-    return !std::regex_search(username.data(), r);
+    return true;
 }
 
 bool isValidPassword(const std::string &password)
@@ -64,9 +80,13 @@ bool isValidPassword(const std::string &password)
         return false;
     }
 
-    static const std::regex r(R"([^a-zA-Z0-9])");
+    for (auto c : password) {
+        if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+            return false;
+        }
+    }
 
-    return !std::regex_search(password.data(), r);
+    return true;
 }
 
 bool isValidName(const std::string &name)
@@ -76,9 +96,13 @@ bool isValidName(const std::string &name)
         return false;
     }
 
-    static const std::regex r(R"([^a-zA-Z])");
+    for (auto c : name) {
+        if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+            return false;
+        }
+    }
 
-    return !std::regex_search(name.data(), r);
+    return true;
 }
 
 bool isValidProjectName(const std::string& project) {
@@ -94,22 +118,26 @@ bool isValidTeamName(const std::string& team) {
         return false;
     }
 
-    static const std::regex r(R"([^a-zA-Z])");
+    for (auto c : team) {
+        if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+            return false;
+        }
+    }
 
-    return !std::regex_search(team.data(), r);
+    return true;
 }
 
 bool isValidTeammates(const std::vector<std::string>& teammates)
 {
-    static const std::regex r(R"([^a-zA-Z0-9])");
-
     for (auto mate : teammates) {
         if (mate.size() > MAX_TAG_NAME || mate.size() == 0) {
             return false;
         }
 
-        if (std::regex_search(mate.data(), r)) {
-            return false;
+        for (auto c : mate) {
+            if (std::find(stop_symbols.begin(), stop_symbols.end(), c) != stop_symbols.end()) {
+                return false;
+            }
         }
     }
 
