@@ -83,74 +83,74 @@ struct SearchData // 8
 };
 
 
-struct ProjectDescriptionData
-{
-    std::string project_id; // like username, but for internal DB
+// struct ProjectDescriptionData
+// {
+//     std::string project_id; // like username, but for internal DB
 
-    ProjectDescriptionData(
-        std::string _project_id = nullptr
-    ) :
-        project_id(_project_id)
-    {
-    }
-};
-
-
-struct UserDescriptionData
-{
-    std::string username;
-
-    UserDescriptionData(
-        std::string _username = nullptr
-    ) :
-        username(_username)
-    {
-    }
-};
+//     ProjectDescriptionData(
+//         std::string _project_id = nullptr
+//     ) :
+//         project_id(_project_id)
+//     {
+//     }
+// };
 
 
-struct PhotoData
-{
-    std::vector<std::int32_t> photo;
+// struct UserDescriptionData
+// {
+//     std::string username;
 
-    PhotoData(
-        std::vector<std::int32_t> _photo = {}
-    ) :
-        photo(_photo)
-    {
-    }
-};
+//     UserDescriptionData(
+//         std::string _username = nullptr
+//     ) :
+//         username(_username)
+//     {
+//     }
+// };
 
 
-struct UserEditData // 6+1
-{
-    std::string username;
-    std::string email;
-    std::string name;
-    std::string surname;
-    std::string user_description;
-    std::string password;
-    PhotoData photo_data;
+// struct PhotoData
+// {
+//     std::vector<std::int32_t> photo;
 
-    UserEditData(
-        std::string _username = nullptr,
-        std::string _email = nullptr,
-        std::string _name = nullptr,
-        std::string _surname = nullptr,
-        std::string _user_description = nullptr,
-        std::string _password = nullptr,
-        PhotoData _photo_data = PhotoData()
-    ) :
-        username(_username),
-        email(_email),
-        name(_name),
-        surname(_surname),
-        user_description(_user_description),
-        password(_password),
-        photo_data(_photo_data)
-    {
-    }
-};
+//     PhotoData(
+//         std::vector<std::int32_t> _photo = {}
+//     ) :
+//         photo(_photo)
+//     {
+//     }
+// };
+
+
+// struct UserEditData // 6+1
+// {
+//     std::string username;
+//     std::string email;
+//     std::string name;
+//     std::string surname;
+//     std::string user_description;
+//     std::string password;
+//     PhotoData photo_data;
+
+//     UserEditData(
+//         std::string _username = nullptr,
+//         std::string _email = nullptr,
+//         std::string _name = nullptr,
+//         std::string _surname = nullptr,
+//         std::string _user_description = nullptr,
+//         std::string _password = nullptr,
+//         PhotoData _photo_data = PhotoData()
+//     ) :
+//         username(_username),
+//         email(_email),
+//         name(_name),
+//         surname(_surname),
+//         user_description(_user_description),
+//         password(_password),
+//         photo_data(_photo_data)
+//     {
+//     }
+// };
 
 // don't delete, data for refactoring
 
@@ -159,14 +159,16 @@ struct LoginData
     std::string username;
     std::string password;
 
-    LoginData(
-        std::string _username = nullptr,
-        std::string _password = nullptr
-    ) :
-        username(_username),
-        password(_password)
-    {
-    }
+    // LoginData(
+    //     std::string _username = nullptr,
+    //     std::string _password = nullptr
+    // ) :
+    //     username(_username),
+    //     password(_password)
+    // {
+    // }
+
+    LoginData() = default;
     
     bool operator==(const LoginData& other) const {
         return username == other.username && password == other.password;
@@ -196,39 +198,39 @@ struct RegisterData
     }
 };
 
-struct UserData {
-    std::string username;
-    std::string email;
-    std::string name;
-    std::string surname;
-    std::string user_description;
-    std::string password;
+// struct UserData {
+//     std::string username;
+//     std::string email;
+//     std::string name;
+//     std::string surname;
+//     std::string user_description;
+//     std::string password;
 
-    UserData(
-        std::string _username = nullptr,
-        std::string _email = nullptr,
-        std::string _name = nullptr,
-        std::string _surname = nullptr,
-        std::string _user_description = nullptr,
-        std::string _password = nullptr
-    ) :
-        username(_username),
-        email(_email),
-        name(_name),
-        surname(_surname),
-        user_description(_user_description),
-        password(_password)
-    {
-    }
+//     UserData(
+//         std::string _username = nullptr,
+//         std::string _email = nullptr,
+//         std::string _name = nullptr,
+//         std::string _surname = nullptr,
+//         std::string _user_description = nullptr,
+//         std::string _password = nullptr
+//     ) :
+//         username(_username),
+//         email(_email),
+//         name(_name),
+//         surname(_surname),
+//         user_description(_user_description),
+//         password(_password)
+//     {
+//     }
 
-    bool operator==(const UserData& other) const {
-        return username == other.username && email == other.email &&
-                name == other.name && surname == other.surname &&
-                user_description == other.user_description && password == other.password;
-    }
+//     bool operator==(const UserData& other) const {
+//         return username == other.username && email == other.email &&
+//                 name == other.name && surname == other.surname &&
+//                 user_description == other.user_description && password == other.password;
+//     }
 
 
-};
+// };
 
 // struct PostData {
 //     int user_id;
@@ -260,65 +262,65 @@ struct RequestToPostData {
 };
 
 
-struct PublishPostData
-{
-    std::string project_name;
-    std::string team_name;
-    std::vector<std::string> post_tags;
-    std::vector<std::string> teammates;
-    std::string project_description;
+// struct PublishPostData
+// {
+//     std::string project_name;
+//     std::string team_name;
+//     std::vector<std::string> post_tags;
+//     std::vector<std::string> teammates;
+//     std::string project_description;
 
-    PublishPostData(
-        std::string _project_name = nullptr,
-        std::string _team_name = nullptr,
-        std::vector<std::string> _post_tags = {},
-        std::vector<std::string> _teammates = {},
-        std::string _project_description = nullptr
-    ) :
-        project_name(_project_name),
-        team_name(_team_name),
-        post_tags(_post_tags),
-        teammates(_teammates),
-        project_description(_project_description)
-    {
-    }
-};
+//     PublishPostData(
+//         std::string _project_name = nullptr,
+//         std::string _team_name = nullptr,
+//         std::vector<std::string> _post_tags = {},
+//         std::vector<std::string> _teammates = {},
+//         std::string _project_description = nullptr
+//     ) :
+//         project_name(_project_name),
+//         team_name(_team_name),
+//         post_tags(_post_tags),
+//         teammates(_teammates),
+//         project_description(_project_description)
+//     {
+//     }
+// };
 
 
-struct ProjectData
-{
-    std::string project_name;
-    std::string team_name;
-    std::vector<std::string> post_tags;
-    std::vector<std::string> teammates;
-    std::string project_description;
-    double diversity;
-    std::string request_description;
+// struct ProjectData
+// {
+//     std::string project_name;
+//     std::string team_name;
+//     std::vector<std::string> post_tags;
+//     std::vector<std::string> teammates;
+//     std::string project_description;
+//     double diversity;
+//     std::string request_description;
 
-    ProjectData(
-        std::string _project_name = nullptr,
-        std::string _team_name = nullptr,
-        std::vector<std::string> _post_tags = {},
-        std::vector<std::string> _teammates = {},
-        std::string _project_description = nullptr,
-        double _diversity = 0,
-        std::string _request_description = nullptr
-    ) :
-        project_name(_project_name),
-        team_name(_team_name),
-        post_tags(_post_tags),
-        teammates(_teammates),
-        project_description(_project_description),
-        diversity(_diversity),
-        request_description(_request_description)
-    {
-    }
+//     ProjectData(
+//         std::string _project_name = nullptr,
+//         std::string _team_name = nullptr,
+//         std::vector<std::string> _post_tags = {},
+//         std::vector<std::string> _teammates = {},
+//         std::string _project_description = nullptr,
+//         double _diversity = 0,
+//         std::string _request_description = nullptr
+//     ) :
+//         project_name(_project_name),
+//         team_name(_team_name),
+//         post_tags(_post_tags),
+//         teammates(_teammates),
+//         project_description(_project_description),
+//         diversity(_diversity),
+//         request_description(_request_description)
+//     {
+//     }
 
-    bool operator==(const ProjectData& other) const {
-        return project_name == other.project_name;
-    }
+//     bool operator==(const ProjectData& other) const {
+//         return project_name == other.project_name;
+//     }
 
-};
+// };
 
 
 struct NotificationProjectData
@@ -362,26 +364,78 @@ struct NotificationData
 };
 
 
-struct MainPostData
-{
-    std::string search_data;
-    std::string team_name;
-    std::string project_name;
-    std::vector<std::string> post_tags;
-    std::string project_description;
+// struct MainPostData
+// {
+//     // std::string search_data;
+//     std::string team_name;
+//     std::string project_name;
+//     std::vector<std::string> post_tags;
+//     std::string project_description;
 
-    MainPostData(
-        std::string _search_data = nullptr,
-        std::string _team_name = nullptr,
-        std::string _project_name = nullptr,
-        std::vector<std::string> _post_tags = {},
-        std::string _project_description = nullptr
-    ) :
-        search_data(_search_data),
-        team_name(_team_name),
-        project_name(_project_name),
-        post_tags(_post_tags),
-        project_description(_project_description)
-    {
+//     MainPostData(
+//         // std::string _search_data = nullptr,
+//         std::string _team_name = nullptr,
+//         std::string _project_name = nullptr,
+//         std::vector<std::string> _post_tags = {},
+//         std::string _project_description = nullptr
+//     ) :
+//         // search_data(_search_data),
+//         team_name(_team_name),
+//         project_name(_project_name),
+//         post_tags(_post_tags),
+//         project_description(_project_description)
+//     {
+//     }
+// };
+
+
+// new architecture
+
+struct UserData {
+    int id;
+    std::string auth_token;
+    std::string username;
+    std::string email;
+    std::string name;
+    std::string sur_name;
+    std::string user_discription;
+    std::string password;
+    std::vector<std::string> projects;
+
+    // must be removed, need fix conflict errors
+    std::string surname;
+    std::string user_description;
+    std::string request_description;
+    //
+
+    UserData(): id(0) {}
+
+    bool operator==(const UserData& other) const {
+        return username == other.username && email == other.email &&
+                name == other.name && sur_name == other.sur_name &&
+                user_discription == other.user_discription && password == other.password;
     }
 };
+
+struct ProjectData
+{
+    int projectid;
+    int userid;
+    std::string project_name;
+    std::string team_name;
+    std::vector<std::string> post_tags;
+    std::vector<std::string> teammates;
+    std::string project_description;
+    double diversity;
+
+    // must be removed, need fix conflict errors
+    std::string request_description;
+    //
+
+    ProjectData(): projectid(0), userid(0), diversity(0.0) {}
+
+    bool operator==(const ProjectData& other) const {
+        return project_name == other.project_name;
+    }
+};
+
