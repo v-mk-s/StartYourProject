@@ -213,7 +213,7 @@ bool MainDataBase::EditUserInPersonTable(UserData &data){
     .set("sur_name",expr(":param4"))
     .set("user_description",expr(":param5"))
     .set("password",expr(":param6"))
-    .where("id=param7")
+    .where("id=:param7")
     .bind("param1", data.username)
     .bind("param2", data.email)
     .bind("param3", data.name)
@@ -227,16 +227,6 @@ bool MainDataBase::EditUserInPersonTable(UserData &data){
 }
 
 bool MainDataBase::EditPostInPostTable(ProjectData &data){
-    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update projectdata set userid=?, project_name=?, team_name=?, post_tags=?,teammates=?,project_description=?, diversity=? where id_project=?")
-    updateQuery->setInt(1,data.userid);
-    updateQuery->setString(2,data.project_name);
-    updateQuery->setString(3,data.team_name);
-    updateQuery->setString(4,data.post_tags[0]);
-    updateQuery->setString(5,data.teammates[0]);
-    updateQuery->setString(6,data.project_description);
-    updateQuery->setDouble(7,data.diversity);
-    updateQuery->setInt(8,data.id);
-    updateQuery->ExecuteUpdate();
     project_data_table.update()
     .set("project_name", expr(":param1"))
     .set("team_name", expr(":param2"))
@@ -244,7 +234,7 @@ bool MainDataBase::EditPostInPostTable(ProjectData &data){
     .set("teammates", expr(":param4"))
     .set("project_description", expr(":param5"))
     .set("diversity", expr(":param6"))
-    .where("id_project", expr(":param7"))
+    .where("id_project=:param7"))
     .bind("param1", data.project_name)
     .bind("param2", data.team_name)
     .bind("param3", data.post_tags)
