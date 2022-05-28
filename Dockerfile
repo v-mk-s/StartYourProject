@@ -17,6 +17,17 @@ RUN cd /home && wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/s
     ./bootstrap.sh && \
     ./b2 install
 
+RUN cd /home && wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-community-client-plugins_8.0.29-1ubuntu20.04_amd64.deb && \
+    wget https://dev.mysql.com/get/Downloads/Connector-C++/libmysqlcppconn9_8.0.29-1ubuntu20.04_amd64.deb && \
+    wget https://dev.mysql.com/get/Downloads/Connector-C++/libmysqlcppconn8-2_8.0.29-1ubuntu20.04_amd64.deb && \
+    wget https://dev.mysql.com/get/Downloads/Connector-C++/libmysqlcppconn-dev_8.0.29-1ubuntu20.04_amd64.deb && \
+    apt install -y ./mysql-community-client-plugins_8.0.29-1ubuntu20.04_amd64.deb && \
+    apt install -y ./libmysqlcppconn9_8.0.29-1ubuntu20.04_amd64.deb && \
+    apt install -y ./libmysqlcppconn8-2_8.0.29-1ubuntu20.04_amd64.deb && \
+    apt install -y ./libmysqlcppconn-dev_8.0.29-1ubuntu20.04_amd64.deb
+
+EXPOSE 80
+
 COPY . /usr/src/StartYourProject
 WORKDIR /usr/src/StartYourProject
 RUN make rebuild

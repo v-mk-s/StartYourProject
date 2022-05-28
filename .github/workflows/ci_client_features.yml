@@ -4,14 +4,14 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    container: ilya0100/start_your_project
+    container: ilya0100/start_your_project:1.1
     steps:
     - uses: actions/checkout@v2
     - run: make build
 
   server_test:
     runs-on: ubuntu-latest
-    container: ilya0100/start_your_project
+    container: ilya0100/start_your_project:1.1
     needs: [build]
     steps:
       - uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
 
   client_test:
     runs-on: ubuntu-latest
-    container: ilya0100/start_your_project
+    container: ilya0100/start_your_project:1.1
     needs: [build]
     steps:
       - uses: actions/checkout@v2

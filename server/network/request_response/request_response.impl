@@ -1,0 +1,133 @@
+#pragma once
+
+#include "request_response.hpp"
+
+
+template <typename BodyType>
+void Response<BodyType>::set_status(ResponseStatus status, bool keep_alive, int ver) {
+    res_ = {static_cast<http::status>(status), ver};
+    res_.set(http::field::server, SERVER_NAME);
+    res_.keep_alive(keep_alive);
+}
+
+template <typename BodyType>
+void Response<BodyType>::set_content_type(std::string content_type) {
+    res_.set(http::field::content_type, content_type);
+}
+
+template <typename BodyType>
+void Response<BodyType>::set_body(const std::string& body) {
+    res_.body() = body;
+    res_.prepare_payload();
+}
+
+
+inline JSON::JSON(const std::string& str): IJSON(str) {
+    json::stream_parser p;
+    json::error_code ec;
+
+    p.write(str.data(), str.size(), ec);
+    if(ec) {
+        std::cerr << ec.message();
+    }
+
+    p.finish(ec);
+    if(ec) {
+        std::cerr << ec.message();
+    }
+
+    value_ =  p.release();
+}
+
+template<>
+inline std::string JSON::get<std::string>(const std::string &key, std::string defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return json::serialize(obj[key]);
+}
+
+template<>
+inline int JSON::get<int>(const std::string &key, int defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_int64();
+}
+
+template<>
+inline double JSON::get<double>(const std::string &key, double defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_double();
+}
+
+template<>
+inline bool JSON::get<bool>(const std::string &key, bool defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    return obj[key].as_bool();
+}
+
+template<>
+inline std::vector<std::string> JSON::get<std::vector<std::string>>(
+        const std::string &key, std::vector<std::string> defaultValue) {
+    json::object obj;
+    if(value_.is_null()) {
+        obj = value_.emplace_object();
+    } else {
+        obj = value_.as_object();
+    }
+    
+    json::array arr = obj[key].as_array();
+    std::vector<std::string> result;
+    for (auto it : arr) {
+        result.push_back(it.as_string().data());
+    }
+}
+
+template <typename T>
+void JSON::put(const std::string &key, T value) {
+    json::object* obj;
+    
+    if(value_.is_null()) {
+        obj = &value_.emplace_object();
+    } else {
+        obj = &value_.as_object();
+    }
+    (*obj)[key] = value;
+}
+
+template <typename T>
+void JSON::put(const std::string &key, const std::vector<T> &values) {
+    json::object* obj;
+
+    if(value_.is_null())
+        obj = &value_.emplace_object();
+    else
+        obj = &value_.as_object();
+    
+    json::array arr;
+    for (size_t i = 0; i < values.size(); ++i) {
+        arr.emplace_back(values[i]);
+    }
+    (*obj)[key] = std::move(arr);
+}
+
+inline std::string JSON::serialize() {
+    return json::serialize(value_);
+}

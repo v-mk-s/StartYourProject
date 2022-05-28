@@ -4,6 +4,30 @@
 #include <vector>
 #include <sstream>
 
+#define LOGIN_URL "/login"
+#define REGISTER_URL "/register"
+
+#define EDIT_PROFILE_URL "/profile/edit"
+#define DELETE_PROFILE_URL "/profile/delete"
+#define GET_PROFILE_URL "/profile"
+#define FIND_USER_URL "/profile/find"
+#define GET_NOTIFICATIONS_URL "/profile/notifications"
+
+#define EDIT_POST_URL "/post/edit"
+#define FIND_POST_URL "/post/find"
+#define MAKE_REQUEST_URL "/post/request/make"
+#define DELETE_POST_URL "/post/delete"
+#define ANSWER_REQUEST_URL "/post/request/answer"
+#define CREATE_POST_URL "/post/create"
+
+#define CONTENT_TYPE_TEXT "text/plain"
+#define CONTENT_TYPE_JSON "application/json"
+
+#define HTTP_VER_1_1 11
+#define HTTP_VER_1_0 10
+
+
+
 // username == nick, nickname
 
 enum class ErrorStatus
@@ -125,33 +149,37 @@ struct RegisterData
 };
 
 struct UserData {
+    int id;
+    std::string auth_token;
     std::string username;
     std::string email;
     std::string name;
     std::string sur_name;
     std::string user_discription;
     std::string password;
+    std::vector<std::string> projects;
+
+    UserData(): id(0) {}
 
     bool operator==(const UserData& other) const {
-        return username == other.username && email == other.email &&
-                name == other.name && sur_name == other.sur_name &&
-                user_discription == other.user_discription && password == other.password;
+        return id == other.id && auth_token == other.auth_token && username == other.username;
     }
 };
 
-// struct PostData {
-//     int user_id;
-//     std::string projectname;
-//     std::string postdescription;
-//     std::string tags;
-//     std::string teamname;
-// };
+struct PostData {
+    int user_id;
+    std::string projectname;
+    std::string postdescription;
+    std::string tags;
+    std::string teamname;
+};
 
 struct RequestToPostData {
     int user_id;
     int post_id;
+    std::string project_name;
     std::string motivation_words;
-    enum class Status {yes, no, unknown};
+    enum class Status {yes=1, no=2, unknown=3};
     Status status;
 
     bool operator==(const RequestToPostData& other) const {
@@ -173,13 +201,16 @@ struct PublishPostData
 
 struct ProjectData
 {
+    int projectid;
+    int userid;
     std::string project_name;
     std::string team_name;
     std::vector<std::string> post_tags;
     std::vector<std::string> teammates;
     std::string project_description;
     double diversity;
-    std::string request_description;
+
+    ProjectData(): projectid(0), userid(0), diversity(0.0) {}
 
     bool operator==(const ProjectData& other) const {
         return project_name == other.project_name;
@@ -187,15 +218,18 @@ struct ProjectData
 };
 
 
-typedef struct NotificationProjectData
+struct NotificationProjectData
 {
+    int projectid;
     std::string project_name;
     std::string name;
     std::string username;
     std::string description;
     std::string question;
     std::vector<std::string> teammates;
-} NotificationProjectData;
+
+    NotificationProjectData(): projectid(0) {}
+};
 
 
 struct NotificationData

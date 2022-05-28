@@ -8,6 +8,14 @@ file(GLOB INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} basic clientui network client
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
+### temp ###
+find_package(Boost COMPONENTS REQUIRED json)
+
+add_executable(client client.cpp)
+
+target_link_libraries(client Boost::json -lpthread)
+############
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS} SYP_GENERAL_INCLUDE_DIRS)
 
 set(CLIENT_SYP_LIBRARIES ${PROJECT_NAME} PARENT_SCOPE)
