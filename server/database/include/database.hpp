@@ -6,9 +6,9 @@
 #include <mysql-cppconn-8/mysqlx/xdevapi.h>
 
 #define HOST "127.0.0.1"
-#define PORT 3306
+#define PORT 33060
 #define DB_USER "root"
-#define DB_PASSWORD "password"
+#define DB_PASSWORD "123qwerty"
 
 // fake
 #include <unordered_map>
@@ -47,10 +47,12 @@ class MainDataBase: public IMainDataBase
 
     // UserData getUserProfile(std::string &username) override;
     // ProjectData getPost(std::string &project_name) override;
-    std::vector<ProjectData> getMultiPost(SearchData &data) override;
+   //  std::vector<ProjectData> getMultiPost(SearchData &data) override;
 
     std::vector<RequestToPostData> SelectNotifications(int &user_id) override;
     ProjectData SelectPostByID(int &id);
+
+   //  bool IsUnique(std::string &username) override;
 
     ~MainDataBase();
 

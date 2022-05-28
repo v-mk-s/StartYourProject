@@ -88,8 +88,8 @@ std::vector<RequestToPostData> MainDataBase::FindRequestToPostTable(int &user_id
 }
 
 UserData MainDataBase::FindIntoPersonByUsername(std::string &username) {
-    mysqlx::RowResult res = user_data_table.select("id", "username", "email", "name", "sur_name", "user_discription", "password")
-    .where("username = :param")
+    mysqlx::RowResult res = user_data_table.select("id", "user_name", "email", "name", "sur_name", "user_discription", "password")
+    .where("user_name = :param")
     .orderBy("name")
     .bind("param",username)
     .execute();
@@ -108,7 +108,7 @@ UserData MainDataBase::FindIntoPersonByUsername(std::string &username) {
 }
 
 UserData MainDataBase::FindIntoPersonByID(int id) {
-    mysqlx::RowResult res = user_data_table.select("id", "username", "email", "name", "sur_name", "user_discription", "password")
+    mysqlx::RowResult res = user_data_table.select("id", "user_name", "email", "name", "sur_name", "user_discription", "password")
     .where("id = :param")
     .orderBy("name")
     .bind("param",id)
@@ -141,31 +141,33 @@ ProjectData MainDataBase::SelectPostByID(int &id) {
     data.userid = row[1];
     data.project_name = std::string(row[2]);
     data.team_name = std::string(row[3]);
-    data.post_tags.push_back(row[4]);
-    data.teammates.push_back(row[5]);
+    data.post_tags.push_back(std::string(row[4]));
+    data.teammates.push_back(std::string(row[5]));
     data.project_description = std::string(row[6]);
-    data.diversity = std::string(row[7]);
+    data.diversity = row[7];
     
     return data;
 }
 
 ProjectData MainDataBase::SelectPostByProjectname(std::string &project_name) {
     mysqlx::RowResult res = project_data_table.select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
-   .where("project_name= :param")
-   .orderBy("project_name")
-   .bind("param",project_name)
-   .execute();
+    .where("project_name= :param")
+    .orderBy("project_name")
+    .bind("param",project_name)
+    .execute();
 
-   ProjectData data;
-   data.id=res[0];
-   data.userid=res[1];
-   data.project_name=res[2];
-   data.team_name=res[3];
-   data.post_tags.push_back(res[4]);
-   data.teammates.push_back(res[5]);
-   data.project_description=res[6];
-   data.diversity=res[7];
-   
+    ProjectData data;
+    mysqlx::Row row = res.fetchOne();
+    
+    data.projectid = row[0];
+    data.userid = row[1];
+    data.project_name = std::string(row[2]);
+    data.team_name = std::string(row[3]);
+    data.post_tags.push_back(std::string(row[4]));
+    data.teammates.push_back(std::string(row[5]));
+    data.project_description = std::string(row[6]);
+    data.diversity = row[7];
+
     return data;
 }
 
@@ -182,8 +184,8 @@ bool MainDataBase::InsertIntoPostTable(ProjectData &data) {
     return true;
 }
 
-bool MainDataBase::InsertIntoUserTable(RegisterData &data) {
-    user_data_table.insert("email", "username","password")
+bool MainDataBase::InsertIntoUserTable(UserData &data) {
+    user_data_table.insert("email", "user_name","password")
     .values(1,data.email)
     .values(2, data.username)
     .values(3, data.password)
@@ -195,7 +197,7 @@ bool MainDataBase::InsertIntoUserTable(RegisterData &data) {
 
 
 bool MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
-    notification_data_table.insert("user_id", "post_id", "motivation_words", "status")    no
+    notification_data_table.insert("user_id", "post_id", "motivation_words", "status")
     .values(1,data.user_id)
     .values(2, data.post_id)
     .values(3, data.motivation_words)
@@ -207,7 +209,7 @@ bool MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
 
 
 bool MainDataBase::InsertToken(std::string &username, std::string& token) {
-    token_data_table.insert("username","token")
+    token_data_table.insert("user_name","token")
     .values(1,username)
     .values(2,token)
     .execute();
@@ -217,18 +219,18 @@ bool MainDataBase::InsertToken(std::string &username, std::string& token) {
 
 bool MainDataBase::EditUserInPersonTable(UserData &data) {
     user_data_table.update()
-    .set("username",expr(":param1"))
-    .set("email",expr(":param2"))
-    .set("name",expr(":param3"))
-    .set("sur_name",expr(":param4"))
-    .set("user_description",expr(":param5"))
-    .set("password",expr(":param6"))
-    .where("id=param7")
+    .set("user_name", mysqlx::expr(":param1"))
+    .set("email", mysqlx::expr(":param2"))
+    .set("name", mysqlx::expr(":param3"))
+    .set("sur_name", mysqlx::expr(":param4"))
+    .set("user_description", mysqlx::expr(":param5"))
+    .set("password", mysqlx::expr(":param6"))
+    .where("id=:param7")
     .bind("param1", data.username)
     .bind("param2", data.email)
     .bind("param3", data.name)
     .bind("param4", data.sur_name)
-    .bind("param5", data.user_description)
+    .bind("param5", data.user_discription)
     .bind("param6", data.password)
     .bind("param7", data.id)
     .execute();
@@ -237,31 +239,21 @@ bool MainDataBase::EditUserInPersonTable(UserData &data) {
 }
 
 bool MainDataBase::EditPostInPostTable(ProjectData &data) {
-    MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update projectdata set userid=?, project_name=?, team_name=?, post_tags=?,teammates=?,project_description=?, diversity=? where id_project=?")
-    updateQuery->setInt(1,data.userid);
-    updateQuery->setString(2,data.project_name);
-    updateQuery->setString(3,data.team_name);
-    updateQuery->setString(4,data.post_tags[0]);
-    updateQuery->setString(5,data.teammates[0]);
-    updateQuery->setString(6,data.project_description);
-    updateQuery->setDouble(7,data.diversity);
-    updateQuery->setInt(8,data.id);
-    updateQuery->ExecuteUpdate();
     project_data_table.update()
-    .set("project_name", expr(":param1"))
-    .set("team_name", expr(":param2"))
-    .set("post_tags", expr(":param3"))
-    .set("teammates", expr(":param4"))
-    .set("project_description", expr(":param5"))
-    .set("diversity", expr(":param6"))
-    .where("id_project", expr(":param7"))
+    .set("project_name", mysqlx::expr(":param1"))
+    .set("team_name", mysqlx::expr(":param2"))
+    .set("post_tags", mysqlx::expr(":param3"))
+    .set("teammates", mysqlx::expr(":param4"))
+    .set("project_description", mysqlx::expr(":param5"))
+    .set("diversity", mysqlx::expr(":param6"))
+    .where("id_project=:param7")
     .bind("param1", data.project_name)
     .bind("param2", data.team_name)
-    .bind("param3", data.post_tags)
-    .bind("param4", data.teammates)
+    .bind("param3", data.post_tags[0])
+    .bind("param4", data.teammates[0])
     .bind("param5", data.project_description)
     .bind("param6", data.diversity)
-    .bind("param7", data.id_project)
+    .bind("param7", data.projectid)
     .execute();
     return true;
 }
@@ -279,18 +271,25 @@ bool MainDataBase::EditRequestToPostTable(RequestToPostData &data){
 }
 
 
-bool MainDataBase::IsUnique(std::string &username) {
-    SqlResult res = user_data_table.select("username")
-    .where("username=:param")
-    .bind("param",username)
-    execute();
+// bool MainDataBase::IsUnique(std::string &username) {
+//     mysqlx::RowResult res = user_data_table.select("username")
+//     .where("username=:param")
+//     .bind("param", username)
+//     .execute();
+//     return res.();
+// }
+
+bool MainDataBase::CheckToken(std::string &username, std::string& token) {
+    mysqlx::SqlResult res = sqlconn.sql("select * from token_data where  username=:param")
+    .bind("param", username)
+    .execute();
     return res.hasData();
 }
 
-bool MainDataBase::FindToken(std::string &username, std::string& token) {
-    SqlResult res = token_data_table.select("username")
-    .where("username=:username")
-    .bind("param",username)
-    execute();
-    return res.hasData();
+std::vector<RequestToPostData> MainDataBase::SelectNotifications(int &user_id) {
+    return std::vector<RequestToPostData>();
+}
+
+bool MainDataBase::FindIntoPostTable(std::string &project_name) {
+    return true;
 }

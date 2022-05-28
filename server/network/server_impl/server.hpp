@@ -55,7 +55,6 @@ class Server {
         net::signal_set signals_;
         std::vector<std::thread> threads_;
 
-      //   MySQLConnection sql_conn_;
         MainDataBase database_;
 
         std::map<std::string, std::unique_ptr<IHandler>> handlers_;

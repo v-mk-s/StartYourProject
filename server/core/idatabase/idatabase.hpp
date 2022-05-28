@@ -42,11 +42,11 @@ class IMainDataBase
 
     // virtual UserData getUserProfile(std::string &username) = 0;
     // virtual ProjectData getPost(std::string &project_name) = 0;
-    virtual std::vector<ProjectData> getMultiPost(SearchData &data) = 0;
+    // virtual std::vector<ProjectData> getMultiPost(SearchData &data) = 0;
 
     virtual std::vector<RequestToPostData> SelectNotifications(int &user_id) = 0;
     // virtual ProjectData SelectPostByID(int &id) = 0;
-    virtual bool IsUnique(std::string &username)=0;
+    // virtual bool IsUnique(std::string &username) = 0;
 
     // private:
     // Session sqlconn;

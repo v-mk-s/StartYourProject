@@ -4,7 +4,7 @@
 Server::ServerImpl::ServerImpl(boost::asio::ip::address address, unsigned short port,
                std::shared_ptr<std::string> doc_root, int threads):
             address_(address), port_(port), doc_root_(doc_root), n_threads_(threads),
-            ioc_(threads), signals_(net::signal_set(ioc_, SIGINT, SIGTERM))/*, database_(&sql_conn_)*/ {
+            ioc_(threads), signals_(net::signal_set(ioc_, SIGINT, SIGTERM)) {
     threads_.reserve(n_threads_ - 1);
 
     handlers_.emplace(LOGIN_URL, std::make_unique<LoginHandler<JSON>>(&database_));
