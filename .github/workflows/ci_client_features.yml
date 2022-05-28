@@ -7,23 +7,3 @@ jobs:
     container: ilya0100/start_your_project
     steps:
     - uses: actions/checkout@v2
-    - run: make build
-
-  server_test:
-    runs-on: ubuntu-latest
-    container: ilya0100/start_your_project
-    needs: [build]
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          make build_server_tests
-          make run_server_tests
-
-  client_test:
-    runs-on: ubuntu-latest
-    container: ilya0100/start_your_project
-    needs: [build]
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          make build_client_tests
