@@ -32,7 +32,7 @@ class MainDataBase
     virtual ProjectData SelectPostByID(int &id)=0;
     virtual ProjectData SelectPostByProjectname(std::string &project_name)=0;
 
-    
+
     virtual bool InsertToken(std::string &username, std::string& token) = 0;
     virtual bool FindToken(std::string &username, std::string& token) = 0;
     virtual bool DeleteToken(std::string &username) = 0;
@@ -42,5 +42,10 @@ class MainDataBase
     virtual std::vector<ProjectData> getMultiPost(SearchData &data) = 0;
     virtual bool IsUnique(std::string &username)=0;
     private:
-    MySQLConnection * sqlconn;
+    Session sqlconn;
+    Schema db;
+    var   user_data_table;
+    var   project_data_table;
+    var   token_data_table;
+    var   notification_data_table;
 };

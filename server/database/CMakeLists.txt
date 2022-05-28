@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(server_syp_database)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wpedantic -Wextra")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wpedantic -Wextra -lmysqlcppconn8")
 
 # find_package(MySQL REQUIRED)
 
@@ -11,7 +11,6 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wpedantic -Wextra")
 
 file(GLOB SOURCES
         src/database.cpp
-        # src/dbconnection.cpp
 )
 
 file(GLOB INCLUDE_DIRS include)
