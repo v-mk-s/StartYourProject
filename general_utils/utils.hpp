@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <map>
 
 #define LOGIN_URL "/login"
 #define REGISTER_URL "/register"
@@ -78,75 +79,75 @@ struct SearchData // 8
 };
 
 
-struct ProjectDescriptionData
-{
-    std::string project_id; // like username, but for internal DB
+// struct ProjectDescriptionData
+// {
+//     std::string project_id; // like username, but for internal DB
 
-    ProjectDescriptionData(std::string _project_id = "") : project_id(_project_id) {}
-};
-
-
-struct UserDescriptionData
-{
-    std::string username;
-
-    UserDescriptionData(std::string _username = "") : username(_username) {}
-};
+//     ProjectDescriptionData(std::string _project_id = "") : project_id(_project_id) {}
+// };
 
 
-struct PhotoData
-{
-    std::vector<std::int32_t> photo;
+// struct UserDescriptionData
+// {
+//     std::string username;
 
-    PhotoData(std::vector<std::int32_t> _photo = {}) : photo(_photo) {}
-};
+//     UserDescriptionData(std::string _username = "") : username(_username) {}
+// };
 
 
-struct UserEditData // 6+1
-{
-    std::string username;
-    std::string email;
-    std::string name;
-    std::string surname;
-    std::string user_description;
-    std::string password;
-    PhotoData photo_data;
+// struct PhotoData
+// {
+//     std::vector<std::int32_t> photo;
 
-    UserEditData(std::string _username = "", std::string _email = "", std::string _name = "",
-                 std::string _surname = "", std::string _user_description = "", std::string _password = "",
-                 PhotoData _photo_data = PhotoData()) : username(_username), email(_email),
-                                                        name(_name), surname(_surname),
-                                                        user_description(_user_description), password(_password),
-                                                        photo_data(_photo_data) {}
-};
+//     PhotoData(std::vector<std::int32_t> _photo = {}) : photo(_photo) {}
+// };
 
-// don't delete, data for refactoring
 
-struct LoginData
-{
-    std::string username;
-    std::string password;
+// struct UserEditData // 6+1
+// {
+//     std::string username;
+//     std::string email;
+//     std::string name;
+//     std::string surname;
+//     std::string user_description;
+//     std::string password;
+//     PhotoData photo_data;
 
-    LoginData(std::string _username = "", std::string _password = "") : username(_username), password(_password) {}
+//     UserEditData(std::string _username = "", std::string _email = "", std::string _name = "",
+//                  std::string _surname = "", std::string _user_description = "", std::string _password = "",
+//                  PhotoData _photo_data = PhotoData()) : username(_username), email(_email),
+//                                                         name(_name), surname(_surname),
+//                                                         user_description(_user_description), password(_password),
+//                                                         photo_data(_photo_data) {}
+// };
+
+// // don't delete, data for refactoring
+
+// struct LoginData
+// {
+//     std::string username;
+//     std::string password;
+
+//     LoginData(std::string _username = "", std::string _password = "") : username(_username), password(_password) {}
     
-    bool operator==(const LoginData& other) const {
-        return username == other.username && password == other.password;
-    }
-};
+//     bool operator==(const LoginData& other) const {
+//         return username == other.username && password == other.password;
+//     }
+// };
 
 
-struct RegisterData
-{
-    std::string email;
-    std::string username;
-    std::string password;
+// struct RegisterData
+// {
+//     std::string email;
+//     std::string username;
+//     std::string password;
 
-    RegisterData(std::string _email = "", std::string _username = "", std::string _password = "") : email(_email), username(_username), password(_password) {}
+//     RegisterData(std::string _email = "", std::string _username = "", std::string _password = "") : email(_email), username(_username), password(_password) {}
     
-    bool operator==(const RegisterData& other) const {
-        return username == other.username && password == other.password && email == other.email;
-    }
-};
+//     bool operator==(const RegisterData& other) const {
+//         return username == other.username && password == other.password && email == other.email;
+//     }
+// };
 
 struct UserData {
     int id;
@@ -166,13 +167,13 @@ struct UserData {
     }
 };
 
-struct PostData {
-    int user_id;
-    std::string projectname;
-    std::string postdescription;
-    std::string tags;
-    std::string teamname;
-};
+// struct PostData {
+//     int user_id;
+//     std::string projectname;
+//     std::string postdescription;
+//     std::string tags;
+//     std::string teamname;
+// };
 
 struct RequestToPostData {
     int user_id;
@@ -189,14 +190,14 @@ struct RequestToPostData {
 };
 
 
-struct PublishPostData
-{
-    std::string project_name;
-    std::string team_name;
-    std::vector<std::string> post_tags;
-    std::vector<std::string> teammates;
-    std::string project_description;
-};
+// struct PublishPostData
+// {
+//     std::string project_name;
+//     std::string team_name;
+//     std::vector<std::string> post_tags;
+//     std::vector<std::string> teammates;
+//     std::string project_description;
+// };
 
 
 struct ProjectData
@@ -238,11 +239,11 @@ struct NotificationData
 };
 
 
-struct MainPostData
-{
-    std::string search_data;
-    std::string team_name;
-    std::string project_name;
-    std::vector<std::string> post_tags;
-    std::string project_description;
-};
+// struct MainPostData
+// {
+//     std::string search_data;
+//     std::string team_name;
+//     std::string project_name;
+//     std::vector<std::string> post_tags;
+//     std::string project_description;
+// };

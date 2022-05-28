@@ -81,7 +81,7 @@ class LoginUC: public ILoginUC {
     LoginUC(IMainDataBase* database): database(database) {}
 
     Message<UserData> checkUser(UserData& user) override;
-    std::string generate_token(std::string key);
+    std::string generate_token(std::string& key);
 
  private:
     IMainDataBase* database;

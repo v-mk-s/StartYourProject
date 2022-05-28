@@ -19,7 +19,7 @@ class LoginHandler: public IHandler {
     LoginHandler() = delete;
     LoginHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     LoginUC usecase;
@@ -32,7 +32,7 @@ class RegisterHandler: public IHandler {
     RegisterHandler() = delete;
     RegisterHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     RegisterUC usecase;
@@ -45,7 +45,7 @@ class EditProfileHandler: public IHandler {
     EditProfileHandler() = delete;
     EditProfileHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     EditProfileUC usecase;
@@ -58,7 +58,7 @@ class DelUserProfileHandler: public IHandler {
     DelUserProfileHandler() = delete;
     DelUserProfileHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     DelUserProfileUC usecase;
@@ -71,7 +71,7 @@ class GetUserProfileHandler: public IHandler {
     GetUserProfileHandler() = delete;
     GetUserProfileHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     GetUserProfileUC usecase;
@@ -86,7 +86,7 @@ class EditPostHandler: public IHandler {
     EditPostHandler() = delete;
     EditPostHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     EditPostUC usecase;
@@ -99,7 +99,7 @@ class SearchPostHandler: public IHandler {
     SearchPostHandler() = delete;
     SearchPostHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     SearchPostUC usecase;
@@ -112,7 +112,7 @@ class SearchPersonHandler: public IHandler {
     SearchPersonHandler() = delete;
     SearchPersonHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     SearchPersonUC usecase;
@@ -125,7 +125,7 @@ class MakeRequestToPostHandler: public IHandler {
     MakeRequestToPostHandler() = delete;
     MakeRequestToPostHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     MakeRequestToPostUC usecase;
@@ -138,7 +138,7 @@ class ShowNotificationsHandler: public IHandler {
     ShowNotificationsHandler() = delete;
     ShowNotificationsHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     ShowNotificationsUC usecase;
@@ -151,7 +151,7 @@ class AnswerTheRequestHandler: public IHandler {
     AnswerTheRequestHandler() = delete;
     AnswerTheRequestHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     AnswerTheRequestUC usecase;
@@ -164,7 +164,7 @@ class DeletePostHandler: public IHandler {
     DeletePostHandler() = delete;
     DeletePostHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     DeletePostUC usecase;
@@ -177,7 +177,7 @@ class CreatePostHandler: public IHandler {
     CreatePostHandler() = delete;
     CreatePostHandler(IMainDataBase *database): usecase(database) {}
 
-    void handle(RequestInterface* request, ResponseInterface* response);
+    void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
     CreatePostUC usecase;
