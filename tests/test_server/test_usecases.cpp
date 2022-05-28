@@ -1,4 +1,5 @@
 #include "server_usecases.hpp"
+#include "database.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -12,24 +13,30 @@ using ::testing::Return;
 
 class MockDB: public MainDataBase {
  public:
-    MOCK_METHOD(bool, InsertIntoPersonTable, (RegisterData &data));
+    MOCK_METHOD(bool, InsertIntoPersonTable, (UserData &data));
     MOCK_METHOD(bool, InsertIntoPostTable, (ProjectData &data));
     MOCK_METHOD(bool, InsertIntoRequestToPostTable, (RequestToPostData &data));
 
-    MOCK_METHOD(bool, DeleteFromPostTable, (std::string &project_name));
-    MOCK_METHOD(bool, DeleteFromPersonTable, (std::string &data));
+    MOCK_METHOD(bool, DeleteFromPostTable, (int id));
+    MOCK_METHOD(bool, DeleteFromPersonTable, (int id));
     MOCK_METHOD(bool, DeleteFromRequestToPostTable, (RequestToPostData &data));
+    MOCK_METHOD(bool, DelFromTableNotifications, (RequestToPostData &data));
 
     MOCK_METHOD(bool, EditUserInPersonTable, (UserData &data));
     MOCK_METHOD(bool, EditPostInPostTable, (ProjectData &data));
     MOCK_METHOD(bool, EditRequestToPostTable, (RequestToPostData &data));
 
-    MOCK_METHOD(bool, FindIntoPersonTable, (LoginData &data));
-    MOCK_METHOD(bool, FindIntoPostTable, (std::string &project_name));
+    MOCK_METHOD(bool, FindIntoPersonByUsername, (std::string &username, UserData& data));
+    MOCK_METHOD(bool, FindIntoPersonByID, (int &id));
+    MOCK_METHOD(bool, FindIntoPostTable, (std::string &project_name, ProjectData& data));
     MOCK_METHOD(NotificationData, FindRequestToPostTable, (int &user_id));
+    
+    MOCK_METHOD(bool, InsertToken, (int id, std::string& token));
+    MOCK_METHOD(bool, CheckToken, (int id, std::string& token));
+    MOCK_METHOD(bool, DeleteToken, (int id));
 
-    MOCK_METHOD(UserData, getUserProfile, (std::string &username));
-    MOCK_METHOD(ProjectData, getPost, (std::string &project_name));
+    // MOCK_METHOD(UserData, getUserProfile, (std::string &username));
+    // MOCK_METHOD(ProjectData, getPost, (std::string &project_name));
     MOCK_METHOD(std::vector<ProjectData>, getMultiPost, (SearchData &data));
 };
 
@@ -37,20 +44,29 @@ class MockDB: public MainDataBase {
 
 TEST(LoginUCTest, GoodCase) {
     MockDB database;
-    LoginData test_data = {"John_123-4", "qwerty1234"};
-    EXPECT_CALL(database, FindIntoPersonTable(test_data)).Times(1).WillOnce(Return(true));
+    UserData test_data;
+    test_data.id = 123;
+    test_data.username = "John_123-4";
+    test_data.password = "qwerty1234";
+    EXPECT_CALL(database, 
+                FindIntoPersonByUsername(test_data.username, test_data)).Times(1).WillOnce(Return(true));
+    EXPECT_CALL(database,
+                InsertToken(test_data.id, test_data.auth_token)).Times(1).WillOnce(Return(true));
 
     LoginUC usecase(&database);
 
-    Message<std::string> msg = usecase.checkUser(test_data);
+    Message<UserData> msg = usecase.checkUser(test_data);
     EXPECT_EQ(ResponseStatus::ok, msg.status);
-    EXPECT_TRUE(msg.data.length() != 0) << "Message: " << msg.data; 
+    EXPECT_TRUE(msg.data.auth_token.length() != 0) << "Message: " << msg.data; 
 }
 
 
 TEST(RegisterUCTest, GoodCase) {
     MockDB database;
-    RegisterData test_data = {"Jack", "1q2w3e4r5t6y", "email@mail.ru"};
+    UserData test_data;
+    test_data.username = "John_123-4";
+    test_data.password = "qwerty1234";
+    test_data.email = "email@mail.ru";
     EXPECT_CALL(database, InsertIntoPersonTable(test_data)).Times(1).WillOnce(Return(true));
 
     RegisterUC usecase(&database);
@@ -62,7 +78,13 @@ TEST(RegisterUCTest, GoodCase) {
 
 TEST(EditProfileUCTest, GoodCase) {
     MockDB database;
-    UserData test_data = {"Jack", "email@mail.ru", "Abc", "dfgh", "some text", "1234qwerty"};
+    UserData test_data;
+    test_data.name = "Jack";
+    test_data.email = "email@mail.ru";
+    test_data.username = "Abc";
+    test_data.sur_name = "dfgh";
+    test_data.user_discription = "some text";
+    test_data.password = "1234qwerty";
     EXPECT_CALL(database, EditUserInPersonTable(test_data)).Times(1).WillOnce(Return(true));
 
     EditProfileUC usecase(&database);
@@ -74,12 +96,13 @@ TEST(EditProfileUCTest, GoodCase) {
 
 TEST(DelUserProfileUCTest, GoodCase) {
     MockDB database;
-    std::string test_username = "abcdefg";
-    EXPECT_CALL(database, DeleteFromPersonTable(test_username)).Times(1).WillOnce(Return(true));
+    UserData test_data;
+    test_data.id = 123;
+    EXPECT_CALL(database, DeleteFromPersonTable(test_data.id)).Times(1).WillOnce(Return(true));
 
     DelUserProfileUC usecase(&database);
 
-    Message<std::string> msg = usecase.delUserData(test_username);
+    Message<std::string> msg = usecase.delUserData(test_data);
     EXPECT_EQ(ResponseStatus::ok, msg.status);
     EXPECT_EQ(msg.data.length(), 0) << "Message: " << msg.data;
 }
@@ -96,8 +119,13 @@ TEST(GetUserProfileUCTest, GoodCase) {
 }
 
 
-ProjectData post = {"project", "PyTorchki", {"Python"}, {"Teammate"}, "cool project", 0.99, "i want you"};
-RequestToPostData req = {1,2, "I really want to join your team", RequestToPostData::Status::unknown};
+ProjectData post;
+post.project_name = "project";
+post.team_name = "PyTorchki";
+post.post_tags = {"Python"};
+post.teammates {"Teammate"};
+post.project_description = "cool project";
+RequestToPostData req = {1,2, "cool project", "I really want to join your team", RequestToPostData::Status::unknown};
 
 TEST(EditPostTest, UC) {
     MockDB db;
@@ -150,7 +178,7 @@ TEST(ShowNotificationsTest, UC) {
 }
 
 TEST(CreatePostTest, UC) {
-    MockDB db;
+    ockDB db;
     EXPECT_CALL(db, InsertIntoPostTable(post)).Times(AtLeast(1)).WillOnce(Return(true));
     CreatePost Test_1(&db);
     EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);

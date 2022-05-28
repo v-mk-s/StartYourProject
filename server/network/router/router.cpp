@@ -46,6 +46,7 @@ void Session::on_read(beast::error_code ec, std::size_t bytes_transferred) {
 
     if(ec) {
         std::cerr << "read" << ": " << ec.message() << "\n";
+        return;
     }
 
     handle_request(*doc_root_, std::move(req_), lambda_, handlers_);
@@ -56,6 +57,7 @@ void Session::on_write(bool close, beast::error_code ec, std::size_t bytes_trans
 
     if(ec) {
         std::cerr << "write" << ": " << ec.message() << "\n";
+        return;
     }
     if(close) {
         return do_close();
@@ -85,10 +87,6 @@ void handle_request(beast::string_view doc_root,
         res.prepare_payload();
         return res;
     };
-    
-    // if(req.method() != http::verb::get && req.method() != http::verb::head) {
-    //     return send(bad_request("Unknown HTTP-method"));
-    // }
 
     if(req.target().empty() || req.target()[0] != '/' ||
        req.target().find("..") != beast::string_view::npos) {

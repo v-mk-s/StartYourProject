@@ -12,5 +12,18 @@ find_package(Threads REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${SERVER_SYP_CORE_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${SERVER_SYP_CORE_LIBRARIES} GTest::GTest gtest_main Threads::Threads -lgmock -lgtest)
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    ${SERVER_SYP_CORE_INCLUDE_DIRS}
+    ${SERVER_SYP_DATABASE_INCLUDE_DIRS}
+    ${SERVER_SYP_NETWORK_INCLUDE_DIRS}
+)
+
+target_link_libraries(${PROJECT_NAME} 
+    ${SERVER_SYP_CORE_LIBRARIES}
+    ${SERVER_SYP_DATABASE_LIBRARIES}
+    GTest::GTest
+    gtest_main
+    Threads::Threads
+    -lgmock
+    -lgtest
+)
