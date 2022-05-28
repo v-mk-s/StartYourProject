@@ -2,6 +2,7 @@
 #include <mysql-cppconn-8/mysqlx/xdevapi.h>
 
 
+
 MainDataBase::MainDataBase(){
     sqlconn("127.0.0.1", 3306, "root", "password");
     db= sess.getSchema("SYP_DB");
@@ -277,7 +278,7 @@ bool MainDataBase::IsUnique(std::string &username){
 }
 
 bool MainDataBase::FindToken(std::string &username, std::string& token){
-    SqlResult res = token_data_table.select("username")
+    mysqlx::SqlResult res = token_data_table.select("username")
     .where("username=:username")
     .bind("param",username)
     execute();

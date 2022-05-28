@@ -42,10 +42,10 @@ class MainDataBase
     virtual std::vector<ProjectData> getMultiPost(SearchData &data) = 0;
     virtual bool IsUnique(std::string &username)=0;
     private:
-    // Session sqlconn;
-    // Schema db;
-    // var   user_data_table;
-    // var   project_data_table;
-    // var   token_data_table;
-    // var   notification_data_table;
+    mysqlx::Session sqlconn;
+    mysqlx::Schema db;
+    mysqlx::Table   user_data_table;
+    mysqlx::Table   project_data_table;
+    mysqlx::Table   token_data_table;
+    mysqlx::Table   notification_data_table;
 };
