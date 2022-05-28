@@ -68,7 +68,7 @@ class IAnswerTheRequest {
 
 class IShowNotifications {
  public:
-    virtual Message<NotificationData> showAllNotifications(int user_id) = 0;
+    virtual Message<std::vector<RequestToPostData>> showAllNotifications(int user_id) = 0;
 };
 
 class ICreatePost {
@@ -213,7 +213,7 @@ class ShowNotifications{
 public:
    ShowNotifications()=default;
    ShowNotifications(MainDataBase* database): database(database) {}
-   Message<NotificationData> showAllNotifications(int user_id);
+   Message<std::vector<RequestToPostData>> showAllNotifications(int user_id);
 private:
    MainDataBase* database = nullptr;
 };

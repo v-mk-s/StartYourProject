@@ -1,6 +1,6 @@
 #pragma once
 #include "server_utils.hpp"
-#include "../../database/dbconnection.hpp"
+#include <mysql-cppconn-8/mysqlx/xdevapi.h>
 
 
 
@@ -16,7 +16,7 @@ class MainDataBase
 
 
     virtual bool DeleteFromPostTable(std::string &project_name) = 0;
-    virtual bool DeleteFromPersonTable(int  &id) = 0;
+    virtual bool DeleteFromPersonTable(std::string  &username) = 0;
     virtual bool DeleteFromRequestToPostTable(RequestToPostData &data) = 0;
 
 
@@ -42,10 +42,10 @@ class MainDataBase
     virtual std::vector<ProjectData> getMultiPost(SearchData &data) = 0;
     virtual bool IsUnique(std::string &username)=0;
     private:
-    Session sqlconn;
-    Schema db;
-    var   user_data_table;
-    var   project_data_table;
-    var   token_data_table;
-    var   notification_data_table;
+    // Session sqlconn;
+    // Schema db;
+    // var   user_data_table;
+    // var   project_data_table;
+    // var   token_data_table;
+    // var   notification_data_table;
 };

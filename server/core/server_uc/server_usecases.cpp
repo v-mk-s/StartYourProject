@@ -4,7 +4,7 @@
 ////////////////// User Use Cases /////////////////////////
 
 Message<std::string> LoginUC::checkUser(LoginData& user) {
-    if (!database->FindIntoPersonTable(user)) {
+    if (database->IsUnique(user.username)) {
         return Message<std::string>(ResponseStatus::not_found, LOGIN_DATA_DONT_MATCH);
     }
 
@@ -20,7 +20,7 @@ std::string LoginUC::generate_token(std::string key) {
 
 
 Message<std::string> RegisterUC::addUser(RegisterData& user_data) {
-    if (!database->InsertIntoPersonTable(user_data)) {
+    if (!database->InsertIntoUserTable(user_data)) {
         return Message<std::string>(ResponseStatus::wrong_data, SAME_USER);
     }
     return Message<std::string>(ResponseStatus::ok);
@@ -77,7 +77,7 @@ Message<UserData> SearchPerson::makePersonSearch(std::string& username) {
 
 
 ResponseStatus MakeRequestToPost::makeReqToPost(RequestToPostData& request_info) {
-    if (!database->InsertIntoRequestToPostTable(request_info)) {
+    if (!(database->InsertIntoRequestToPostTable(request_info))) {
         return ResponseStatus::server_error;
     }
     return ResponseStatus::ok;
@@ -104,8 +104,8 @@ ResponseStatus AnswerTheRequest::getAnswer(bool answer, RequestToPostData reques
 }
 
 
-Message<NotificationData> ShowNotifications::showAllNotifications(int user_id) {
-    Message<NotificationData> msg(ResponseStatus::ok, database->FindRequestToPostTable(user_id));
+Message<std::vector<RequestToPostData>> ShowNotifications::showAllNotifications(int user_id) {
+    Message<std::vector<RequestToPostData>> msg(ResponseStatus::ok, database->FindRequestToPostTable(user_id));
     return msg;
 }
 

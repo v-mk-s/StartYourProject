@@ -19,15 +19,15 @@ MainDataBase::~MainDataBase(){
 
 
 
-bool MainDataBase::DeleteFromPersonTable(int id){
+bool MainDataBase::DeleteFromPersonTable(std::string &username){
 
     user_data_table.delete()
-    .where("id=:param")
-    .bind("param",id)
+    .where("username=:param")
+    .bind("param",username)
     .execute();
     return true;
 }
-bool MainDataBase::DeleteToken(std::string username){
+bool MainDataBase::DeleteToken(std::string &username){
     token_data_table.delete()
     .where("username=:param")
     .bind("param",username)
@@ -35,7 +35,7 @@ bool MainDataBase::DeleteToken(std::string username){
     return true;
 }
 
-bool MainDataBase::DeleteFromPostTable(int id){
+bool MainDataBase::DeleteFromPostTable(int &id){
     project_data_table.delete()
     .where("project_id=:param")
     .bind("param",id)
