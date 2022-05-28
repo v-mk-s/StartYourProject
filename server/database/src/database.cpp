@@ -1,9 +1,9 @@
 #include <database.hpp>
 
 
-MainDataBase::MainDataBase(MySQLConnection *sqlconn_): sqlconn(sqlconn_) {
+// MainDataBase::MainDataBase(MySQLConnection *sqlconn_): sqlconn(sqlconn_) {
     // sqlconn->Connect("127.0.0.1", 3306, "root", "password", "Projectdata");
-}
+// }
 
 bool MainDataBase::DeleteFromPersonTable(int id) {
     // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from userdata where id=?");
@@ -12,12 +12,12 @@ bool MainDataBase::DeleteFromPersonTable(int id) {
 
     return delete_record(id);
 }
-bool MainDataBase::DelFromTableToken(int id) {
+bool MainDataBase::DeleteToken(int id) {
     // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from userdata where user_id=?");
     // que->setInt(1,id);
     // return que->ExecuteUpdate();
 
-    return delete_record(id);
+    return true;
 }
 
 bool MainDataBase::DeleteFromPostTable(int id){
@@ -68,7 +68,7 @@ std::vector<RequestToPostData> MainDataBase::SelectNotifications(int &user_id) {
     return std::vector<RequestToPostData>();
 }
 
-UserData MainDataBase::FindIntoPersonByUsername(std::string &username) {
+bool MainDataBase::FindIntoPersonByUsername(std::string &username, UserData& data) {
     // MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, username, email, name, sur_name, user_discription, password from userdata "
     // R"( where username = ? )");
 
@@ -85,7 +85,16 @@ UserData MainDataBase::FindIntoPersonByUsername(std::string &username) {
     // data.password = selectQuery->getString(1,7);
     // return data;
 
-    return UserData();
+    for (auto it : table_) {
+        if (it.second[0] == username) {
+            data.id = it.first;
+            data.username = it.second[0];
+            data.password = it.second[1];
+            data.email = it.second[2];
+            return true;
+        }
+    }
+    return false;
 }
 
 bool MainDataBase::FindIntoPersonByID(int &id) {
@@ -108,7 +117,7 @@ bool MainDataBase::FindIntoPersonByID(int &id) {
     return find_record(id);
 }
 
-ProjectData MainDataBase::SelectPostByID(int &id) {
+// ProjectData MainDataBase::SelectPostByID(int &id) {
 //    MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select id, userid, project_name, team_name, post_tag, teammates, project_description, diversity from projectdata "
 //    "where id=?");
 
@@ -126,10 +135,10 @@ ProjectData MainDataBase::SelectPostByID(int &id) {
 //    data.diversity = selectQuery->getDouble(1,2);
 //     return data;
 
-    ProjectData data;
-    data.project_name = get_record(id)[0];
-    return data;
-}
+//     ProjectData data;
+//     data.project_name = get_record(id)[0];
+//     return data;
+// }
 
 
 bool MainDataBase::InsertIntoPostTable(ProjectData &data) {
@@ -164,40 +173,20 @@ bool MainDataBase::EditRequestToPostTable(RequestToPostData &data) {
     return true;
 }
 
-bool MainDataBase::FindIntoPersonTable(LoginData &data) {
-    for (auto it : table_) {
-        if (it.second[0] == data.username && it.second[1] == data.password) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool MainDataBase::FindIntoPostTable(std::string &project_name) {
-    project_name;
+bool MainDataBase::FindIntoPostTable(std::string &project_name, ProjectData& data) {
     return true;
 }
 NotificationData MainDataBase::FindRequestToPostTable(int &user_id) {
-    user_id;
     return NotificationData();
 }
 
-bool MainDataBase::InsertToken(std::string &username, std::string& token) {
+bool MainDataBase::InsertToken(int id, std::string& token) {
     return true;
 }
-bool MainDataBase::FindToken(std::string &username, std::string& token) {
-    return true;
-}
-bool MainDataBase::DeleteToken(std::string &username) {
+bool MainDataBase::CheckToken(int id, std::string& token) {
     return true;
 }
 
-UserData MainDataBase::getUserProfile(std::string &username) {
-    return UserData();
-}
-ProjectData MainDataBase::getPost(std::string &project_name) {
-    return ProjectData();
-}
 std::vector<ProjectData> MainDataBase::getMultiPost(SearchData &data) {
     return std::vector<ProjectData>();
 }
@@ -219,7 +208,7 @@ bool MainDataBase::delete_record(int id) {
 }
 
 bool MainDataBase::find_record(int id) {
-    if (auto it = table_.find(id) != table_.end()) {
+    if (table_.find(id) != table_.end()) {
         return true;
     } 
     return false;

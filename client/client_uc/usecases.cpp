@@ -126,9 +126,9 @@ ErrorStatus ProjectUC::onRequestToProjectButton(ProjectData request) {
         return ErrorStatus::diversity_not_valid;
     }
 
-    if (!isValidRequestDescription(request.request_description)) {
-        return ErrorStatus::request_description_not_valid;
-    }
+    // if (!isValidRequestDescription(request.request_description)) {
+    //     return ErrorStatus::request_description_not_valid;
+    // }
 
     return ErrorStatus::no_error;
 }

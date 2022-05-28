@@ -35,7 +35,8 @@ class Response: public ResponseInterface {
  public:
     Response() = default;
 
-    void set_headers(ResponseStatus status, std::string content_type, int ver, bool keep_alive) override;
+    void set_status(ResponseStatus status, bool keep_alive = false, int ver = HTTP_VER_1_1) override;
+    void set_content_type(std::string content_type);
 
     void set_body(const std::string& body) override;
 
@@ -56,6 +57,9 @@ class JSON: public IJSON {
 
     template<class T>
     void put(const std::string &key, T value);
+
+    template <typename T>
+    void put(const std::string &key, const std::vector<T> &values);
 
     std::string serialize() override;
 

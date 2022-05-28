@@ -12,20 +12,23 @@
 
 
 enum class ResponseStatus {
-    ok,
-    bad_req,
-    not_found,
-    server_error,
-    wrong_data
+    ok = 200,
+    bad_req = 400,
+    unauthorized = 401,
+    forbidden = 403,
+    not_found = 404,
+    not_implemented = 501,
+    server_error = 503
 };
 
 
 template <typename MessageData>
 struct Message {
     ResponseStatus status = ResponseStatus::server_error;
-    MessageData data = MessageData();
+    std::string status_text;
+    MessageData data;
 
     Message() = default;
-    Message(ResponseStatus status): status(status) {}
-    Message(ResponseStatus status, MessageData data): status(status), data(data) {}
+    Message(ResponseStatus status, std::string text = ""): status(status), status_text(text) {}
+    Message(MessageData data): status(ResponseStatus::ok), data(data) {}
 };

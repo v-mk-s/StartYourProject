@@ -5,18 +5,25 @@
 #define WRONG_EMAIL "Email is incorrect"
 #define LOGIN_DATA_DONT_MATCH "Username and password dont match"
 #define SAME_USER "A user with the same name already exists"
+#define SAME_PROJECT "A project with the same name already exists"
+#define DB_ERROR "Data base error"
 
 
 ////////////////// User Use Cases /////////////////////////
 
-Message<std::string> LoginUC::checkUser(LoginData& user) {
-    if (!database->FindIntoPersonTable(user)) {
-        return Message<std::string>(ResponseStatus::not_found, LOGIN_DATA_DONT_MATCH);
+Message<UserData> LoginUC::checkUser(UserData& user) {
+    UserData search_res;
+    if(!database->FindIntoPersonByUsername(user.username, search_res)) {
+        return Message<UserData>(ResponseStatus::not_found);
+    }
+    if (search_res.username != user.username || search_res.password != user.password) {
+        return Message<UserData>(ResponseStatus::unauthorized, LOGIN_DATA_DONT_MATCH);
     }
 
-    std::string token = generate_token(user.username);
-    Message<std::string> msg(ResponseStatus::ok, token);
-    return msg;
+    search_res.auth_token = generate_token(user.username + user.password);
+    database->InsertToken(search_res.id, search_res.auth_token);
+
+    return Message<UserData>(std::move(search_res));
 }
 
 std::string LoginUC::generate_token(std::string key) {
@@ -26,17 +33,21 @@ std::string LoginUC::generate_token(std::string key) {
 
 
 Message<std::string> RegisterUC::addUser(UserData& user_data) {
-    if (database->FindIntoPersonByID(user_data.id)) {
-        return Message<std::string>(ResponseStatus::wrong_data, SAME_USER);
+    UserData search_res;
+    if(database->FindIntoPersonByUsername(user_data.username, search_res)) {
+        return Message<std::string>(ResponseStatus::forbidden, SAME_USER);
     }
     if (!database->InsertIntoPersonTable(user_data)) {
-        return Message<std::string>(ResponseStatus::server_error);
+        return Message<std::string>(ResponseStatus::server_error, DB_ERROR);
     }
-    return Message<std::string>(ResponseStatus::ok, "Registration seccuss");
+    return Message<std::string>(ResponseStatus::ok);
 }
 
 
 Message<std::string> EditProfileUC::editUserData(UserData& user_data) {
+    if (!database->CheckToken(user_data.id, user_data.auth_token)) {
+        return Message<std::string>(ResponseStatus::unauthorized);
+    }
     if (!database->EditUserInPersonTable(user_data)) {
         return Message<std::string>(ResponseStatus::not_found);
     }
@@ -44,8 +55,11 @@ Message<std::string> EditProfileUC::editUserData(UserData& user_data) {
 }
 
 
-Message<std::string> DelUserProfileUC::delUserData(int id) {
-    if (!database->DeleteFromPersonTable(id)) {
+Message<std::string> DelUserProfileUC::delUserData(UserData& user_data) {
+    if (!database->CheckToken(user_data.id, user_data.auth_token)) {
+        return Message<std::string>(ResponseStatus::unauthorized);
+    }
+    if (!database->DeleteFromPersonTable(user_data.id)) {
         return Message<std::string>(ResponseStatus::not_found);
     }
     return Message<std::string>(ResponseStatus::ok);
@@ -53,14 +67,22 @@ Message<std::string> DelUserProfileUC::delUserData(int id) {
 
 
 Message<UserData> GetUserProfileUC::getUserData(std::string& username) {
-    Message<UserData> msg(ResponseStatus::ok, database->getUserProfile(username));
+    UserData data;
+    if(!database->FindIntoPersonByUsername(username, data)) {
+        return Message<UserData>(ResponseStatus::not_found);
+    }
+    Message<UserData> msg(ResponseStatus::ok);
+    msg.data = data;
     return msg;
 }
 
 
 //////////////////// Posts Use Cases ////////////////////////
 
-ResponseStatus EditPostUC::editPostToDB(ProjectData post) {
+ResponseStatus EditPostUC::editPostToDB(ProjectData post, std::string& token) {
+    if (!database->CheckToken(post.userid, token)) {
+        return ResponseStatus::unauthorized;
+    }
     if (!database->EditPostInPostTable(post)) {
         return ResponseStatus::not_found;
     }
@@ -69,32 +91,41 @@ ResponseStatus EditPostUC::editPostToDB(ProjectData post) {
 
 
 Message<ProjectData> SearchPostUC::makePostSearch(std::string& project_name) {
-    Message<ProjectData> msg(ResponseStatus::ok, database->getPost(project_name));
+    ProjectData search_data;
+    if (!database->FindIntoPostTable(project_name, search_data)) {
+        return Message<ProjectData>(ResponseStatus::not_found);
+    }
+    Message<ProjectData> msg(ResponseStatus::ok);
+    msg.data = search_data;
     return msg;
 }
 
 Message<std::vector<ProjectData>> SearchPostUC::makeMultiPostSearch(SearchData& data) {
-    Message<std::vector<ProjectData>> msg(ResponseStatus::ok, database->getMultiPost(data));
+    Message<std::vector<ProjectData>> msg(ResponseStatus::not_implemented);
+    // msg.data = database->getMultiPost(data);
     return msg;
 }
 
 
 Message<UserData> SearchPersonUC::makePersonSearch(std::string& username) {
-    Message<UserData> msg(ResponseStatus::ok, database->getUserProfile(username));
+    Message<UserData> msg(ResponseStatus::not_implemented);
     return msg;
 }
 
 
 ResponseStatus MakeRequestToPostUC::makeReqToPost(RequestToPostData& request_info) {
-    if (!database->InsertIntoRequestToPostTable(request_info)) {
-        return ResponseStatus::server_error;
-    }
-    return ResponseStatus::ok;
+    // if (!database->InsertIntoRequestToPostTable(request_info)) {
+    //     return ResponseStatus::server_error;
+    // }
+    return ResponseStatus::not_implemented;
 }
 
 
-ResponseStatus DeletePostUC::delPostData(int id) {
-    if (!database->DeleteFromPostTable(id)){
+ResponseStatus DeletePostUC::delPostData(ProjectData& post, std::string& token) {
+    if (!database->CheckToken(post.userid, token)) {
+        return ResponseStatus::unauthorized;
+    }
+    if (!database->DeleteFromPostTable(post.projectid)){
         return ResponseStatus::bad_req;
     } 
     return ResponseStatus::ok;
@@ -102,29 +133,31 @@ ResponseStatus DeletePostUC::delPostData(int id) {
 
 
 ResponseStatus AnswerTheRequestUC::getAnswer(bool answer, RequestToPostData request_info) {
-    if (answer)
-        request_info.status=RequestToPostData::Status::yes;
-    else
-        request_info.status=RequestToPostData::Status::no;
-    if (!database->EditRequestToPostTable(request_info)){
-        return ResponseStatus::bad_req;
-    } 
-    return ResponseStatus::ok;
+    // if (answer)
+    //     request_info.status=RequestToPostData::Status::yes;
+    // else
+    //     request_info.status=RequestToPostData::Status::no;
+    // if (!database->EditRequestToPostTable(request_info)){
+    //     return ResponseStatus::bad_req;
+    // } 
+    return ResponseStatus::not_implemented;
 }
 
 
 Message<NotificationData> ShowNotificationsUC::showAllNotifications(int user_id) {
-    Message<NotificationData> msg(ResponseStatus::ok, database->FindRequestToPostTable(user_id));
+    Message<NotificationData> msg(ResponseStatus::not_implemented);
     return msg;
 }
 
-
-
-ResponseStatus CreatePostUC::addPostToDB(ProjectData post) {
+Message<std::string> CreatePostUC::addPostToDB(ProjectData& post) {
+    ProjectData search_data;
+    if (database->FindIntoPostTable(post.project_name, search_data)) {
+        return Message<std::string>(ResponseStatus::forbidden, SAME_PROJECT);
+    }
     if (!database->InsertIntoPostTable(post)){
-        return ResponseStatus::bad_req;
+        return Message<std::string>(ResponseStatus::bad_req);
     } 
-    return ResponseStatus::ok;
+    return Message<std::string>(ResponseStatus::ok);
 }
 
 

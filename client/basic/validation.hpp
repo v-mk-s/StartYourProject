@@ -61,4 +61,4 @@ bool isValidDiversity(std::int32_t diversity);
 bool isValidQuestion(std::string &question);
 bool isValidProjects(std::vector<NotificationProjectData> &projects);
 bool isValidSearchData(std::string &search_data);
-bool isValidPostData(MainPostData &post_data);
+// bool isValidPostData(MainPostData &post_data);
