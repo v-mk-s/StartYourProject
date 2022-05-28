@@ -1,12 +1,3 @@
-add_subdirectory(core)
-# add_subdirectory(qt)
-
-set(CLIENT_SYP_CORE_LIBRARIES ${CLIENT_SYP_CORE_LIBRARIES} PARENT_SCOPE)
-set(CLIENT_SYP_CORE_INCLUDE_DIRS ${CLIENT_SYP_CORE_INCLUDE_DIRS} PARENT_SCOPE)
-
-# set(CLIENT_SYP_QT_LIBRARIES ${CLIENT_SYP_QT_LIBRARIES} PARENT_SCOPE)
-# set(CLIENT_SYP_QT_INCLUDE_DIRS ${CLIENT_SYP_QT_INCLUDE_DIRS} PARENT_SCOPE)
-
 cmake_minimum_required(VERSION 3.5)
 
 project(SYPcmakeVer_1 VERSION 0.1 LANGUAGES CXX)
@@ -19,11 +10,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-#set_property(SOURCE login_page.h PROPERTY SKIP_AUTOUIC ON)
-#set_property(SOURCE login_page.cpp PROPERTY SKIP_AUTOUIC ON)
-#set_property(SOURCE login_page.ui PROPERTY SKIP_AUTOUIC ON)
-
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -62,6 +48,14 @@ set(PROJECT_SOURCES
         client/include/project_page.h
         client/src/project_page.ui
 
+        client/src/user_edit_page.cpp
+        client/include/user_edit_page.h
+        client/src/user_edit_page.ui
+
+        client/src/user_page.cpp
+        client/include/user_page.h
+        client/src/user_page.ui
+
         client/src/process/general.cpp
         client/include/process/general.h
 
@@ -69,6 +63,7 @@ set(PROJECT_SOURCES
         core/client_uc/usecases.hpp
         core/client_uc/usecases.cpp
         core/clientui/clientui.hpp
+        core/basic/general.hpp
         core/basic/validation.cpp
         core/basic/validation.hpp
 
