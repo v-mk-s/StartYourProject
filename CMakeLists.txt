@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra")
 
 add_subdirectory(server)
-add_subdirectory(client)
+# add_subdirectory(client)
 
 add_subdirectory(tests)
 

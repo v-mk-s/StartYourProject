@@ -81,6 +81,19 @@ class GetUserProfileHandler: public IHandler {
 /////////////////////////// Posts Handlers ////////////////////////////////
 
 template <typename JSON>
+class CreatePostHandler: public IHandler {
+ public:
+    CreatePostHandler() = delete;
+    CreatePostHandler(IMainDataBase *database): usecase(database) {}
+
+    void handle(RequestInterface* request, ResponseInterface* response) override;
+
+ private:
+    CreatePostUC usecase;
+};
+
+
+template <typename JSON>
 class EditPostHandler: public IHandler {
  public:
     EditPostHandler() = delete;
@@ -94,15 +107,28 @@ class EditPostHandler: public IHandler {
 
 
 template <typename JSON>
-class SearchPostHandler: public IHandler {
+class GetPostHandler: public IHandler {
  public:
-    SearchPostHandler() = delete;
-    SearchPostHandler(IMainDataBase *database): usecase(database) {}
+    GetPostHandler() = delete;
+    GetPostHandler(IMainDataBase *database): usecase(database) {}
 
     void handle(RequestInterface* request, ResponseInterface* response) override;
 
  private:
-    SearchPostUC usecase;
+    GetPostUC usecase;
+};
+
+
+template <typename JSON>
+class DeletePostHandler: public IHandler {
+ public:
+    DeletePostHandler() = delete;
+    DeletePostHandler(IMainDataBase *database): usecase(database) {}
+
+    void handle(RequestInterface* request, ResponseInterface* response) override;
+
+ private:
+    DeletePostUC usecase;
 };
 
 
@@ -155,32 +181,6 @@ class AnswerTheRequestHandler: public IHandler {
 
  private:
     AnswerTheRequestUC usecase;
-};
-
-
-template <typename JSON>
-class DeletePostHandler: public IHandler {
- public:
-    DeletePostHandler() = delete;
-    DeletePostHandler(IMainDataBase *database): usecase(database) {}
-
-    void handle(RequestInterface* request, ResponseInterface* response) override;
-
- private:
-    DeletePostUC usecase;
-};
-
-
-template <typename JSON>
-class CreatePostHandler: public IHandler {
- public:
-    CreatePostHandler() = delete;
-    CreatePostHandler(IMainDataBase *database): usecase(database) {}
-
-    void handle(RequestInterface* request, ResponseInterface* response) override;
-
- private:
-    CreatePostUC usecase;
 };
 
 

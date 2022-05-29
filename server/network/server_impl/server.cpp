@@ -13,11 +13,11 @@ Server::ServerImpl::ServerImpl(boost::asio::ip::address address, unsigned short 
     handlers_.emplace(EDIT_PROFILE_URL, std::make_unique<EditProfileHandler<JSON>>(&database_));
     handlers_.emplace(DELETE_PROFILE_URL, std::make_unique<DelUserProfileHandler<JSON>>(&database_));
     handlers_.emplace(GET_PROFILE_URL, std::make_unique<GetUserProfileHandler<JSON>>(&database_));
-    // handlers_.emplace(FIND_USER_URL, std::make_unique<SearchPersonHandler<JSON>>(&database_));
+    handlers_.emplace(FIND_USER_URL, std::make_unique<SearchPersonHandler<JSON>>(&database_));
     handlers_.emplace(GET_NOTIFICATIONS_URL, std::make_unique<ShowNotificationsHandler<JSON>>(&database_));
 
     handlers_.emplace(EDIT_POST_URL, std::make_unique<EditPostHandler<JSON>>(&database_));
-    handlers_.emplace(FIND_POST_URL, std::make_unique<SearchPostHandler<JSON>>(&database_));
+    handlers_.emplace(GET_POST_URL, std::make_unique<GetPostHandler<JSON>>(&database_));
     handlers_.emplace(MAKE_REQUEST_URL, std::make_unique<MakeRequestToPostHandler<JSON>>(&database_));
     handlers_.emplace(DELETE_POST_URL, std::make_unique<DeletePostHandler<JSON>>(&database_));
     handlers_.emplace(ANSWER_REQUEST_URL, std::make_unique<AnswerTheRequestHandler<JSON>>(&database_));

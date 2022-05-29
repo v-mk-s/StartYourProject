@@ -10,13 +10,18 @@ void Response<BodyType>::set_status(ResponseStatus status, bool keep_alive, int 
     res_.keep_alive(keep_alive);
 }
 
-template <typename BodyType>
-void Response<BodyType>::set_content_type(std::string content_type) {
-    res_.set(http::field::content_type, content_type);
-}
 
 template <typename BodyType>
-void Response<BodyType>::set_body(const std::string& body) {
+void Response<BodyType>::set_body(const std::string& body, ContentType type) {
+    switch (type) {
+    case ContentType::json:
+        res_.set(http::field::content_type, CONTENT_TYPE_JSON);
+        break;
+
+    default:
+        res_.set(http::field::content_type, CONTENT_TYPE_TEXT);
+        break;
+    }
     res_.body() = body;
     res_.prepare_payload();
 }

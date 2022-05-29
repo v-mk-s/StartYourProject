@@ -36,9 +36,8 @@ class Response: public ResponseInterface {
     Response() = default;
 
     void set_status(ResponseStatus status, bool keep_alive = false, int ver = HTTP_VER_1_1) override;
-    void set_content_type(std::string content_type);
 
-    void set_body(const std::string& body) override;
+    void set_body(const std::string& body, ContentType type = ContentType::text) override;
 
     http::response<BodyType>& get_reference() { return res_; }
 

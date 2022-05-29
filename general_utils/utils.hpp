@@ -45,7 +45,7 @@ Body    :
 
 // Нужно отправить на сервер project_name
 // В ответе заполненная структура ProjectData, ключи в json совпадают с названиями полей структуры
-#define FIND_POST_URL "/post/find"
+#define GET_POST_URL "/post/find"
 
 // Нужно отправить на сервер заполненную структуру ProjectData
 // По ключу "auth_token" должен лежать токен полученный при логировании
@@ -63,6 +63,7 @@ Body    :
 #define MAKE_REQUEST_URL "/post/request/make"
 // In development
 #define ANSWER_REQUEST_URL "/post/request/answer"
+
 
 #define CONTENT_TYPE_TEXT "text/plain"
 #define CONTENT_TYPE_JSON "application/json"
@@ -157,11 +158,6 @@ struct RequestToPostData {
     std::string motivation_words;
     enum class Status {yes=1, no=2, unknown=3};
     Status status;
-
-    bool operator==(const RequestToPostData& other) const {
-        return user_id == other.user_id && 
-               post_id == other.post_id;
-    }
 
     RequestToPostData() = default;
 };
