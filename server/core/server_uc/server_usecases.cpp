@@ -106,7 +106,7 @@ Message<ProjectData> GetPostUC::getPost(std::string& project_name) {
 
 
 ResponseStatus DeletePostUC::delPostData(ProjectData& post, std::string& token) {
-    if (database->CheckToken(post.project_name, token)) {
+    if (database->CheckToken(post.username, token)) {
         return ResponseStatus::unauthorized;
     }
     if (database->DeleteFromPostTable(post.project_name) != DBStatus::ok){
@@ -129,3 +129,8 @@ ResponseStatus AnswerTheRequestUC::getAnswer(bool answer, RequestToPostData requ
 ResponseStatus ShowNotificationsUC::showAllNotifications(int user_id) {
     return ResponseStatus::not_implemented;
 }
+
+Message<UserData> SearchPersonUC::makePersonSearch(std::string& username) {
+    return Message<UserData>(ResponseStatus::not_implemented);
+}
+

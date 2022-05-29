@@ -174,4 +174,8 @@ struct ProjectData
     double diversity;
 
     ProjectData(): diversity(0.0) {}
+
+    bool operator==(const ProjectData& other) const {
+        return username == other.username && project_name == other.project_name;
+    }
 };

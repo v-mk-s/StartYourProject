@@ -21,7 +21,7 @@ class RequestInterface {
 class ResponseInterface{
  public:
     virtual void set_status(ResponseStatus status, bool keep_alive = false, int ver = HTTP_VER_1_1) = 0;
-    virtual void set_body(const std::string& body, ContentType type) = 0;
+    virtual void set_body(const std::string& body, ContentType type = ContentType::text) = 0;
     virtual void set_error_message(ResponseStatus status) = 0;
 };
 

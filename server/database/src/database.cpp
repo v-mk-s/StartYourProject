@@ -48,7 +48,7 @@ DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
     // return que->ExecuteUpdate();
     project_data_table.remove()
     .where("project_id=:param")
-    .bind("param",data.user_id)
+    // .bind("param",data.user_id)
     .execute();
     return DBStatus::ok;
 
@@ -199,8 +199,8 @@ DBStatus MainDataBase::InsertIntoUserTable(UserData &data) {
 
 DBStatus MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
     notification_data_table.insert("user_id", "post_id", "motivation_words", "status")
-    .values(1,data.user_id)
-    .values(2, data.post_id)
+    // .values(1,data.user_id)
+    // .values(2, data.post_id)
     .values(3, data.motivation_words)
     .values(4, 3)
     .execute();

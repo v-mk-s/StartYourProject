@@ -20,7 +20,7 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
         return;
     }
     response->set_status(status, request->is_keep_alive());
-    response->set_body(data.auth_token);
+    response->set_body(data.auth_token, ContentType::text);
 }
 
 template <typename JSON>
@@ -157,7 +157,7 @@ void GetPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* 
     JSON json(request->get_body());
     std::string project_name;
 
-    project_name = json_req.template get<std::string>("project_name", "");
+    project_name = json.template get<std::string>("project_name", "");
 
     Message<ProjectData> msg = usecase.getPost(project_name);
     if (msg.status != ResponseStatus::ok) {
