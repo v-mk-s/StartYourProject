@@ -21,7 +21,7 @@ DBStatus MainDataBase::DeleteFromPersonTable(std::string &username) {
 
     user_data_table.remove()
     .where("id=:param")
-    .bind("param",id)
+    // .bind("param",id)
     .execute();
     return DBStatus::ok;
 }
@@ -98,7 +98,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
     UserData data;
     mysqlx::Row row = res.fetchOne();
 
-    data.id = row[0];
+    // data.id = row[0];
     data.username = std::string(row[1]);
     data.email = std::string(row[2]);
     data.name = std::string(row[3]);
@@ -233,7 +233,7 @@ DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
     .bind("param4", data.sur_name)
     .bind("param5", data.user_discription)
     .bind("param6", data.password)
-    .bind("param7", data.id)
+    // .bind("param7", data.id)
     .execute();
 
     return DBStatus::ok;
@@ -254,7 +254,7 @@ DBStatus MainDataBase::EditPostInPostTable(ProjectData &data) {
     .bind("param4", data.teammates[0])
     .bind("param5", data.project_description)
     .bind("param6", data.diversity)
-    .bind("param7", data.projectid)
+    // .bind("param7", data.projectid)
     .execute();
     return DBStatus::ok;
 }

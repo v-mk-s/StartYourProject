@@ -5,21 +5,64 @@
 #include <sstream>
 #include <map>
 
+
+
+// Нужно отправить на сервер username и password
+/* example:
+URL: http://localhost:8080/login
+Body    :
+{
+    "username": "test",
+    "password": "qwerty123"
+}
+*/
+// В ответ записывает токен
+// Токен нужно записать в поле "auth_token"
 #define LOGIN_URL "/login"
+
+// Нужно отправить на сервер username, password и email
 #define REGISTER_URL "/register"
 
+// Нужно отправить на сервер заполненную структуру UserData
+// В поле "auth_token" должен лежать токен полученный при логировании  
 #define EDIT_PROFILE_URL "/profile/edit"
+
+// Нужно отправить на сервер username
+// В поле "auth_token" должен лежать токен полученный при логировании  
 #define DELETE_PROFILE_URL "/profile/delete"
+
+// Нужно отправить на сервер username
+// В ответе заполненная структура UserData, ключи в json совпадают с названиями полей структуры
 #define GET_PROFILE_URL "/profile"
+
+// In development
 #define FIND_USER_URL "/profile/find"
+
+// In development
 #define GET_NOTIFICATIONS_URL "/profile/notifications"
 
-#define EDIT_POST_URL "/post/edit"
+
+
+// Нужно отправить на сервер project_name
+// В ответе заполненная структура ProjectData, ключи в json совпадают с названиями полей структуры
 #define FIND_POST_URL "/post/find"
-#define MAKE_REQUEST_URL "/post/request/make"
-#define DELETE_POST_URL "/post/delete"
-#define ANSWER_REQUEST_URL "/post/request/answer"
+
+// Нужно отправить на сервер заполненную структуру ProjectData
+// По ключу "auth_token" должен лежать токен полученный при логировании
 #define CREATE_POST_URL "/post/create"
+
+// Нужно отправить на сервер заполненную структуру ProjectData
+// По ключу "auth_token" должен лежать токен полученный при логировании
+#define EDIT_POST_URL "/post/edit"
+
+// Нужно отправить на сервер project_name
+// По ключу "auth_token" должен лежать токен полученный при логировании
+#define DELETE_POST_URL "/post/delete"
+
+// In development
+#define MAKE_REQUEST_URL "/post/request/make"
+// In development
+#define ANSWER_REQUEST_URL "/post/request/answer"
 
 #define CONTENT_TYPE_TEXT "text/plain"
 #define CONTENT_TYPE_JSON "application/json"
@@ -149,7 +192,6 @@ struct RegisterData
 };
 
 struct UserData {
-    int id;
     std::string auth_token;
     std::string username;
     std::string email;
@@ -159,10 +201,10 @@ struct UserData {
     std::string password;
     std::vector<std::string> projects;
 
-    UserData(): id(0) {}
+    UserData() = default;
 
     bool operator==(const UserData& other) const {
-        return id == other.id && auth_token == other.auth_token && username == other.username;
+        return auth_token == other.auth_token && username == other.username;
     }
 };
 
@@ -202,8 +244,7 @@ struct PublishPostData
 
 struct ProjectData
 {
-    int projectid;
-    int userid;
+    std::string username;
     std::string project_name;
     std::string team_name;
     std::vector<std::string> post_tags;
@@ -211,7 +252,7 @@ struct ProjectData
     std::string project_description;
     double diversity;
 
-    ProjectData(): projectid(0), userid(0), diversity(0.0) {}
+    ProjectData(): diversity(0.0) {}
 
     bool operator==(const ProjectData& other) const {
         return project_name == other.project_name;
