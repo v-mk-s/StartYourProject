@@ -18,41 +18,32 @@ class MainDataBase: public IMainDataBase
 {
  public:
     MainDataBase();
-    // MainDataBase(MySQLConnection *sqlconn_);
 
-    bool InsertIntoPostTable(ProjectData &data) override;
-    bool InsertIntoUserTable(UserData &data) override;
-    bool InsertIntoRequestToPostTable(RequestToPostData &data) override;
+    // просто добавляют данные и возвращают статус если успешно false иначе true
+    DBStatus InsertIntoPostTable(ProjectData &data) override;
+    DBStatus InsertIntoUserTable(UserData &data) override;
+    DBStatus InsertIntoRequestToPostTable(RequestToPostData &data) override;
 
-    bool DeleteFromPostTable(std::string &project_name) override;
-    bool DeleteFromPersonTable(int id) override;
-    bool DeleteFromRequestToPostTable(RequestToPostData &data) override;
-    // bool DelFromTableToken(int id) override;
-    bool DelFromTableNotifications(RequestToPostData& data) override;
+    // Удаляют запись и возвращают статус если успешно false иначе true
+    DBStatus DeleteFromPostTable(std::string &project_name) override;
+    DBStatus DeleteFromPersonTable(std::string &username) override;
+    DBStatus DeleteFromRequestToPostTable(RequestToPostData &data) override;
+    DBStatus DelFromTableNotifications(RequestToPostData& data) override;
 
-    bool EditUserInPersonTable(UserData &data) override;
-    bool EditPostInPostTable(ProjectData &data) override;
-    bool EditRequestToPostTable(RequestToPostData &data) override;
+    // Изменяют запись и возвращают статус если успешно false иначе true
+    DBStatus EditUserInPersonTable(UserData &data) override;
+    DBStatus EditPostInPostTable(ProjectData &data) override;
+    DBStatus EditRequestToPostTable(RequestToPostData &data) override;
 
+    // Возвращают одну запись
+    Message<UserData, DBStatus> FindIntoPersonByUsername(std::string &username) override;
+    Message<ProjectData, DBStatus> FindIntoPostTable(std::string &project_name) override;
+    Message<std::vector<RequestToPostData>, DBStatus>  FindRequestToPostTable(std::string &username) override;
 
-    UserData FindIntoPersonByUsername(std::string &username) override;
-    UserData FindIntoPersonByID(int id) override;
-    bool FindIntoPostTable(std::string &project_name) override;
-    std::vector<RequestToPostData> FindRequestToPostTable(int &user_id) override;
-    ProjectData SelectPostByProjectname(std::string &project_name) override;
-
-    bool InsertToken(std::string &username, std::string& token) override;
+    DBStatus InsertToken(std::string &username, std::string& token) override;
+    // Если токен совпадает то false иначе true
     bool CheckToken(std::string &username, std::string& token) override;
-    bool DeleteToken(std::string &username) override;
-
-    // UserData getUserProfile(std::string &username) override;
-    // ProjectData getPost(std::string &project_name) override;
-   //  std::vector<ProjectData> getMultiPost(SearchData &data) override;
-
-    std::vector<RequestToPostData> SelectNotifications(int &user_id) override;
-    ProjectData SelectPostByID(int &id);
-
-   //  bool IsUnique(std::string &username) override;
+    DBStatus DeleteToken(std::string &username) override;
 
     ~MainDataBase();
 
@@ -64,12 +55,4 @@ class MainDataBase: public IMainDataBase
     mysqlx::Table project_data_table;
     mysqlx::Table token_data_table;
     mysqlx::Table notification_data_table;
-
-    // fake bd
-    // std::unordered_map<int, std::vector<std::string>> table_;
-
-    // bool add_record(int id, const std::vector<std::string>& record);
-    // bool delete_record(int id);
-    // bool find_record(int id);
-    // std::vector<std::string> get_record(int id);
 };

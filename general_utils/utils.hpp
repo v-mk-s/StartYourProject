@@ -78,7 +78,7 @@ struct SearchData // 8
                                           post_tags(_post_tags), diversity(_diversity) {}
 };
 
-
+// Legacy
 struct ProjectDescriptionData
 {
     std::string project_id; // like username, but for internal DB
@@ -86,7 +86,7 @@ struct ProjectDescriptionData
     ProjectDescriptionData(std::string _project_id = "") : project_id(_project_id) {}
 };
 
-
+// Legacy
 struct UserDescriptionData
 {
     std::string username;
@@ -94,7 +94,7 @@ struct UserDescriptionData
     UserDescriptionData(std::string _username = "") : username(_username) {}
 };
 
-
+// Legacy
 struct PhotoData
 {
     std::vector<std::int32_t> photo;
@@ -102,7 +102,7 @@ struct PhotoData
     PhotoData(std::vector<std::int32_t> _photo = {}) : photo(_photo) {}
 };
 
-
+// Legacy
 struct UserEditData // 6+1
 {
     std::string username;
@@ -121,8 +121,7 @@ struct UserEditData // 6+1
                                                         photo_data(_photo_data) {}
 };
 
-// don't delete, data for refactoring
-
+// Legacy
 struct LoginData
 {
     std::string username;
@@ -135,7 +134,7 @@ struct LoginData
     }
 };
 
-
+// Legacy
 struct RegisterData
 {
     std::string email;
@@ -167,6 +166,7 @@ struct UserData {
     }
 };
 
+// Legacy
 struct PostData {
     int user_id;
     std::string projectname;
@@ -189,7 +189,7 @@ struct RequestToPostData {
     }
 };
 
-
+// Legacy
 struct PublishPostData
 {
     std::string project_name;
@@ -218,7 +218,7 @@ struct ProjectData
     }
 };
 
-
+// Legacy
 struct NotificationProjectData
 {
     int projectid;
@@ -232,13 +232,13 @@ struct NotificationProjectData
     NotificationProjectData(): projectid(0) {}
 };
 
-
+// Legacy
 struct NotificationData
 {
     std::vector<NotificationProjectData> projects;
 };
 
-
+// Legacy
 struct MainPostData
 {
     std::string search_data;

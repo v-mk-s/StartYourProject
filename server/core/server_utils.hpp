@@ -20,14 +20,19 @@ enum class ResponseStatus {
     server_error = 503
 };
 
+enum class DBStatus {
+    ok,
+    not_found
+};
 
-template <typename MessageData>
+
+template <typename MessageData, typename Status = ResponseStatus>
 struct Message {
-    ResponseStatus status = ResponseStatus::server_error;
+    Status status;
     std::string status_text;
     MessageData data;
 
-    Message() = default;
-    Message(ResponseStatus status, std::string text = ""): status(status), status_text(text) {}
-    Message(MessageData data): status(ResponseStatus::ok), data(data) {}
+    Message() = delete;
+    Message(Status status, std::string text = ""): status(status), status_text(text) {}
+    Message(MessageData data): status(Status::ok), data(data) {}
 };
