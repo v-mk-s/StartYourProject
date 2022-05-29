@@ -149,7 +149,6 @@ struct RegisterData
 };
 
 struct UserData {
-    int id;
     std::string auth_token;
     std::string username;
     std::string email;
@@ -159,16 +158,15 @@ struct UserData {
     std::string password;
     std::vector<std::string> projects;
 
-    UserData(): id(0) {}
+    UserData(): username("") {}
 
     bool operator==(const UserData& other) const {
-        return id == other.id && auth_token == other.auth_token && username == other.username;
+        return username == other.username && auth_token == other.auth_token && username == other.username;
     }
 };
 
 // Legacy
 struct PostData {
-    int user_id;
     std::string projectname;
     std::string postdescription;
     std::string tags;
@@ -176,16 +174,15 @@ struct PostData {
 };
 
 struct RequestToPostData {
-    int user_id;
-    int post_id;
+    int user_name;
     std::string project_name;
     std::string motivation_words;
     enum class Status {yes=1, no=2, unknown=3};
     Status status;
 
     bool operator==(const RequestToPostData& other) const {
-        return user_id == other.user_id && 
-               post_id == other.post_id;
+        return user_name == other.user_name && 
+               project_name == other.project_name;
     }
 };
 

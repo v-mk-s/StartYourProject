@@ -21,7 +21,7 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
     if (msg.status == ResponseStatus::ok) {
         response->set_content_type(CONTENT_TYPE_JSON);
         JSON json_res;
-        json_res.put("id", msg.data.id);
+        json_res.put("username", msg.data.username);
         json_res.put("auth_token", msg.data.auth_token);
         response->set_body(json_res.serialize());
     } else {
@@ -50,7 +50,6 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     JSON json(request->get_body());
     UserData data;
  
-    data.id = json.template get<int>("id", 0);
     data.auth_token = json.template get<std::string>("auth_token", "");
     data.username = json.template get<std::string>("username", "");
     data.password = json.template get<std::string>("password", "");
@@ -70,7 +69,6 @@ void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     JSON json(request->get_body());
     UserData data;
 
-    data.id = json.template get<int>("id", 0);
     data.auth_token = json.template get<std::string>("auth_token", "");
 
     Message<std::string> msg = usecase.delUserData(data);
@@ -89,7 +87,6 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     Message<UserData> msg = usecase.getUserData(data);
     JSON json_response;
     json_response.put("email", msg.data.email);
-    json_response.put("id", msg.data.id);
     json_response.put("name", msg.data.name);
     json_response.put("password", msg.data.password);
     json_response.put("sur_name", msg.data.sur_name);
@@ -128,8 +125,6 @@ void SearchPostHandler<JSON>::handle(RequestInterface* request, ResponseInterfac
     Message<ProjectData> msg = usecase.makePostSearch(project_name);
 
     JSON json_res;
-    json_res.put("userid", msg.data.userid);
-    json_res.put("projectid", msg.data.projectid);
     json_res.put("project_name", msg.data.project_name);
     json_res.put("team_name", msg.data.team_name);
     json_res.put("post_tags", msg.data.post_tags);
@@ -157,8 +152,7 @@ template <typename JSON>
 void MakeRequestToPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
 
-    // data.user_id = json.template get<int>("user_id", 0);
-    // data.post_id = json.template get<int>("post_id", 0);
+    // data.username = json.template get<string>("username", 0);
     // data.project_name = json.template get<std::string>("project_name", "");
     // data.status = static_cast<RequestToPostData::Status>(json.template get<int>("status", 0));
     // data.motivation_words = json.template get<std::string>("motivation_words", 0);

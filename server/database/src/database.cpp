@@ -20,8 +20,8 @@ MainDataBase::~MainDataBase() {
 DBStatus MainDataBase::DeleteFromPersonTable(std::string &username) {
 
     user_data_table.remove()
-    .where("id=:param")
-    .bind("param",id)
+    .where("user_name=:param")
+    .bind("param",username)
     .execute();
     return DBStatus::ok;
 }
@@ -47,8 +47,8 @@ DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
     // que->setInt(2,data.post_id);
     // return que->ExecuteUpdate();
     project_data_table.remove()
-    .where("project_id=:param")
-    .bind("param",data.user_id)
+    .where("project_name=:param")
+    .bind("param",data.project_name)
     .execute();
     return DBStatus::ok;
 
@@ -89,7 +89,7 @@ Message<std::vector<RequestToPostData>, DBStatus> MainDataBase::FindRequestToPos
 }
 
 Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &username) {
-    mysqlx::RowResult res = user_data_table.select("id", "user_name", "email", "name", "sur_name", "user_discription", "password")
+    mysqlx::RowResult res = user_data_table.select( "user_name", "email", "name", "sur_name", "user_discription", "password")
     .where("user_name = :param")
     .orderBy("name")
     .bind("param",username)
@@ -98,13 +98,12 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
     UserData data;
     mysqlx::Row row = res.fetchOne();
 
-    data.id = row[0];
-    data.username = std::string(row[1]);
-    data.email = std::string(row[2]);
-    data.name = std::string(row[3]);
-    data.sur_name = std::string(row[4]);
-    data.user_discription = std::string(row[5]);
-    data.password = std::string(row[6]);
+    data.username = std::string(row[0]);
+    data.email = std::string(row[1]);
+    data.name = std::string(row[2]);
+    data.sur_name = std::string(row[3]);
+    data.user_discription = std::string(row[4]);
+    data.password = std::string(row[5]);
     return Message<UserData, DBStatus>(data);
 }
 
@@ -198,12 +197,12 @@ DBStatus MainDataBase::InsertIntoUserTable(UserData &data) {
 
 
 DBStatus MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
-    notification_data_table.insert("user_id", "post_id", "motivation_words", "status")
-    .values(1,data.user_id)
-    .values(2, data.post_id)
-    .values(3, data.motivation_words)
-    .values(4, 3)
-    .execute();
+    // notification_data_table.insert("user_name", "post_id", "motivation_words", "status")
+    // .values(1,data.user_name)
+    // .values(2, data.post_id)
+    // .values(3, data.motivation_words)
+    // .values(4, 3)
+    // .execute();
 
     return DBStatus::ok;
 }
@@ -226,14 +225,14 @@ DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
     .set("sur_name", mysqlx::expr(":param4"))
     .set("user_description", mysqlx::expr(":param5"))
     .set("password", mysqlx::expr(":param6"))
-    .where("id=:param7")
+    .where("username=:param7")
     .bind("param1", data.username)
     .bind("param2", data.email)
     .bind("param3", data.name)
     .bind("param4", data.sur_name)
     .bind("param5", data.user_discription)
     .bind("param6", data.password)
-    .bind("param7", data.id)
+    .bind("param7", data.username)
     .execute();
 
     return DBStatus::ok;
@@ -247,14 +246,14 @@ DBStatus MainDataBase::EditPostInPostTable(ProjectData &data) {
     .set("teammates", mysqlx::expr(":param4"))
     .set("project_description", mysqlx::expr(":param5"))
     .set("diversity", mysqlx::expr(":param6"))
-    .where("id_project=:param7")
+    .where("project_name=:param7")
     .bind("param1", data.project_name)
     .bind("param2", data.team_name)
     .bind("param3", data.post_tags[0])
     .bind("param4", data.teammates[0])
     .bind("param5", data.project_description)
     .bind("param6", data.diversity)
-    .bind("param7", data.projectid)
+    .bind("param7", data.project_name)
     .execute();
     return DBStatus::ok;
 }
