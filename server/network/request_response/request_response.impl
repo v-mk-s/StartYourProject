@@ -2,6 +2,13 @@
 
 #include "request_response.hpp"
 
+#define LOGIN_DATA_DONT_MATCH "Username or password dont match"
+#define NEED_AUTHORIATION "Authorization is required for this operation."
+#define SAME_NAME "The name already exists"
+#define CONTENT_NOT_FOUND "Requested content not found"
+#define DB_ERROR "Data base error"
+
+
 
 template <typename BodyType>
 void Response<BodyType>::set_status(ResponseStatus status, bool keep_alive, int ver) {
@@ -10,15 +17,47 @@ void Response<BodyType>::set_status(ResponseStatus status, bool keep_alive, int 
     res_.keep_alive(keep_alive);
 }
 
+
 template <typename BodyType>
-void Response<BodyType>::set_content_type(std::string content_type) {
-    res_.set(http::field::content_type, content_type);
+void Response<BodyType>::set_body(const std::string& body, ContentType type) {
+    switch (type) {
+    case ContentType::json:
+        res_.set(http::field::content_type, CONTENT_TYPE_JSON);
+        break;
+
+    default:
+        res_.set(http::field::content_type, CONTENT_TYPE_TEXT);
+        break;
+    }
+    res_.body() = body;
+    res_.prepare_payload();
 }
 
 template <typename BodyType>
-void Response<BodyType>::set_body(const std::string& body) {
-    res_.body() = body;
-    res_.prepare_payload();
+void Response<BodyType>::set_error_message(ResponseStatus status) {
+    set_status(status);
+
+    switch (status) {
+    case ResponseStatus::not_found:
+        set_body(CONTENT_NOT_FOUND);
+        break;
+
+    case ResponseStatus::conflict:
+        set_body(LOGIN_DATA_DONT_MATCH);
+        break;
+
+    case ResponseStatus::forbidden:
+        set_body(SAME_NAME);
+        break;
+
+    case ResponseStatus::unauthorized:
+        set_body(NEED_AUTHORIATION);
+        break;
+
+    default:
+        set_status(ResponseStatus::server_error);
+        break;
+    }
 }
 
 

@@ -3,6 +3,15 @@
 #include "server_utils.hpp"
 
 
+#define HTTP_VER_1_1 11
+#define HTTP_VER_1_0 10
+
+enum class ContentType {
+    text,
+    json
+};
+
+
 class RequestInterface {
  public:
     virtual std::string get_body() = 0;
@@ -12,8 +21,8 @@ class RequestInterface {
 class ResponseInterface{
  public:
     virtual void set_status(ResponseStatus status, bool keep_alive = false, int ver = HTTP_VER_1_1) = 0;
-    virtual void set_content_type(std::string content_type) = 0;
-    virtual void set_body(const std::string& body) = 0;
+    virtual void set_body(const std::string& body, ContentType type = ContentType::text) = 0;
+    virtual void set_error_message(ResponseStatus status) = 0;
 };
 
 
