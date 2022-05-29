@@ -16,6 +16,7 @@ enum class ResponseStatus {
     unauthorized = 401,
     forbidden = 403,
     not_found = 404,
+    conflict = 409,
     not_implemented = 501,
     server_error = 503
 };

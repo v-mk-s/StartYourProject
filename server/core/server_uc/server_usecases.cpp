@@ -10,7 +10,7 @@ ResponseStatus LoginUC::checkUser(UserData& user) {
         return ResponseStatus::not_found;
     }
     if (msg.data.username != user.username || msg.data.password != user.password) {
-        return ResponseStatus::unauthorized;
+        return ResponseStatus::conflict;
     }
 
     user.auth_token = generate_token(user.username + user.password);

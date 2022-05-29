@@ -3,15 +3,6 @@
 #include "handlers.hpp"
 
 
-#define LOGIN_DATA_DONT_MATCH "Username and password dont match"
-#define SAME_USER "A user with the same name already exists"
-#define USER_NOT_FOUND "User with this nickname does not exist"
-#define SAME_PROJECT "A project with the same name already exists"
-#define NEED_AUTHORIATION "Authorization is required for this operation."
-#define CONTENT_NOT_FOUND "Rrequested information not found"
-#define SAME_NAME "The name already exists"
-#define CONTENT_NOT_FOUND "Requested content not found"
-#define DB_ERROR "Data base error"
 
 /////////////////////////// User Handlers ///////////////////////////////
 template <typename JSON>
@@ -24,23 +15,12 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
 
     ResponseStatus status = usecase.checkUser(data);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::not_found:
-        response->set_body(USER_NOT_FOUND);
-        break;
-
-    case ResponseStatus::unauthorized:
-        response->set_body(LOGIN_DATA_DONT_MATCH);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
+    response->set_body(data.auth_token);
 }
 
 template <typename JSON>
@@ -54,19 +34,11 @@ void RegisterHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
 
     ResponseStatus status = usecase.addUser(data);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::forbidden:
-        response->set_body(SAME_USER);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 template <typename JSON>
@@ -84,23 +56,11 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
 
     ResponseStatus status = usecase.editUserData(data);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::unauthorized:
-        response->set_body(NEED_AUTHORIATION);
-        break;
-
-    case ResponseStatus::not_found:
-        response->set_body(USER_NOT_FOUND);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 template <typename JSON>
@@ -113,23 +73,11 @@ void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
 
     ResponseStatus status = usecase.delUserData(data);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::unauthorized:
-        response->set_body(NEED_AUTHORIATION);
-        break;
-
-    case ResponseStatus::not_found:
-        response->set_body(USER_NOT_FOUND);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 template <typename JSON>
@@ -140,6 +88,10 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     username = json.template get<std::string>("username", "");
 
     Message<UserData> msg = usecase.getUserData(username);
+    if (msg.status != ResponseStatus::ok) {
+        response->set_error_message(msg.status);
+        return;
+    }
     JSON json_response;
 
     json_response.put("username", msg.data.username);
@@ -149,22 +101,8 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     json_response.put("user_discription", msg.data.user_discription);
     json_response.put("password", msg.data.password);
 
-
     response->set_status(msg.status, request->is_keep_alive());
-    if (msg.status == ResponseStatus::ok) {
-        response->set_body(json_response.serialize(), ContentType::json);
-        return;
-    }
-
-    switch (msg.status) {
-    case ResponseStatus::not_found:
-        response->set_body(USER_NOT_FOUND);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
-        return;
-    }
+    response->set_body(json_response.serialize(), ContentType::json);
 }
 
 /////////////////////////// Posts Handlers ////////////////////////////////
@@ -183,19 +121,11 @@ void CreatePostHandler<JSON>::handle(RequestInterface* request, ResponseInterfac
     
     ResponseStatus status = usecase.addPostToDB(data);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::forbidden:
-        response->set_body(SAME_NAME);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 
@@ -215,23 +145,11 @@ void EditPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
 
     ResponseStatus status = usecase.editPostToDB(data, token); 
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::unauthorized:
-        response->set_body(NEED_AUTHORIATION);
-        break;
-
-    case ResponseStatus::not_found:
-        response->set_body(CONTENT_NOT_FOUND);
-        break;
-
-    case default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 template <typename JSON>
@@ -242,6 +160,10 @@ void GetPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* 
     project_name = json_req.template get<std::string>("project_name", "");
 
     Message<ProjectData> msg = usecase.getPost(project_name);
+    if (msg.status != ResponseStatus::ok) {
+        response->set_error_message(msg.status);
+        return;
+    }
     JSON json_respoonse;
 
     json_respoonse.put("username", msg.data.username);
@@ -252,20 +174,7 @@ void GetPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* 
     json_respoonse.put("project_description", msg.data.project_description);
 
     response->set_status(msg.status, request->is_keep_alive());
-    if (msg.status == ResponseStatus::ok) {
-        response->set_body(json_respoonse.serialize(), ContentType::json);
-        return;
-    }
-
-    switch (msg.status) {
-    case ResponseStatus::not_found:
-        response->set_body(CONTENT_NOT_FOUND);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
-        return;
-    }
+    response->set_body(json_respoonse.serialize(), ContentType::json);
 }
 
 
@@ -280,23 +189,11 @@ void DeletePostHandler<JSON>::handle(RequestInterface* request, ResponseInterfac
 
     ResponseStatus status = usecase.delPostData(data, token);
 
-    response->set_status(status, request->is_keep_alive());
-    if (status == ResponseStatus::ok)
-        return;
-
-    switch (status) {
-    case ResponseStatus::unauthorized:
-        response->set_body(NEED_AUTHORIATION);
-        break;
-
-    case ResponseStatus::not_found:
-        response->set_body(CONTENT_NOT_FOUND);
-        break;
-
-    default:
-        response->set_status(ResponseStatus::server_error);
+    if (status != ResponseStatus::ok) {
+        response->set_error_message(status);
         return;
     }
+    response->set_status(status, request->is_keep_alive());
 }
 
 template <typename JSON>
