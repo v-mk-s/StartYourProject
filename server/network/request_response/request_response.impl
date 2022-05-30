@@ -7,6 +7,7 @@
 #define SAME_NAME "The name already exists"
 #define CONTENT_NOT_FOUND "Requested content not found"
 #define DB_ERROR "Data base error"
+#define BAD_DATA "Unknown target or invalid body data"
 
 
 
@@ -54,6 +55,10 @@ void Response<BodyType>::set_error_message(ResponseStatus status) {
         set_body(NEED_AUTHORIATION);
         break;
 
+    case ResponseStatus::bad_req:
+        set_body(BAD_DATA);
+        break;
+
     default:
         set_status(ResponseStatus::server_error);
         break;
@@ -79,7 +84,7 @@ inline JSON::JSON(const std::string& str): IJSON(str) {
 }
 
 template<>
-inline std::string JSON::get<std::string>(const std::string &key, std::string defaultValue) {
+inline std::string JSON::get<std::string>(const std::string &key) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -90,7 +95,7 @@ inline std::string JSON::get<std::string>(const std::string &key, std::string de
 }
 
 template<>
-inline int JSON::get<int>(const std::string &key, int defaultValue) {
+inline int JSON::get<int>(const std::string &key) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -101,7 +106,7 @@ inline int JSON::get<int>(const std::string &key, int defaultValue) {
 }
 
 template<>
-inline double JSON::get<double>(const std::string &key, double defaultValue) {
+inline double JSON::get<double>(const std::string &key) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -112,7 +117,7 @@ inline double JSON::get<double>(const std::string &key, double defaultValue) {
 }
 
 template<>
-inline bool JSON::get<bool>(const std::string &key, bool defaultValue) {
+inline bool JSON::get<bool>(const std::string &key) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -123,8 +128,7 @@ inline bool JSON::get<bool>(const std::string &key, bool defaultValue) {
 }
 
 template<>
-inline std::vector<std::string> JSON::get<std::vector<std::string>>(
-        const std::string &key, std::vector<std::string> defaultValue) {
+inline std::vector<std::string> JSON::get<std::vector<std::string>>(const std::string &key) {
     json::object obj;
     if(value_.is_null()) {
         obj = value_.emplace_object();
@@ -137,6 +141,7 @@ inline std::vector<std::string> JSON::get<std::vector<std::string>>(
     for (auto it : arr) {
         result.push_back(it.as_string().c_str());
     }
+    return result;
 }
 
 template <typename T>

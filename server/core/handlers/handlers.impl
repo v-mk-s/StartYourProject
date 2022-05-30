@@ -10,8 +10,8 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
     JSON json_req(request->get_body());
     UserData data;
 
-    data.username = json_req.template get<std::string>("username", "");
-    data.password = json_req.template get<std::string>("password", "");
+    data.username = json_req.template get<std::string>("username");
+    data.password = json_req.template get<std::string>("password");
 
     ResponseStatus status = usecase.checkUser(data);
 
@@ -28,9 +28,9 @@ void RegisterHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
     JSON json(request->get_body());
     UserData data;
 
-    data.username = json.template get<std::string>("username", "");
-    data.password = json.template get<std::string>("password", "");
-    data.email = json.template get<std::string>("email", "");
+    data.username = json.template get<std::string>("username");
+    data.password = json.template get<std::string>("password");
+    data.email = json.template get<std::string>("email");
 
     ResponseStatus status = usecase.addUser(data);
 
@@ -46,13 +46,13 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     JSON json(request->get_body());
     UserData data;
  
-    data.auth_token = json.template get<std::string>("auth_token", "");
-    data.username = json.template get<std::string>("username", "");
-    data.email = json.template get<std::string>("email", "");
-    data.name = json.template get<std::string>("name", "");
-    data.sur_name = json.template get<std::string>("sur_name", "");
-    data.user_description = json.template get<std::string>("user_description", "");
-    data.password = json.template get<std::string>("password", "");
+    data.auth_token = json.template get<std::string>("auth_token");
+    data.username = json.template get<std::string>("username");
+    data.email = json.template get<std::string>("email");
+    data.name = json.template get<std::string>("name");
+    data.sur_name = json.template get<std::string>("sur_name");
+    data.user_description = json.template get<std::string>("user_description");
+    data.password = json.template get<std::string>("password");
 
     ResponseStatus status = usecase.editUserData(data);
 
@@ -68,8 +68,8 @@ void DelUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     JSON json(request->get_body());
     UserData data;
 
-    data.auth_token = json.template get<std::string>("auth_token", "");
-    data.username = json.template get<std::string>("username", "");
+    data.auth_token = json.template get<std::string>("auth_token");
+    data.username = json.template get<std::string>("username");
 
     ResponseStatus status = usecase.delUserData(data);
 
@@ -85,7 +85,7 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     JSON json(request->get_body());
     std::string username;
 
-    username = json.template get<std::string>("username", "");
+    username = json.template get<std::string>("username");
 
     Message<UserData> msg = usecase.getUserData(username);
     if (msg.status != ResponseStatus::ok) {
@@ -111,15 +111,17 @@ template <typename JSON>
 void CreatePostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* response) {
     JSON json(request->get_body());
     ProjectData data;
+    std::string token;
    
-    data.username  = json.template get<std::string>("username", "");
-    data.project_name  = json.template get<std::string>("project_name", "");
-    data.team_name  = json.template get<std::string>("team_name", "");
-    data.post_tags  = json.template get<std::vector<std::string>>("post_tags", std::vector<std::string>());
-    data.teammates  = json.template get<std::vector<std::string>>("teammates", std::vector<std::string>());
-    data.project_description  = json.template get<std::string>("project_description", "");
+    token  = json.template get<std::string>("auth_token");
+    data.username  = json.template get<std::string>("username");
+    data.project_name  = json.template get<std::string>("project_name");
+    data.team_name  = json.template get<std::string>("team_name");
+    data.post_tags  = json.template get<std::vector<std::string>>("post_tags");
+    data.teammates  = json.template get<std::vector<std::string>>("teammates");
+    data.project_description  = json.template get<std::string>("project_description");
     
-    ResponseStatus status = usecase.addPostToDB(data);
+    ResponseStatus status = usecase.addPostToDB(data, token);
 
     if (status != ResponseStatus::ok) {
         response->set_error_message(status);
@@ -134,14 +136,14 @@ void EditPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface*
     JSON json(request->get_body());
     ProjectData data;
 
-    std::string token = json.template get<std::string>("auth_token", "");
+    std::string token = json.template get<std::string>("auth_token");
 
-    data.username = json.template get<std::string>("username", "");
-    data.project_name = json.template get<std::string>("project_name", "");
-    data.team_name = json.template get<std::string>("team_name", "");
-    data.post_tags = json.template get<std::vector<std::string>>("post_tags", std::vector<std::string>());
-    data.teammates = json.template get<std::vector<std::string>>("teammates", std::vector<std::string>());
-    data.project_description = json.template get<std::string>("project_description", "");
+    data.username = json.template get<std::string>("username");
+    data.project_name = json.template get<std::string>("project_name");
+    data.team_name = json.template get<std::string>("team_name");
+    data.post_tags = json.template get<std::vector<std::string>>("post_tags");
+    data.teammates = json.template get<std::vector<std::string>>("teammates");
+    data.project_description = json.template get<std::string>("project_description");
 
     ResponseStatus status = usecase.editPostToDB(data, token); 
 
@@ -157,7 +159,7 @@ void GetPostHandler<JSON>::handle(RequestInterface* request, ResponseInterface* 
     JSON json(request->get_body());
     std::string project_name;
 
-    project_name = json.template get<std::string>("project_name", "");
+    project_name = json.template get<std::string>("project_name");
 
     Message<ProjectData> msg = usecase.getPost(project_name);
     if (msg.status != ResponseStatus::ok) {
@@ -183,9 +185,9 @@ void DeletePostHandler<JSON>::handle(RequestInterface* request, ResponseInterfac
     JSON json(request->get_body());
     ProjectData data;
 
-    data.project_name = json.template get<std::string>("project_name", "");
-    data.username = json.template get<std::string>("username", "");
-    std::string token = json.template get<std::string>("auth_token", "");
+    data.project_name = json.template get<std::string>("project_name");
+    data.username = json.template get<std::string>("username");
+    std::string token = json.template get<std::string>("auth_token");
 
     ResponseStatus status = usecase.delPostData(data, token);
 

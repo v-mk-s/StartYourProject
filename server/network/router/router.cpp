@@ -78,58 +78,37 @@ void handle_request(beast::string_view doc_root,
     http::request<Body, http::basic_fields<Allocator>>&& req,
     Send&& send,
     const std::map<std::string, std::unique_ptr<IHandler>>& handlers) {
-    auto const bad_request = [&req](beast::string_view why) {
-        http::response<http::string_body> res{http::status::bad_request, req.version()};
-        res.set(http::field::server, SERVER_NAME);
-        res.set(http::field::content_type, "text/html");
-        res.keep_alive(req.keep_alive());
-        res.body() = std::string(why);
-        res.prepare_payload();
-        return res;
-    };
-
-    auto const server_error = [&req]() {
-        http::response<http::string_body> res{http::status::internal_server_error, req.version()};
-        res.set(http::field::server, SERVER_NAME);
-        res.keep_alive(req.keep_alive());
-        return res;
-    };
-
-    auto const wrong_data = [&req](beast::string_view why) {
-        http::response<http::string_body> res{http::status::bad_request, req.version()};
-        res.set(http::field::server, SERVER_NAME);
-        res.set(http::field::content_type, "text/html");
-        res.keep_alive(req.keep_alive());
-        res.body() = std::string(why);
-        res.prepare_payload();
-        return res;
-    };
+    Request<http::string_body> request(req);
+    Response<http::string_body> response;
 
     if(req.target().empty() || req.target()[0] != '/' ||
        req.target().find("..") != beast::string_view::npos) {
-        return send(bad_request("Illegal request-target"));
+        response.set_error_message(ResponseStatus::bad_req);
+        return send(std::move(response.get_reference()));
     }
 
     std::cout << "target: " << req.target() << std::endl;
 
     beast::string_view target = req.target();
-    Request<http::string_body> request(req);
-    Response<http::string_body> response;
 
     auto handler = handlers.find(target.to_string());
     if (handler != handlers.end()) {
         try {
             handler->second->handle(&request, &response);
-        } catch (boost::wrapexcept<boost::system::system_error> err) {
-            std::cerr << err.what() << std::endl;
+        } catch (boost::wrapexcept<boost::system::system_error> const& err) {
             std::cerr << "JSON exeption: " << err.what() << std::endl;
-        } catch (mysqlx::abi2::r0::Error err) {
+            
+            response.set_error_message(ResponseStatus::bad_req);
+            // return send(response.get_reference());
+        } catch (mysqlx::abi2::r0::Error const& err) {
             std::cerr << "DB exeption: " << err.what() << std::endl;
-            return send(server_error());
+
+            response.set_error_message(ResponseStatus::server_error);
+            // return send(response.get_reference());
         }
     }
     else {
-        return send(bad_request("Unknown target\n"));
+        response.set_error_message(ResponseStatus::bad_req);
     }
 
     return send(std::move(response.get_reference()));

@@ -31,8 +31,9 @@ class MainDataBase: public IMainDataBase {
     DBStatus InsertIntoPostTable(ProjectData &data) override;
     DBStatus InsertIntoUserTable(UserData &data) override;
     DBStatus InsertIntoRequestToPostTable(RequestToPostData &data) override;
-   //  DBStatus InsertIntoTegsTable(std::string &data) override;
-
+    DBStatus InsertIntoTagsTable(std::string &data) override;
+    DBStatus InsertIntoProjectTagsTable(std::string &data, std::string &projectname) override;
+    DBStatus InsertIntoTeamTable(std::string &data, std::string &projectname) override;
 
     // Удаляют запись и возвращают статус если успешно false иначе true
     DBStatus DeleteFromPostTable(std::string &project_name) override;
@@ -49,6 +50,8 @@ class MainDataBase: public IMainDataBase {
     Message<UserData, DBStatus> FindIntoPersonByUsername(std::string &username) override;
     Message<ProjectData, DBStatus> FindIntoPostTable(std::string &project_name) override;
     Message<std::vector<RequestToPostData>, DBStatus>  FindRequestToPostTable(std::string &username) override;
+
+    Message<int, DBStatus> FindTag(std::string &tag) override;
 
     DBStatus InsertToken(std::string &username, std::string& token) override;
     // Если токен совпадает то false иначе true

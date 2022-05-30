@@ -82,7 +82,11 @@ Message<UserData> GetUserProfileUC::getUserData(std::string& username) {
 
 //////////////////// Posts Use Cases ////////////////////////
 
-ResponseStatus CreatePostUC::addPostToDB(ProjectData& post) {
+ResponseStatus CreatePostUC::addPostToDB(ProjectData& post, std::string& token) {
+    auto token_msg = database->FindToken(post.username);
+    if (token_msg.status == DBStatus::not_found || token_msg.data != token) {
+        return ResponseStatus::unauthorized;
+    }
     auto msg = database->FindIntoPostTable(post.project_name);
     if (msg.status == DBStatus::ok || msg.data.project_name == post.project_name) {
         return ResponseStatus::forbidden;

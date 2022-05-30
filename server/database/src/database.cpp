@@ -14,10 +14,10 @@ mysqlx::Table CreateTable(mysqlx::Session &session, const mysqlx::string &name, 
 }
 
 MainDataBase::MainDataBase(): 
-    cli("root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
+    cli( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
     sqlconn(cli.getSession()) {
     //mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)
-    sqlconn.sql("CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
+    sqlconn.sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
     // sqlconn.sql("use SYP_DB;");
 
     // sqlconn.sql("use SYP_DB; create table IF NOT EXISTS tags_data (id int auto_increment, tag char(30) unique,PRIMARY KEY ( id ) );");
@@ -87,12 +87,12 @@ DBStatus MainDataBase::DeleteToken(std::string& username) {
     return DBStatus::ok;
 }
 
-DBStatus MainDataBase::DeleteFromPostTable(std::string& username) {
+DBStatus MainDataBase::DeleteFromPostTable(std::string& post) {
     std::cout << "DeleteFromPostTable:" << std::endl;
-    
-    // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from projectdata where project_id=?");
-    // que->setInt(1,id);
-    // return que->ExecuteUpdate();
+    project_data_table->remove()
+    .where("project_name=:param")
+    .bind("param",post)
+    .execute();
 
     return DBStatus::ok;
 }
@@ -112,6 +112,9 @@ DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
     return DBStatus::ok;
 
 }
+
+
+
 DBStatus MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
     std::cout << "DeleteFromRequestToPostTable:" << std::endl;
     // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from requesttopost where user_id=? and project_id=?");
@@ -122,8 +125,8 @@ DBStatus MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
 Message<std::vector<RequestToPostData>, DBStatus> MainDataBase::FindRequestToPostTable(std::string &username) {
     std::cout << "FindRequestToPostTable:" << std::endl;
     //выводим оповещения-ответы на пост юзера, либо ответы на его отклики
-    // MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select r.user_id, \
-    // r.project_id, p.project_name, r.motivation_words, r.status from requesttopost as r \
+    // MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select r.user_id, 
+    // r.project_id, p.project_name, r.motivation_words, r.status from requesttopost as r
     // inner join projectdata as p on r.project_id=p.project_id where r.user_id=? and r.status<>3 or p.user_id=?")
 
 
@@ -236,18 +239,54 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
 
 //     return data;
 // }
+Message<int, DBStatus> MainDataBase::FindTag(std::string &tag) {
+    std::cout << "FindTag:" << std::endl;
+    mysqlx::RowResult res = tags_data_table->select("id", "tag")
+    .where("tag = :param")
+    .bind("param", tag)
+    .execute();
+    mysqlx::Row row;
+    if (!(row = res.fetchOne())) {
+        return Message<int, DBStatus>(DBStatus::not_found);
+    }
+    return Message<int, DBStatus>(int(row[0]));
+}
+
+
+DBStatus MainDataBase::InsertIntoTagsTable(std::string &data){
+     std::cout << "InsertIntoTagsTable:" << std::endl;
+    auto msg = FindTag(data);
+    if (msg.status == DBStatus::not_found){    
+        tags_data_table->insert("tag")
+        .values(data)
+        .execute();
+    }   
+    return DBStatus::ok;
+}
+
+DBStatus MainDataBase::InsertIntoProjectTagsTable(std::string &data, std::string &project_name){
+    std::cout << "InsertIntoProjectTable:" << std::endl;
+    if(InsertIntoTagsTable(data) == DBStatus::ok){
+        auto msg = FindTag(data);
+        project_tags_data_table->insert( "project_name", "id_tag")
+        .values(project_name, msg.data)
+        .execute();
+    }
+    return DBStatus::ok;
+}
+
+
 
 DBStatus MainDataBase::InsertIntoPostTable(ProjectData &data) {
     std::cout << "InsertIntoPostTable:" << std::endl;
-    project_data_table->insert("project_name","team_name","project_description","diversity", "user_name")
+    project_data_table->insert("project_name", "team_name", "project_description", "diversity", "user_name")
     .values (data.project_name, data.team_name, data.project_description, data.diversity, data.username)
     .execute();
 
-    // for (int i=0;i<data.post_tags.size();i++){
-    //     if
-    //     project_tags_data_table->insert("")
-    // }
-    // //project_tags_data_table->insert("")
+    for (int i=0;i<data.post_tags.size();i++){
+        InsertIntoProjectTagsTable(data.post_tags[i], data.project_name);
+    }
+
 
     return DBStatus::ok;
 }
@@ -368,5 +407,5 @@ Message<std::string, DBStatus> MainDataBase::FindToken(std::string &username) {
 
 Message<ProjectData, DBStatus> MainDataBase::FindIntoPostTable(std::string &project_name) {
     std::cout << "FindIntoPostTable:" << std::endl;
-    return DBStatus::ok;
+    return DBStatus::not_found;
 }

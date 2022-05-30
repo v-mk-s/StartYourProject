@@ -32,7 +32,7 @@ class IGetUserProfileUC {
 
 class ICreatePostUC {
  public:
-    virtual ResponseStatus addPostToDB(ProjectData& post) = 0;
+    virtual ResponseStatus addPostToDB(ProjectData& post, std::string& token) = 0;
 };
 
 class IEditPostUC {
@@ -142,7 +142,7 @@ class CreatePostUC: public ICreatePostUC {
     CreatePostUC() = delete;
     CreatePostUC(IMainDataBase* database): database(database) {}
 
-    ResponseStatus addPostToDB(ProjectData& post) override;
+    ResponseStatus addPostToDB(ProjectData& post, std::string& token) override;
 
  private:
     IMainDataBase* database;
