@@ -38,7 +38,7 @@ MainDataBase::MainDataBase():
     project_data_table = std::make_unique<mysqlx::Table>(
         CreateTable(sqlconn, PROJECT_TABLE,"( user_name  char(32) NOT NULL, project_name  char(32),  team_name  char(32),  project_description  char(255),  diversity  double, primary key( project_name ), foreign key ( user_name ) references user_data( user_name ))" ));
         
-    token_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TOKEN_TABLE, "CREATE TABLE IF NOT EXISTS  token_data "
+    token_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TOKEN_TABLE,
                                                        "( token char(100), user_name  CHAR(32) NOT NULL unique,primary key (token),"
                                                        " FOREIGN KEY (user_name)  REFERENCES user_data (user_name))"));
     notification_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, NOTIFICATION_TABLE,  "id  int NOT NULL AUTO_INCREMENT, project_name  char(32) NOT NULL, motivation_words  char(255),user_name char(32) not null,status int, primary key( id ), foreign key ( project_name ) references project_data(project_name ), foreign key ( user_name ) references user_data( user_name ))"));
