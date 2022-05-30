@@ -12,5 +12,5 @@ find_package(Threads REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${CLIENT_SYP_LIBRARIES} GTest::GTest gtest_main Threads::Threads)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CLIENT_SYP_CORE_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${CLIENT_SYP_CORE_LIBRARIES} GTest::GTest gtest_main Threads::Threads)

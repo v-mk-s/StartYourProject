@@ -32,3 +32,6 @@ run_server:
 
 run_client:
 	./build/client/client $(HOST) $(PORT)
+	
+run_client_tests:
+	./build/tests/test_client/test_client_syp --gtest_filter=${TEST_FILTER}
