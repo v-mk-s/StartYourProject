@@ -2,7 +2,7 @@
 
 
 MainDataBase::MainDataBase(): 
-        cli("root:123qwerty@localhost:33060/projectdata", ClientOption::POOL_MAX_SIZE, 7),
+        cli("root:123qwerty@localhost:33060/projectdata", mysqlx::ClientOption::POOL_MAX_SIZE, 7),
         sqlconn(cli.getSession()),
         //mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)
         db(sqlconn.getSchema("SYP_DB")),
