@@ -88,6 +88,23 @@ void handle_request(beast::string_view doc_root,
         return res;
     };
 
+    auto const server_error = [&req]() {
+        http::response<http::string_body> res{http::status::internal_server_error, req.version()};
+        res.set(http::field::server, SERVER_NAME);
+        res.keep_alive(req.keep_alive());
+        return res;
+    };
+
+    auto const wrong_data = [&req](beast::string_view why) {
+        http::response<http::string_body> res{http::status::bad_request, req.version()};
+        res.set(http::field::server, SERVER_NAME);
+        res.set(http::field::content_type, "text/html");
+        res.keep_alive(req.keep_alive());
+        res.body() = std::string(why);
+        res.prepare_payload();
+        return res;
+    };
+
     if(req.target().empty() || req.target()[0] != '/' ||
        req.target().find("..") != beast::string_view::npos) {
         return send(bad_request("Illegal request-target"));
@@ -99,7 +116,15 @@ void handle_request(beast::string_view doc_root,
 
     auto handler = handlers.find(target.data());
     if (handler != handlers.end()) {
-        handler->second->handle(&request, &response);
+        try {
+            handler->second->handle(&request, &response);
+        } catch (boost::wrapexcept<boost::system::system_error> err) {
+            std::cerr << err.what() << std::endl;
+            return send(wrong_data("Json is not valid"));
+        } catch (mysqlx::abi2::r0::Error err) {
+            std::cerr << err.what() << std::endl;
+            return send(server_error());
+        }
     }
     else {
         return send(bad_request("Unknown target\n"));
