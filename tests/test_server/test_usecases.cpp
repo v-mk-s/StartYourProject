@@ -40,18 +40,40 @@ TEST(LoginUCTest, GoodCase) {
     UserData test_data;
     test_data.username = "John_123-4";
     test_data.password = "qwerty1234";
-    EXPECT_CALL(database, 
-                FindIntoPersonByUsername(test_data.username)).Times(1);
-    EXPECT_CALL(database,
-                InsertToken(test_data.username, test_data.auth_token)).Times(1);
-
     LoginUC usecase(&database);
+    test_data.auth_token = usecase.generate_token(test_data.username + test_data.password);
+
+    EXPECT_CALL(database, FindIntoPersonByUsername(test_data.username))
+                .Times(1).WillOnce(Return(Message<UserData, DBStatus>(test_data)));
+
+    EXPECT_CALL(database, InsertToken(test_data.username, test_data.auth_token))
+                .Times(1).WillOnce(Return(DBStatus::ok));
+
 
     Message<UserData> msg = usecase.checkUser(test_data);
     EXPECT_EQ(ResponseStatus::ok, msg.status);
-    EXPECT_EQ(test_data.auth_token.length(), 0) << "auth_token dont generated";
+    EXPECT_TRUE(test_data.auth_token.length() != 0) << "auth_token dont generated";
 }
 
+TEST(LoginUCTest, WrongPassword) {
+    MockDB database;
+    UserData test_data;
+    test_data.username = "John_123-4";
+    test_data.password = "qwerty1234";
+    LoginUC usecase(&database);
+    test_data.auth_token = usecase.generate_token(test_data.username + test_data.password);
+
+    EXPECT_CALL(database, FindIntoPersonByUsername(test_data.username))
+                .Times(1).WillOnce(Return(Message<UserData, DBStatus>(test_data)));
+
+    EXPECT_CALL(database, InsertToken(test_data.username, test_data.auth_token))
+                .Times(1).WillOnce(Return(DBStatus::ok));
+
+
+    Message<UserData> msg = usecase.checkUser(test_data);
+    EXPECT_EQ(ResponseStatus::ok, msg.status);
+    EXPECT_TRUE(test_data.auth_token.length() != 0) << "auth_token dont generated";
+}
 
 TEST(RegisterUCTest, GoodCase) {
     MockDB database;
@@ -59,9 +81,11 @@ TEST(RegisterUCTest, GoodCase) {
     test_data.username = "John_123-4";
     test_data.password = "qwerty1234";
     test_data.email = "email@mail.ru";
-    EXPECT_CALL(database, 
-                FindIntoPersonByUsername(test_data.username)).Times(1);
-    EXPECT_CALL(database, InsertIntoUserTable(test_data)).Times(1);
+    EXPECT_CALL(database, FindIntoPersonByUsername(test_data.username))
+                .Times(1).WillOnce(Return(DBStatus::not_found));
+
+    EXPECT_CALL(database, InsertIntoUserTable(test_data)).
+                Times(1).WillOnce(Return(DBStatus::ok));
 
     RegisterUC usecase(&database);
 
@@ -77,8 +101,12 @@ TEST(EditProfileUCTest, GoodCase) {
     test_data.sur_name = "dfgh";
     test_data.user_discription = "some text";
     test_data.password = "1234qwerty";
-    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token)).Times(1);
-    EXPECT_CALL(database, EditUserInPersonTable(test_data)).Times(1);
+
+    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token))
+                .Times(1).WillOnce(Return(false));
+
+    EXPECT_CALL(database, EditUserInPersonTable(test_data))
+                .Times(1).WillOnce(Return(DBStatus::ok));
 
     EditProfileUC usecase(&database);
 
@@ -90,8 +118,12 @@ TEST(DelUserProfileUCTest, GoodCase) {
     UserData test_data;
     test_data.username = "test123";
     test_data.auth_token = "23132";
-    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token)).Times(1);
-    EXPECT_CALL(database, DeleteFromPersonTable(test_data.username)).Times(1);
+
+    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token))
+                .Times(1).WillOnce(Return(false));
+
+    EXPECT_CALL(database, DeleteFromPersonTable(test_data.username))
+                .Times(1).WillOnce(Return(DBStatus::ok));
 
     DelUserProfileUC usecase(&database);
 
@@ -101,7 +133,9 @@ TEST(DelUserProfileUCTest, GoodCase) {
 TEST(GetUserProfileUCTest, GoodCase) {
     MockDB database;
     std::string test_username = "abcdefg";
-    EXPECT_CALL(database, FindIntoPersonByUsername(test_username)).Times(1);
+
+    EXPECT_CALL(database, FindIntoPersonByUsername(test_username))
+                .Times(1).WillOnce(Return(Message<UserData, DBStatus>(UserData())));
 
     GetUserProfileUC usecase(&database);
 
@@ -121,10 +155,13 @@ TEST(EditPostTest, UC) {
     post.project_description = "cool project";
 
     std::string auth_token = "323324";
-
     MockDB db;
-    EXPECT_CALL(db, CheckToken(post.username, auth_token)).Times(1);
-    EXPECT_CALL(db, EditPostInPostTable(post)).Times(AtLeast(1));
+
+    EXPECT_CALL(db, CheckToken(post.username, auth_token))
+                .Times(1).WillOnce(Return(false));
+
+    EXPECT_CALL(db, EditPostInPostTable(post))
+                .Times(1).WillOnce(Return(DBStatus::ok));
 
     EditPostUC Test_1(&db);
     EXPECT_EQ(Test_1.editPostToDB(post, auth_token), ResponseStatus::ok);
@@ -132,16 +169,12 @@ TEST(EditPostTest, UC) {
 
 TEST(GetPostTest, UC) {
     MockDB db;
+
+    EXPECT_CALL(db, FindIntoPostTable(post.project_name))
+                .Times(1).WillOnce(Return(Message<ProjectData, DBStatus>(post)));
+
     GetPostUC Test_1(&db);
     Message<ProjectData> msg = Test_1.getPost(post.project_name);
-    EXPECT_EQ(ResponseStatus::ok, msg.status);
-}
-
-TEST(GetUserProfileTest, UC) {
-    MockDB db;
-    std::string username = "cool_username";
-    GetUserProfileUC Test_1(&db);
-    Message<UserData> msg = Test_1.getUserData(username);
     EXPECT_EQ(ResponseStatus::ok, msg.status);
 }
 
@@ -156,8 +189,12 @@ TEST(DeletePostTest, UC) {
     MockDB db;
     std::string auth_token = "323324";
 
-    EXPECT_CALL(db, CheckToken(post.username, auth_token)).Times(1);
-    EXPECT_CALL(db, DeleteFromPostTable(post.project_name)).Times(AtLeast(1));
+    EXPECT_CALL(db, CheckToken(post.username, auth_token))
+                .Times(1).WillOnce(Return(false));
+
+    EXPECT_CALL(db, DeleteFromPostTable(post.project_name))
+                .Times(AtLeast(1)).WillOnce(Return(DBStatus::ok));
+
     DeletePostUC Test_1(&db);
     EXPECT_EQ(Test_1.delPostData(post, auth_token), ResponseStatus::ok);
 }
@@ -178,8 +215,12 @@ TEST(DeletePostTest, UC) {
 
 TEST(CreatePostTest, UC) {
     MockDB db;
-    EXPECT_CALL(db, FindIntoPostTable(post.project_name)).Times(1);
-    EXPECT_CALL(db, InsertIntoPostTable(post)).Times(1);
+    EXPECT_CALL(db, FindIntoPostTable(post.project_name))
+                .Times(1).WillOnce(Return(Message<ProjectData, DBStatus>(DBStatus::not_found)));
+
+    EXPECT_CALL(db, InsertIntoPostTable(post))
+                .Times(1).WillOnce(Return(DBStatus::ok));
+
     CreatePostUC Test_1(&db);
     EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);
 }

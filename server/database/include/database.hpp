@@ -10,14 +10,13 @@
 #define DB_USER "root"
 #define DB_PASSWORD "123qwerty"
 
-// fake
-#include <unordered_map>
-
 
 class MainDataBase: public IMainDataBase 
 {
  public:
-    MainDataBase();
+    MainDataBase() = default;
+
+    DBStatus connect();
 
     // просто добавляют данные и возвращают статус если успешно false иначе true
     DBStatus InsertIntoPostTable(ProjectData &data) override;
@@ -49,10 +48,10 @@ class MainDataBase: public IMainDataBase
 
  private:
 
-    mysqlx::Session sqlconn;
-    mysqlx::Schema db;
-    mysqlx::Table user_data_table;
-    mysqlx::Table project_data_table;
-    mysqlx::Table token_data_table;
-    mysqlx::Table notification_data_table;
+    std::unique_ptr<mysqlx::Session> sqlconn;
+    std::unique_ptr<mysqlx::Schema> db;
+    std::unique_ptr<mysqlx::Table> user_data_table;
+    std::unique_ptr<mysqlx::Table> project_data_table;
+    std::unique_ptr<mysqlx::Table> token_data_table;
+    std::unique_ptr<mysqlx::Table> notification_data_table;
 };

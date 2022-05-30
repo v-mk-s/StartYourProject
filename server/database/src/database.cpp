@@ -1,32 +1,33 @@
 #include "database.hpp"
 
 
-MainDataBase::MainDataBase(): 
-        sqlconn(mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)),
-        db(sqlconn.getSchema("SYP_DB")),
-        user_data_table(db.getTable("user_data")),
-        project_data_table(db.getTable("project_data")),
-        token_data_table(db.getTable("token_data")),
-        notification_data_table(db.getTable("notification_data")) {}
+DBStatus MainDataBase::connect() {
+    sqlconn = std::make_unique<mysqlx::Session>(mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD));
+    db = std::make_unique<mysqlx::Schema>(sqlconn->getSchema("SYP_DB"));
+    user_data_table = std::make_unique<mysqlx::Table>(db->getTable("user_data"));
+    project_data_table = std::make_unique<mysqlx::Table>(db->getTable("project_data"));
+    token_data_table = std::make_unique<mysqlx::Table>(db->getTable("token_data"));
+    notification_data_table = std::make_unique<mysqlx::Table>(db->getTable("notification_data"));
+}
 
 
 
 MainDataBase::~MainDataBase() {
-    sqlconn.close();
+    // sqlconn->close();
 }
 
 
 
 DBStatus MainDataBase::DeleteFromPersonTable(std::string &username) {
 
-    user_data_table.remove()
+    user_data_table->remove()
     .where("user_name=:param")
     .bind("param",username)
     .execute();
     return DBStatus::ok;
 }
 DBStatus MainDataBase::DeleteToken(std::string& username){
-    token_data_table.remove()
+    token_data_table->remove()
     .where("username=:param")
     .bind("param",username)
     .execute();
@@ -46,7 +47,7 @@ DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
     // que->setInt(1,data.user_id);
     // que->setInt(2,data.post_id);
     // return que->ExecuteUpdate();
-    project_data_table.remove()
+    project_data_table->remove()
     .where("project_name=:param")
     .bind("param",data.project_name)
     .execute();
@@ -89,7 +90,7 @@ Message<std::vector<RequestToPostData>, DBStatus> MainDataBase::FindRequestToPos
 }
 
 Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &username) {
-    mysqlx::RowResult res = user_data_table.select( "user_name", "email", "name", "sur_name", "user_discription", "password")
+    mysqlx::RowResult res = user_data_table->select( "user_name", "email", "name", "sur_name", "user_discription", "password")
     .where("user_name = :param")
     .orderBy("name")
     .bind("param",username)
@@ -108,7 +109,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
 }
 
 // UserData MainDataBase::FindIntoPersonByID(int id) {
-//     mysqlx::RowResult res = user_data_table.select("id", "user_name", "email", "name", "sur_name", "user_discription", "password")
+//     mysqlx::RowResult res = user_data_table->select("id", "user_name", "email", "name", "sur_name", "user_discription", "password")
 //     .where("id = :param")
 //     .orderBy("name")
 //     .bind("param",id)
@@ -128,7 +129,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
 // }
 
 // ProjectData MainDataBase::SelectPostByID(int &id) {
-//     mysqlx::RowResult res = project_data_table.select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
+//     mysqlx::RowResult res = project_data_table->select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
 //     .where("id= :param")
 //     .orderBy("project_name")
 //     .bind("param",id)
@@ -150,7 +151,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
 // }
 
 // ProjectData MainDataBase::SelectPostByProjectname(std::string &project_name) {
-//     mysqlx::RowResult res = project_data_table.select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
+//     mysqlx::RowResult res = project_data_table->select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
 //     .where("project_name= :param")
 //     .orderBy("project_name")
 //     .bind("param",project_name)
@@ -172,7 +173,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
 // }
 
 DBStatus MainDataBase::InsertIntoPostTable(ProjectData &data) {
-    project_data_table.insert("project_name","team_name","post_tags","teammates","project_description","diversity")
+    project_data_table->insert("project_name","team_name","post_tags","teammates","project_description","diversity")
     .values(1, data.project_name)
     .values(2, data.team_name)
     .values(3, data.post_tags[0])
@@ -185,7 +186,7 @@ DBStatus MainDataBase::InsertIntoPostTable(ProjectData &data) {
 }
 
 DBStatus MainDataBase::InsertIntoUserTable(UserData &data) {
-    user_data_table.insert("email", "user_name","password")
+    user_data_table->insert("email", "user_name","password")
     .values(1,data.email)
     .values(2, data.username)
     .values(3, data.password)
@@ -209,7 +210,7 @@ DBStatus MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
 
 
 DBStatus MainDataBase::InsertToken(std::string &username, std::string& token) {
-    token_data_table.insert("user_name","token")
+    token_data_table->insert("user_name","token")
     .values(1,username)
     .values(2,token)
     .execute();
@@ -218,7 +219,7 @@ DBStatus MainDataBase::InsertToken(std::string &username, std::string& token) {
 //updatам дописать sql-запросы
 
 DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
-    user_data_table.update()
+    user_data_table->update()
     .set("user_name", mysqlx::expr(":param1"))
     .set("email", mysqlx::expr(":param2"))
     .set("name", mysqlx::expr(":param3"))
@@ -239,7 +240,7 @@ DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
 }
 
 DBStatus MainDataBase::EditPostInPostTable(ProjectData &data) {
-    project_data_table.update()
+    project_data_table->update()
     .set("project_name", mysqlx::expr(":param1"))
     .set("team_name", mysqlx::expr(":param2"))
     .set("post_tags", mysqlx::expr(":param3"))
@@ -272,7 +273,7 @@ DBStatus MainDataBase::EditRequestToPostTable(RequestToPostData &data){
 
 
 // DBStatus MainDataBase::IsUnique(std::string &username) {
-//     mysqlx::RowResult res = user_data_table.select("username")
+//     mysqlx::RowResult res = user_data_table->select("username")
 //     .where("username=:param")
 //     .bind("param", username)
 //     .execute();
@@ -280,7 +281,7 @@ DBStatus MainDataBase::EditRequestToPostTable(RequestToPostData &data){
 // }
 
 bool MainDataBase::CheckToken(std::string &username, std::string& token) {
-    mysqlx::SqlResult res = sqlconn.sql("select * from token_data where  username=:param")
+    mysqlx::SqlResult res = sqlconn->sql("select * from token_data where  username=:param")
     .bind("param", username)
     .execute();
     return res.hasData();

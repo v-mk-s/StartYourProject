@@ -14,8 +14,9 @@ ResponseStatus LoginUC::checkUser(UserData& user) {
     }
 
     user.auth_token = generate_token(user.username + user.password);
-    database->InsertToken(user.username, user.auth_token);
-
+    if (database->InsertToken(user.username, user.auth_token) != DBStatus::ok) {
+        return ResponseStatus::server_error;
+    }
     return ResponseStatus::ok;
 }
 
@@ -85,7 +86,7 @@ ResponseStatus CreatePostUC::addPostToDB(ProjectData& post) {
 
 
 ResponseStatus EditPostUC::editPostToDB(ProjectData post, std::string& token) {
-    if (database->CheckToken(post.project_name, token)) {
+    if (database->CheckToken(post.username, token)) {
         return ResponseStatus::unauthorized;
     }
     if (database->EditPostInPostTable(post) == DBStatus::not_found) {
