@@ -93,13 +93,21 @@ void handle_request(beast::string_view doc_root,
         return send(bad_request("Illegal request-target"));
     }
 
+    std::cout << "target: " << req.target() << "\n";
+    std::cout << "headers: \n";
+    for (auto&& it : req) {
+        std::cout << it.name_string() << ": " << it.value() << "\n";
+    }
+    std::cout << "body:\n";
+    std::cout << req.body() << std::endl << std::endl;
+
     beast::string_view target = req.target();
     Request<http::string_body> request(req);
     Response<http::string_body> response;
 
     auto handler = handlers.find(target.data());
     if (handler != handlers.end()) {
-        handler->second->handle(&request, &response);
+        // handler->second->handle(&request, &response);
     }
     else {
         return send(bad_request("Unknown target\n"));
