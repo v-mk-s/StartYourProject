@@ -2,12 +2,17 @@
 
 
 MainDataBase::MainDataBase(): 
-        sqlconn(mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)),
+        cli("root:123qwerty@localhost:33060/projectdata", ClientOption::POOL_MAX_SIZE, 7),
+        sqlconn(cli.getSession()),
+        //mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)
         db(sqlconn.getSchema("SYP_DB")),
         user_data_table(db.getTable("user_data")),
         project_data_table(db.getTable("project_data")),
         token_data_table(db.getTable("token_data")),
-        notification_data_table(db.getTable("notification_data")) {}
+        notification_data_table(db.getTable("notification_data")) 
+        {
+            std::cout<<"success\n";
+        }
 
 
 

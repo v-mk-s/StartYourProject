@@ -48,7 +48,7 @@ class MainDataBase: public IMainDataBase
     ~MainDataBase();
 
  private:
-
+    mysqlx::Client cli;
     mysqlx::Session sqlconn;
     mysqlx::Schema db;
     mysqlx::Table user_data_table;

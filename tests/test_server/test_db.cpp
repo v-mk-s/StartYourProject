@@ -18,7 +18,7 @@
 //     RequestToPostData req_data;
 //     std::string username;
        
-     EXPECT_TRUE(ok==db.InsertIntoPostTable(post_data));
+     EXPECT_TRUE(ok = db.InsertIntoPostTable(post_data));
 //     EXPECT_TRUE(db.InsertIntoPersonTable(reg_data));
 //     EXPECT_TRUE(db.InsertIntoRequestToPostTable(req_data));
 //     EXPECT_TRUE(db.DeleteFromPostTable(post_data.project_name));

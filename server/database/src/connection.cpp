@@ -1,4 +1,7 @@
 #include <connection.h>
 
 
-namespace cpool {}
+namespace cpool {
+
+    
+}
