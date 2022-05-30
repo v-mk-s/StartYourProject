@@ -31,6 +31,8 @@ class MainDataBase: public IMainDataBase {
     DBStatus InsertIntoPostTable(ProjectData &data) override;
     DBStatus InsertIntoUserTable(UserData &data) override;
     DBStatus InsertIntoRequestToPostTable(RequestToPostData &data) override;
+   //  DBStatus InsertIntoTegsTable(std::string &data) override;
+
 
     // Удаляют запись и возвращают статус если успешно false иначе true
     DBStatus DeleteFromPostTable(std::string &project_name) override;
@@ -50,7 +52,7 @@ class MainDataBase: public IMainDataBase {
 
     DBStatus InsertToken(std::string &username, std::string& token) override;
     // Если токен совпадает то false иначе true
-    bool CheckToken(std::string &username, std::string& token) override;
+    Message<std::string, DBStatus> FindToken(std::string &username) override;
     DBStatus DeleteToken(std::string &username) override;
 
     ~MainDataBase();

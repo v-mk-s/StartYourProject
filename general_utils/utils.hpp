@@ -141,7 +141,7 @@ struct UserData {
     std::string email;
     std::string name;
     std::string sur_name;
-    std::string user_discription;
+    std::string user_description;
     std::string password;
     std::vector<std::string> projects;
 

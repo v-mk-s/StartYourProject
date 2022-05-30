@@ -51,7 +51,7 @@ void EditProfileHandler<JSON>::handle(RequestInterface* request, ResponseInterfa
     data.email = json.template get<std::string>("email", "");
     data.name = json.template get<std::string>("name", "");
     data.sur_name = json.template get<std::string>("sur_name", "");
-    data.user_discription = json.template get<std::string>("user_discription", "");
+    data.user_description = json.template get<std::string>("user_description", "");
     data.password = json.template get<std::string>("password", "");
 
     ResponseStatus status = usecase.editUserData(data);
@@ -98,7 +98,7 @@ void GetUserProfileHandler<JSON>::handle(RequestInterface* request, ResponseInte
     json_response.put("email", msg.data.email);
     json_response.put("name", msg.data.name);
     json_response.put("sur_name", msg.data.sur_name);
-    json_response.put("user_discription", msg.data.user_discription);
+    json_response.put("user_description", msg.data.user_description);
     json_response.put("password", msg.data.password);
 
     response->set_status(msg.status, request->is_keep_alive());

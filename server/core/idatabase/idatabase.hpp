@@ -32,6 +32,6 @@ class IMainDataBase
 
     virtual DBStatus InsertToken(std::string &username, std::string& token) = 0;
     // Если токен совпадает то false иначе true
-    virtual bool CheckToken(std::string &username, std::string& token) = 0;
+    virtual Message<std::string, DBStatus> FindToken(std::string &username) = 0;
     virtual DBStatus DeleteToken(std::string &username) = 0;
 };

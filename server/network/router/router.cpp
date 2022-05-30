@@ -110,19 +110,21 @@ void handle_request(beast::string_view doc_root,
         return send(bad_request("Illegal request-target"));
     }
 
+    std::cout << "target: " << req.target() << std::endl;
+
     beast::string_view target = req.target();
     Request<http::string_body> request(req);
     Response<http::string_body> response;
 
-    auto handler = handlers.find(target.data());
+    auto handler = handlers.find(target.to_string());
     if (handler != handlers.end()) {
         try {
             handler->second->handle(&request, &response);
         } catch (boost::wrapexcept<boost::system::system_error> err) {
             std::cerr << err.what() << std::endl;
-            return send(wrong_data("Json is not valid"));
+            std::cerr << "JSON exeption: " << err.what() << std::endl;
         } catch (mysqlx::abi2::r0::Error err) {
-            std::cerr << err.what() << std::endl;
+            std::cerr << "DB exeption: " << err.what() << std::endl;
             return send(server_error());
         }
     }

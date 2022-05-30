@@ -75,7 +75,7 @@ TEST(EditProfileUCTest, GoodCase) {
     test_data.email = "email@mail.ru";
     test_data.username = "Abc";
     test_data.sur_name = "dfgh";
-    test_data.user_discription = "some text";
+    test_data.user_description = "some text";
     test_data.password = "1234qwerty";
     EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token)).Times(1);
     EXPECT_CALL(database, EditUserInPersonTable(test_data)).Times(1);

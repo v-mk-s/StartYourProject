@@ -86,7 +86,7 @@ inline std::string JSON::get<std::string>(const std::string &key, std::string de
     } else {
         obj = value_.as_object();
     }
-    return json::serialize(obj[key]);
+    return obj[key].as_string().c_str();
 }
 
 template<>
@@ -135,7 +135,7 @@ inline std::vector<std::string> JSON::get<std::vector<std::string>>(
     json::array arr = obj[key].as_array();
     std::vector<std::string> result;
     for (auto it : arr) {
-        result.push_back(it.as_string().data());
+        result.push_back(it.as_string().c_str());
     }
 }
 
