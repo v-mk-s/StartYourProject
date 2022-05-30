@@ -10,12 +10,20 @@
 #define DB_USER "root"
 #define DB_PASSWORD "123qwerty"
 
-// fake
-#include <unordered_map>
+#define SYP_DB_NAME "SYP_DB"
+
+#define TAGS_TABLE "tags_data"
+#define USER_TABLE "user_data"
+#define PROJECT_TABLE "project_data"
+#define TEAM_TABLE "team_data"
+#define USER_TAGS_TABLE "user_tags_data"
+#define TOKEN_TABLE "token_data"
+#define NOTIFICATION_TABLE "notification_data"
+#define PROJECT_TAGS_TABLE "project_tags_data"
 
 
-class MainDataBase: public IMainDataBase 
-{
+
+class MainDataBase: public IMainDataBase {
  public:
     MainDataBase();
 
@@ -50,9 +58,11 @@ class MainDataBase: public IMainDataBase
  private:
     mysqlx::Client cli;
     mysqlx::Session sqlconn;
-    mysqlx::Schema db;
-    mysqlx::Table user_data_table;
-    mysqlx::Table project_data_table;
-    mysqlx::Table token_data_table;
-    mysqlx::Table notification_data_table;
+    std::unique_ptr<mysqlx::Schema> db;
+    std::unique_ptr<mysqlx::Table> user_data_table;
+    std::unique_ptr<mysqlx::Table> project_data_table;
+    std::unique_ptr<mysqlx::Table> token_data_table;
+    std::unique_ptr<mysqlx::Table> notification_data_table;
 };
+
+mysqlx::Table CreateTable(mysqlx::Session &session, const mysqlx::string &name, const mysqlx::string &params);
