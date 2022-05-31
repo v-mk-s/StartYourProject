@@ -1,63 +1,70 @@
 #include "database.hpp"
 
 
-mysqlx::Table CreateTable(mysqlx::Session &session, const mysqlx::string &name, const mysqlx::string &params) {
+mysqlx::Table MainDataBase::CreateTable(const mysqlx::string &name, const mysqlx::string &params) {
     std::cout<<"Creating table"<<std::endl;
     mysqlx::string quoted_name = mysqlx::string("`")
-    + session.getDefaultSchemaName()
+    + sqlconn->getDefaultSchemaName()
     + mysqlx::string(L"`.`") + name + mysqlx::string(L"`");
     mysqlx::string create = "CREATE TABLE IF NOT EXISTS ";
     create += quoted_name;
     create += params;
-    session.sql(create).execute();
-    return session.getDefaultSchema().getTable(name);
+    sqlconn->sql(create).execute();
+    return sqlconn->getDefaultSchema().getTable(name);
 }
 
-MainDataBase::MainDataBase(): 
-    cli( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
-    sqlconn(cli.getSession()) {
-    sqlconn.sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
+MainDataBase::MainDataBase() {
+    // cli( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
+    // sqlconn(cli.getSession()) {
+    // sqlconn->sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
+
+    cli = std::make_unique<mysqlx::Client>( "root:123qwerty@localhost:33060/", mysqlx::ClientOption::POOL_MAX_SIZE, 7);
+    sqlconn = std::make_unique<mysqlx::Session>(cli->getSession());
+    sqlconn->sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
+
+    cli = std::make_unique<mysqlx::Client>( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7);
+    sqlconn = std::make_unique<mysqlx::Session>(cli->getSession());
 
     user_data_table = std::make_unique<mysqlx::Table>(
-        CreateTable(sqlconn, USER_TABLE, "( user_name  CHAR(32) NOT NULL, email  CHAR(32),  name  CHAR(32),"
+        CreateTable(USER_TABLE, "( user_name  CHAR(32) NOT NULL, email  CHAR(32),  name  CHAR(32),"
                 " sur_name  CHAR(32), user_description  CHAR(255), password  CHAR(64) NOT NULL, PRIMARY KEY ( user_name ))"));
                 
     project_data_table = std::make_unique<mysqlx::Table>(
-        CreateTable(sqlconn, PROJECT_TABLE,"( user_name  char(32) NOT NULL, project_name  char(32), "
+        CreateTable(PROJECT_TABLE,"( user_name  char(32) NOT NULL, project_name  char(32), "
         " team_name  char(32),  project_description  char(255),  diversity  double, primary key( project_name ),"
         " foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)" ));
         
-    token_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TOKEN_TABLE,
+    token_data_table = std::make_unique<mysqlx::Table>(CreateTable(TOKEN_TABLE,
         "( token char(100), user_name  CHAR(32) NOT NULL unique,primary key (token),"
         " FOREIGN KEY (user_name)  REFERENCES user_data (user_name) ON DELETE CASCADE ON UPDATE CASCADE)"));
         
-    notification_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, NOTIFICATION_TABLE,  
+    notification_data_table = std::make_unique<mysqlx::Table>(CreateTable(NOTIFICATION_TABLE,  
         "(id  int NOT NULL AUTO_INCREMENT, project_name  char(32) NOT NULL, motivation_words"
         "  char(255),user_name char(32) not null,status int, primary key( id ), "
         "foreign key ( project_name ) references project_data(project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
         " foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)"));
         
-    team_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TEAM_TABLE,
+    team_data_table = std::make_unique<mysqlx::Table>(CreateTable(TEAM_TABLE,
         "(user_name char(32) not null, project_name char(32) not null,"
         "foreign key ( user_name ) references user_data( user_name)  ON DELETE CASCADE ON UPDATE CASCADE,"
         " foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
         " unique(user_name,project_name) )"));
         
-    tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TAGS_TABLE, 
+    tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(TAGS_TABLE, 
         "(id int auto_increment, tag char(30) unique,PRIMARY KEY ( id ) )"));
 
-    user_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, USER_TAGS_TABLE, 
+    user_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(USER_TAGS_TABLE, 
         "(user_name char(32) not null, id_tag int not null, "
         "foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE, "
         "foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, unique(user_name,id_tag))"));
         
-    project_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, PROJECT_TAGS_TABLE, 
+    project_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(PROJECT_TAGS_TABLE, 
         "(project_name char(32) not null, id_tag int not null,"
         " foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
         "foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, "
         "unique(project_name,id_tag))"));
 
-    std::list<mysqlx::Schema> schemaList = sqlconn.getSchemas();
+    std::list<mysqlx::Schema> schemaList = sqlconn->getSchemas();
 
     std::cout << "Available schemas in this session:" << std::endl;
 
@@ -72,8 +79,8 @@ MainDataBase::MainDataBase():
 
 
 MainDataBase::~MainDataBase() {
-    sqlconn.sql("DROP TABLE IF EXISTS "TOKEN_TABLE).execute();
-    sqlconn.close();
+    sqlconn->sql("DROP TABLE IF EXISTS "TOKEN_TABLE).execute();
+    sqlconn->close();
 }
 
 

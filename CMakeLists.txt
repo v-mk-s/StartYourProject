@@ -4,8 +4,16 @@ project(StartYourProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wall -Wpedantic -Wextra")
 
-add_subdirectory(server)
-# add_subdirectory(client)
+message("SEVER = ${SERVER}")
+message("CLIENT = ${CLIENT}")
+
+if (SERVER)
+    add_subdirectory(server)
+endif()
+    
+if (CLIENT)
+    add_subdirectory(client)
+endif()
 
 add_subdirectory(tests)
 

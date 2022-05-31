@@ -11,18 +11,25 @@ all: build
 clean:
 	rm -rf build
 
+build_server:
+	./build.sh -DSERVER=ON -DCLIENT=OFF
+
+build_client:
+	./build.sh -DSERVER=OFF -DCLIENT=ON
+
 build:
-	./build.sh
+	./build.sh -DSERVER=ON -DCLIENT=ON
 
 rebuild: clean build
 
 build_server_tests:
-	./build.sh -DWITH_SERVER_TESTS=ON
+	./build.sh -DWITH_SERVER_TESTS=ON -DWITH_CLIENT_TESTS=OFF
 
 build_client_tests:
-	./build.sh -DWITH_CLIENT_TESTS=ON
+	./build.sh -DWITH_SERVER_TESTS=OFF -DWITH_CLIENT_TESTS=ON
 
-build_tests: build_server_tests build_client_tests
+build_tests:
+	./build.sh -DWITH_SERVER_TESTS=ON -DWITH_CLIENT_TESTS=ON
 
 run_server_tests:
 	./build/tests/test_server/test_server_syp --gtest_filter=${TEST_FILTER}

@@ -25,9 +25,7 @@
 
 class MainDataBase: public IMainDataBase {
  public:
-    MainDataBase() = default;
-
-    DBStatus connect();
+    MainDataBase();
 
     // просто добавляют данные и возвращают статус если успешно false иначе true
     DBStatus InsertIntoPostTable(ProjectData &data) override;
@@ -72,9 +70,10 @@ class MainDataBase: public IMainDataBase {
     ~MainDataBase();
 
  private:
-    mysqlx::Client cli;
-    mysqlx::Session sqlconn;
+    std::unique_ptr<mysqlx::Client> cli;
+    std::unique_ptr<mysqlx::Session> sqlconn;
     std::unique_ptr<mysqlx::Schema> db;
+
     std::unique_ptr<mysqlx::Table> user_data_table;
     std::unique_ptr<mysqlx::Table> project_data_table;
     std::unique_ptr<mysqlx::Table> token_data_table;
@@ -84,6 +83,6 @@ class MainDataBase: public IMainDataBase {
     std::unique_ptr<mysqlx::Table> project_tags_data_table;
     std::unique_ptr<mysqlx::Table> tags_data_table;
 
+    mysqlx::Table CreateTable(const mysqlx::string &name, const mysqlx::string &params);
 };
 
-mysqlx::Table CreateTable(mysqlx::Session &session, const mysqlx::string &name, const mysqlx::string &params);

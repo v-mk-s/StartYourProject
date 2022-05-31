@@ -15,7 +15,8 @@ RUN cd /home && wget https://boostorg.jfrog.io/artifactory/main/release/1.79.0/s
     tar xfv boost_1_79_0.tar.bz2 && \
     cd boost_1_79_0 && \
     ./bootstrap.sh && \
-    ./b2 install
+    ./b2 install --with-json && \
+    cd .. && rm -rf boost_1_79_0
 
 RUN cd /home && wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-community-client-plugins_8.0.29-1ubuntu20.04_amd64.deb && \
     wget https://dev.mysql.com/get/Downloads/Connector-C++/libmysqlcppconn9_8.0.29-1ubuntu20.04_amd64.deb && \
@@ -30,6 +31,6 @@ EXPOSE 8080
 
 COPY . /usr/src/StartYourProject
 WORKDIR /usr/src/StartYourProject
-RUN make rebuild
+RUN make clean && make build_server
 
 CMD make run_server
