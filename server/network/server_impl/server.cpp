@@ -25,6 +25,14 @@ Server::ServerImpl::ServerImpl(boost::asio::ip::address address, unsigned short 
 }
 
 void Server::ServerImpl::start() {
+    try {
+        database_.connect();
+    } catch (mysqlx::abi2::r0::Error const& err) {
+        std::cerr << "Faild connect to DB with exeption: " << err.what() << std::endl;
+        std::cerr << "Server stop" << std::endl;
+        return;
+    }
+
     std::make_shared<Listener>(ioc_, tcp::endpoint{address_, port_}, doc_root_, handlers_)->run();
 
     signals_.async_wait([&] (beast::error_code const&, int) {ioc_.stop();});

@@ -13,14 +13,14 @@ mysqlx::Table MainDataBase::CreateTable(const mysqlx::string &name, const mysqlx
     return sqlconn->getDefaultSchema().getTable(name);
 }
 
-MainDataBase::MainDataBase() {
-    // cli( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
-    // sqlconn(cli.getSession()) {
-    // sqlconn->sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
-
+void MainDataBase::CreateDatabase(std::string db_name) {
     cli = std::make_unique<mysqlx::Client>( "root:123qwerty@localhost:33060/", mysqlx::ClientOption::POOL_MAX_SIZE, 7);
     sqlconn = std::make_unique<mysqlx::Session>(cli->getSession());
-    sqlconn->sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
+    sqlconn->sql( "CREATE DATABASE IF NOT EXISTS " + db_name + ";").execute();
+}
+
+void MainDataBase::connect() {
+    CreateDatabase(SYP_DB_NAME);
 
     cli = std::make_unique<mysqlx::Client>( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7);
     sqlconn = std::make_unique<mysqlx::Session>(cli->getSession());

@@ -25,7 +25,7 @@
 
 class MainDataBase: public IMainDataBase {
  public:
-    MainDataBase();
+    MainDataBase() = default;
 
     // просто добавляют данные и возвращают статус если успешно false иначе true
     DBStatus InsertIntoPostTable(ProjectData &data) override;
@@ -67,6 +67,8 @@ class MainDataBase: public IMainDataBase {
     Message<std::string, DBStatus> FindToken(std::string &username) override;
     DBStatus DeleteToken(std::string &username) override;
 
+    void connect();
+
     ~MainDataBase();
 
  private:
@@ -84,5 +86,7 @@ class MainDataBase: public IMainDataBase {
     std::unique_ptr<mysqlx::Table> tags_data_table;
 
     mysqlx::Table CreateTable(const mysqlx::string &name, const mysqlx::string &params);
+    void CreateDatabase(std::string db_name);
+
 };
 
