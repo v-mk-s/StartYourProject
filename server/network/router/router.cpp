@@ -95,16 +95,18 @@ void handle_request(beast::string_view doc_root,
     if (handler != handlers.end()) {
         try {
             handler->second->handle(&request, &response);
+
         } catch (boost::wrapexcept<boost::system::system_error> const& err) {
             std::cerr << "JSON exeption: " << err.what() << std::endl;
-            
             response.set_error_message(ResponseStatus::bad_req);
-            // return send(response.get_reference());
+
+        } catch (boost::wrapexcept<std::invalid_argument> const& err) {
+            std::cerr << "JSON exeption: " << err.what() << std::endl;
+            response.set_error_message(ResponseStatus::bad_req);
+
         } catch (mysqlx::abi2::r0::Error const& err) {
             std::cerr << "DB exeption: " << err.what() << std::endl;
-
             response.set_error_message(ResponseStatus::server_error);
-            // return send(response.get_reference());
         }
     }
     else {

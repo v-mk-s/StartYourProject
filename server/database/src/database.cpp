@@ -323,14 +323,12 @@ DBStatus MainDataBase::InsertToken(std::string &username, std::string& token) {
 DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
     std::cout << "EditUserInPersonTable:" << std::endl;
     user_data_table->update()
-    .set("user_name", mysqlx::expr(":param1"))
     .set("email", mysqlx::expr(":param2"))
     .set("name", mysqlx::expr(":param3"))
     .set("sur_name", mysqlx::expr(":param4"))
     .set("user_description", mysqlx::expr(":param5"))
     .set("password", mysqlx::expr(":param6"))
     .where("user_name=:param7")
-    .bind("param1", data.username)
     .bind("param2", data.email)
     .bind("param3", data.name)
     .bind("param4", data.sur_name)
@@ -344,22 +342,13 @@ DBStatus MainDataBase::EditUserInPersonTable(UserData &data) {
 
 DBStatus MainDataBase::EditPostInPostTable(ProjectData &data) {
     std::cout << "EditPostInPostTable:" << std::endl;
-    project_data_table->update()
-    .set("project_name", mysqlx::expr(":param1"))
-    .set("team_name", mysqlx::expr(":param2"))
-    .set("post_tags", mysqlx::expr(":param3"))
-    .set("teammates", mysqlx::expr(":param4"))
-    .set("project_description", mysqlx::expr(":param5"))
-    .set("diversity", mysqlx::expr(":param6"))
-    .where("project_name=:param7")
-    .bind("param1", data.project_name)
-    .bind("param2", data.team_name)
-    .bind("param3", data.post_tags[0])
-    .bind("param4", data.teammates[0])
-    .bind("param5", data.project_description)
-    .bind("param6", data.diversity)
-    .bind("param7", data.project_name)
-    .execute();
+    if (DeleteFromPostTable(data.project_name) != DBStatus::ok) {
+        return DBStatus::unknown;
+    }
+    if (InsertIntoPostTable(data) != DBStatus::ok) {
+        return DBStatus::unknown;
+    }
+
     return DBStatus::ok;
 }
 

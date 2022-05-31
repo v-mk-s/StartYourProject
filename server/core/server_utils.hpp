@@ -23,7 +23,8 @@ enum class ResponseStatus {
 
 enum class DBStatus {
     ok,
-    not_found
+    not_found,
+    unknown
 };
 
 
