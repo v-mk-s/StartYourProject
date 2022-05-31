@@ -18,7 +18,6 @@ class MockDB: public MainDataBase {
     MOCK_METHOD(DBStatus, DeleteFromPostTable, (std::string &project_name), (override));
     MOCK_METHOD(DBStatus, DeleteFromPersonTable, (std::string &username), (override));
     MOCK_METHOD(DBStatus, DeleteFromRequestToPostTable, (RequestToPostData &data), (override));
-    MOCK_METHOD(DBStatus, DelFromTableNotifications, (RequestToPostData& data), (override));
 
     MOCK_METHOD(DBStatus, EditUserInPersonTable, (UserData &data), (override));
     MOCK_METHOD(DBStatus, EditPostInPostTable, (ProjectData &data), (override));
@@ -29,7 +28,7 @@ class MockDB: public MainDataBase {
     MOCK_METHOD((Message<std::vector<RequestToPostData>, DBStatus>),  FindRequestToPostTable, (std::string &username), (override));
 
     MOCK_METHOD(DBStatus, InsertToken, (std::string &username, std::string& token), (override));
-    MOCK_METHOD(bool, CheckToken, (std::string &username, std::string& token), (override));
+    MOCK_METHOD((Message<std::string, DBStatus>), FindToken, (std::string &username), (override));
     MOCK_METHOD(DBStatus, DeleteToken, (std::string &username), (override));
 };
 
@@ -99,7 +98,7 @@ TEST(EditProfileUCTest, GoodCase) {
     test_data.email = "email@mail.ru";
     test_data.username = "Abc";
     test_data.sur_name = "dfgh";
-    test_data.user_discription = "some text";
+    test_data.user_description = "some text";
     test_data.password = "1234qwerty";
 
     EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token))
@@ -222,6 +221,6 @@ TEST(CreatePostTest, UC) {
                 .Times(1).WillOnce(Return(DBStatus::ok));
 
     CreatePostUC Test_1(&db);
-    EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);
+    EXPECT_EQ(Test_1.addPostToDB(post, token), ResponseStatus::ok);
 }
 

@@ -2,6 +2,7 @@
 
 #include "request_response.hpp"
 #include "handlers.hpp"
+#include "database.hpp"
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>

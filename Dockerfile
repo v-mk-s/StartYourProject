@@ -26,8 +26,10 @@ RUN cd /home && wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-communi
     apt install -y ./libmysqlcppconn8-2_8.0.29-1ubuntu20.04_amd64.deb && \
     apt install -y ./libmysqlcppconn-dev_8.0.29-1ubuntu20.04_amd64.deb
 
-EXPOSE 80
+EXPOSE 8080
 
 COPY . /usr/src/StartYourProject
 WORKDIR /usr/src/StartYourProject
 RUN make rebuild
+
+CMD make run_server

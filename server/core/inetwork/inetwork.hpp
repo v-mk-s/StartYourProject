@@ -31,7 +31,7 @@ class IJSON {
     IJSON(const std::string &) {};
 
     template<class T>
-    T get(const std::string &key, T);
+    T get(const std::string &key);
 
     template<class T>
     void put(const std::string &key, T);

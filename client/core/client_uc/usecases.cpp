@@ -74,7 +74,7 @@ ErrorStatus UserEditUC::onEditUserDataButton(const UserData& user_data) {
         return ErrorStatus::surname_not_valid;
     }
 
-    if (!isValidUserDescription(user_data.user_discription)) {
+    if (!isValidUserDescription(user_data.user_description)) {
         return ErrorStatus::user_description_not_valid;
     }
 

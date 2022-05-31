@@ -59,9 +59,12 @@ Body    :
 // По ключу "auth_token" должен лежать токен полученный при логировании
 #define DELETE_POST_URL "/post/delete"
 
-// In development
+// Нужно отправить на сервер заполненную структуру RequestToPostData
+// По ключу "auth_token" должен лежать токен полученный при логировании
 #define MAKE_REQUEST_URL "/post/request/make"
-// In development
+
+// Нужно отправить на сервер заполненную структуру RequestToPostData
+// По ключу "auth_token" должен лежать токен полученный при логировании
 #define ANSWER_REQUEST_URL "/post/request/answer"
 
 
@@ -141,7 +144,7 @@ struct UserData {
     std::string email;
     std::string name;
     std::string sur_name;
-    std::string user_discription;
+    std::string user_description;
     std::string password;
     std::vector<std::string> projects;
 
@@ -154,6 +157,7 @@ struct UserData {
 
 
 struct RequestToPostData {
+    std::string username;
     std::string project_name;
     std::string motivation_words;
     enum class Status {yes=1, no=2, unknown=3};

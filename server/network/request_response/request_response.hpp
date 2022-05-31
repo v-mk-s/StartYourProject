@@ -52,7 +52,7 @@ class JSON: public IJSON {
     JSON(const std::string &str);
 
     template<class T>
-    T get(const std::string &key, T defaultValue);
+    T get(const std::string &key);
 
     template<class T>
     void put(const std::string &key, T value);
