@@ -19,8 +19,12 @@ void LoginHandler<JSON>::handle(RequestInterface* request, ResponseInterface* re
         response->set_error_message(status);
         return;
     }
+    JSON json_response;
+    json_response.put("auth_token", data.auth_token);
+    json_response.put("projects", data.projects);
+    
     response->set_status(status, request->is_keep_alive());
-    response->set_body(data.auth_token, ContentType::text);
+    response->set_body(json_response.serialize(), ContentType::json);
 }
 
 template <typename JSON>

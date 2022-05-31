@@ -170,9 +170,24 @@ Message<std::vector<std::string>, DBStatus> MainDataBase::FindIntoTeambyProjectN
     return Message<std::vector<std::string>, DBStatus>(teammates);
 }
 
+//выводит все проекты пользователя
+Message<std::vector<std::string>, DBStatus> MainDataBase::SearchProjectNames(std::string &username){
+    mysqlx::RowResult res = project_data_table->select("project_name")
+    .where("user_name = :param")
+    .bind("param", username)
+    .execute();
+    mysqlx::Row row;
+    std::vector<std::string> projects;
+    while (row = res.fetchOne()){
+        std::string temp = std::string(row[0]);
+        projects.push_back(temp);
+    }
+    return Message<std::vector<std::string>, DBStatus>(projects);
+}
+
 Message<ProjectData, DBStatus> MainDataBase::FindIntoPostTable(std::string &project_name) {
     mysqlx::RowResult res = project_data_table->select("user_name", "project_name", "team_name", "project_description", "diversity")
-    .where("project_name= :param")
+    .where("project_name = :param")
     .bind("param",project_name)
     .execute();
 
@@ -299,13 +314,9 @@ DBStatus MainDataBase::InsertIntoUserTable(UserData &data) {
 
 DBStatus MainDataBase::InsertIntoRequestToPostTable(RequestToPostData &data) {
     std::cout << "InsertIntoRequestToPostTable:" << std::endl;
-    // notification_data_table.insert("user_name", "post_id", "motivation_words", "status")
-    // .values(1,data.user_name)
-    // .values(2, data.post_id)
-    // .values(3, data.motivation_words)
-    // .values(4, 3)
-    // .execute();
-
+    notification_data_table->insert("user_name", "post_id", "motivation_words", "status")
+    .values(data.username,data.project_name,data.motivation_words, 3)
+    .execute();
     return DBStatus::ok;
 }
 
@@ -374,6 +385,9 @@ DBStatus MainDataBase::EditRequestToPostTable(RequestToPostData &data){
 //     return res.();
 // }
 
+
+
+
 Message<std::string, DBStatus> MainDataBase::FindToken(std::string &username) {
     std::cout << "FindToken:" << std::endl;
     mysqlx::RowResult res = token_data_table->select("user_name", "token")
@@ -385,8 +399,4 @@ Message<std::string, DBStatus> MainDataBase::FindToken(std::string &username) {
         return Message<std::string, DBStatus>(DBStatus::not_found);
     }
     return Message<std::string, DBStatus>(std::string(row[1]));
-}
-
-Message<std::vector<std::string>, DBStatus> MainDataBase::SearchProjectNames(std::string &username) {
-
 }

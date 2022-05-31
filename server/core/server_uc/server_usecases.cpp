@@ -20,11 +20,11 @@ ResponseStatus LoginUC::checkUser(UserData& user) {
     if (database->InsertToken(user.username, user.auth_token) != DBStatus::ok) {
         return ResponseStatus::server_error;
     }
-    // auto project_names = database->SearchProjectNames(user.username);
-    // if (project_names.status != DBStatus::ok) {
-    //     return ResponseStatus::not_found;
-    // }
-    // user.projects = project_names.data;
+    auto project_names = database->SearchProjectNames(user.username);
+    if (project_names.status != DBStatus::ok) {
+        return ResponseStatus::not_found;
+    }
+    user.projects = project_names.data;
 
     return ResponseStatus::ok;
 }
