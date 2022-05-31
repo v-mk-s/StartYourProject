@@ -76,9 +76,9 @@ void LoginPage::on_pushLoginButton_clicked()
                 QByteArray reply = responce->readAll();
                 std::string auth_token_reply = reply.toStdString();
 
-                setUserAuthToken(auth_token_reply);
-                setUserUsername(username);
-                setUserPassword(password);
+                _context->setAuthTokenUserData(auth_token_reply);
+                _context->setUsernameUserData(username);
+                _context->setPasswordUserData(password);
 
                 std::cout << _context->getUserData().auth_token << " test" << std::endl;
 

@@ -46,16 +46,18 @@ void UserEditPage::on_pushSaveButton_clicked()
     std::string surname = qsurname.toUtf8().constData();
     std::string user_description = quser_description.toUtf8().constData();
 
-    _context->getUserData().email = email;
-    _context->getUserData().username = username;
-    _context->getUserData().password = password;
-    _context->getUserData().name = name;
-    _context->getUserData().sur_name = surname;
-    _context->getUserData().user_discription = user_description;
-
     UserEditUC user_edit_uc;
 
-    if (user_edit_uc.onEditUserDataButton(_context->getUserData()) == ErrorStatus::no_error) {
+    UserData _tmp_user;
+    _tmp_user.email = email;
+    _tmp_user.username = username;
+    _tmp_user.password = password;
+    _tmp_user.name = name;
+    _tmp_user.sur_name = surname;
+    _tmp_user.user_discription = user_description;
+
+
+    if (user_edit_uc.onEditUserDataButton(_tmp_user) == ErrorStatus::no_error) {
 
         QJsonObject param;
         param.insert("username", qusername);
@@ -95,6 +97,13 @@ void UserEditPage::on_pushSaveButton_clicked()
                 std::string auth_token_reply = reply.toStdString();
 
                 std::cout << _context->getUserData().auth_token << " test" << std::endl;
+
+                _context->setEmailUserData(email);
+                _context->setUsernameUserData(username);
+                _context->setPasswordUserData(password);
+                _context->setNameUserData(name);
+                _context->setSurnameUserData(surname);
+                _context->setUserDescriptionUserData(user_description);
 
                 QMessageBox::information(this, "Information", "New User data was written");
 

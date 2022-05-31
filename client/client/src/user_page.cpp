@@ -41,7 +41,7 @@ UserPage::UserPage(QWidget *parent, std::shared_ptr<Context> context) :
 
     // load data
     QJsonObject param;
-    param.insert("auth_token",  QString::fromStdString(_context->getUserData().auth_token));
+    param.insert("username",  QString::fromStdString(_context->getUserData().username));
 
     QJsonDocument doc(param);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -95,16 +95,16 @@ UserPage::UserPage(QWidget *parent, std::shared_ptr<Context> context) :
             ui->l_username->setText(qusername);
             ui->l_email->setText(qemail);
             ui->l_name->setText(qname);
-            ui->l_surname->setText(qsurname);
+            ui->l_surname->setText(qsurname);         
             ui->l_projects->setText(qprojects);
             ui->l_user_description->setText(quser_description);
 
-            _context->getUserData().username = qusername.toStdString();
-            _context->getUserData().name = qname.toStdString();
-            _context->getUserData().email = qemail.toStdString();
-            _context->getUserData().sur_name = qsurname.toStdString();
-            _context->getUserData().projects = projects_vec;
-            _context->getUserData().user_discription = quser_description.toStdString();
+            _context->setUsernameUserData(qusername.toStdString());
+            _context->setNameUserData(qname.toStdString());
+            _context->setEmailUserData(qemail.toStdString());
+            _context->setSurnameUserData(qsurname.toStdString());
+            _context->setProjectsUserData(projects_vec);
+            _context->setUserDescriptionUserData(quser_description.toStdString());
 
         } else {
             qDebug("User Error");

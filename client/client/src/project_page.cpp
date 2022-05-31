@@ -98,12 +98,11 @@ void ProjectPage::on_pushSearchButton_clicked()
             ui->l_teammates->setText(qteammates);
             ui->l_project_description->setText(qproject_description);
 
-            _context->getProjectData().team_name = qteam_name.toStdString();
-            _context->getProjectData().teammates = teammates_vec;
-            _context->getProjectData().project_description = qproject_description.toStdString();
-            _context->getProjectData().project_name = qproject_name.toStdString();
-            _context->getProjectData().post_tags = post_tags_vec;
-            _context->getProjectData().project_description = qproject_description.toStdString();
+//            _context->setTeamNameProjectData(qteam_name.toStdString());
+//            _context->setTeammatesProjectData(teammates_vec);
+//            _context->setProjectDescriptionProjectData(qproject_description.toStdString());
+//            _context->setProjectNameProjectData(qproject_name.toStdString());
+//            _context->setPostTagsProjectData(post_tags_vec);
 
         } else {
             qDebug("Project Error");

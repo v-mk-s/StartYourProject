@@ -44,11 +44,11 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
 
     std::vector<std::string> post_tags = getVectorFromString(post_tags_str);
 
-    _context->getProjectData().project_name = project_name;
-    _context->getProjectData().team_name = team_name;
-    _context->getProjectData().teammates = teammates;
-    _context->getProjectData().post_tags = post_tags;
-    _context->getProjectData().project_description = project_description;
+    _context->setProjectNameProjectData(project_name);
+    _context->setTeamNameProjectData(team_name);
+    _context->setTeammatesProjectData(teammates);
+    _context->setPostTagsProjectData(post_tags);
+    _context->setProjectDescriptionProjectData(project_description);
 
     PublishPostUC publish_post_uc;
 
@@ -57,10 +57,11 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
         param.insert("auth_token", qauth_token);
         param.insert("project_name", qproject_name);
         param.insert("team_name", qteam_name);
-        param.insert("teammates", qteammates);
+//        param.insert("teammates", qteammates);
         param.insert("project_discription", qproject_description);
 //        add post_tags
 //        param.insert("post_tags", qpost_tags);
+
 
         QJsonDocument doc(param);
         QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -85,6 +86,8 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
 //                responce->deleteLater();
 
 //                std::cout << _user_data.auth_token << " test" << std::endl;
+
+
 
                 QMessageBox::information(this, "Information", "New Post was published");
 
