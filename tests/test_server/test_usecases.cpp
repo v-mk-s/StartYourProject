@@ -18,7 +18,6 @@ class MockDB: public MainDataBase {
     MOCK_METHOD(DBStatus, DeleteFromPostTable, (std::string &project_name), (override));
     MOCK_METHOD(DBStatus, DeleteFromPersonTable, (std::string &username), (override));
     MOCK_METHOD(DBStatus, DeleteFromRequestToPostTable, (RequestToPostData &data), (override));
-    MOCK_METHOD(DBStatus, DelFromTableNotifications, (RequestToPostData& data), (override));
 
     MOCK_METHOD(DBStatus, EditUserInPersonTable, (UserData &data), (override));
     MOCK_METHOD(DBStatus, EditPostInPostTable, (ProjectData &data), (override));
@@ -29,7 +28,7 @@ class MockDB: public MainDataBase {
     MOCK_METHOD((Message<std::vector<RequestToPostData>, DBStatus>),  FindRequestToPostTable, (std::string &username), (override));
 
     MOCK_METHOD(DBStatus, InsertToken, (std::string &username, std::string& token), (override));
-    MOCK_METHOD(bool, CheckToken, (std::string &username, std::string& token), (override));
+    MOCK_METHOD((Message<std::string, DBStatus>), FindToken, (std::string &username), (override));
     MOCK_METHOD(DBStatus, DeleteToken, (std::string &username), (override));
 };
 
@@ -77,7 +76,7 @@ TEST(EditProfileUCTest, GoodCase) {
     test_data.sur_name = "dfgh";
     test_data.user_description = "some text";
     test_data.password = "1234qwerty";
-    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token)).Times(1);
+    EXPECT_CALL(database, FindToken(test_data.username)).Times(1);
     EXPECT_CALL(database, EditUserInPersonTable(test_data)).Times(1);
 
     EditProfileUC usecase(&database);
@@ -90,7 +89,7 @@ TEST(DelUserProfileUCTest, GoodCase) {
     UserData test_data;
     test_data.username = "test123";
     test_data.auth_token = "23132";
-    EXPECT_CALL(database, CheckToken(test_data.username, test_data.auth_token)).Times(1);
+    EXPECT_CALL(database, FindToken(test_data.username)).Times(1);
     EXPECT_CALL(database, DeleteFromPersonTable(test_data.username)).Times(1);
 
     DelUserProfileUC usecase(&database);
@@ -123,7 +122,7 @@ TEST(EditPostTest, UC) {
     std::string auth_token = "323324";
 
     MockDB db;
-    EXPECT_CALL(db, CheckToken(post.username, auth_token)).Times(1);
+    EXPECT_CALL(db, FindToken(post.username)).Times(1);
     EXPECT_CALL(db, EditPostInPostTable(post)).Times(AtLeast(1));
 
     EditPostUC Test_1(&db);
@@ -156,7 +155,7 @@ TEST(DeletePostTest, UC) {
     MockDB db;
     std::string auth_token = "323324";
 
-    EXPECT_CALL(db, CheckToken(post.username, auth_token)).Times(1);
+    EXPECT_CALL(db, FindToken(post.username)).Times(1);
     EXPECT_CALL(db, DeleteFromPostTable(post.project_name)).Times(AtLeast(1));
     DeletePostUC Test_1(&db);
     EXPECT_EQ(Test_1.delPostData(post, auth_token), ResponseStatus::ok);
@@ -180,7 +179,9 @@ TEST(CreatePostTest, UC) {
     MockDB db;
     EXPECT_CALL(db, FindIntoPostTable(post.project_name)).Times(1);
     EXPECT_CALL(db, InsertIntoPostTable(post)).Times(1);
+
+    std::string token;
     CreatePostUC Test_1(&db);
-    EXPECT_EQ(Test_1.addPostToDB(post), ResponseStatus::ok);
+    EXPECT_EQ(Test_1.addPostToDB(post, token), ResponseStatus::ok);
 }
 

@@ -20,19 +20,42 @@ MainDataBase::MainDataBase():
 
     user_data_table = std::make_unique<mysqlx::Table>(
         CreateTable(sqlconn, USER_TABLE, "( user_name  CHAR(32) NOT NULL, email  CHAR(32),  name  CHAR(32),"
-                " sur_name  CHAR(32), user_description  CHAR(255), password  CHAR(64) NOT NULL, PRIMARY KEY ( user_name ))")
-    );
+                " sur_name  CHAR(32), user_description  CHAR(255), password  CHAR(64) NOT NULL, PRIMARY KEY ( user_name ))"));
+                
     project_data_table = std::make_unique<mysqlx::Table>(
-        CreateTable(sqlconn, PROJECT_TABLE,"( user_name  char(32) NOT NULL, project_name  char(32),  team_name  char(32),  project_description  char(255),  diversity  double, primary key( project_name ), foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)" ));
+        CreateTable(sqlconn, PROJECT_TABLE,"( user_name  char(32) NOT NULL, project_name  char(32), "
+        " team_name  char(32),  project_description  char(255),  diversity  double, primary key( project_name ),"
+        " foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)" ));
         
     token_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TOKEN_TABLE,
-                                                       "( token char(100), user_name  CHAR(32) NOT NULL unique,primary key (token),"
-                                                       " FOREIGN KEY (user_name)  REFERENCES user_data (user_name) ON DELETE CASCADE ON UPDATE CASCADE)"));
-    notification_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, NOTIFICATION_TABLE,  "(id  int NOT NULL AUTO_INCREMENT, project_name  char(32) NOT NULL, motivation_words  char(255),user_name char(32) not null,status int, primary key( id ), foreign key ( project_name ) references project_data(project_name ) ON DELETE CASCADE ON UPDATE CASCADE, foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)"));
-    team_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TEAM_TABLE, "(user_name char(32) not null, project_name char(32) not null,foreign key ( user_name ) references user_data( user_name)  ON DELETE CASCADE ON UPDATE CASCADE, foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE, unique(user_name,project_name) )"));
-    tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TAGS_TABLE, "(id int auto_increment, tag char(30) unique,PRIMARY KEY ( id ) )"));
-    user_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, USER_TAGS_TABLE, "(user_name char(32) not null, id_tag int not null, foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE,foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, unique(user_name,id_tag))"));
-    project_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, PROJECT_TAGS_TABLE, "(project_name char(32) not null, id_tag int not null, foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE,foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, unique(project_name,id_tag))"));
+        "( token char(100), user_name  CHAR(32) NOT NULL unique,primary key (token),"
+        " FOREIGN KEY (user_name)  REFERENCES user_data (user_name) ON DELETE CASCADE ON UPDATE CASCADE)"));
+        
+    notification_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, NOTIFICATION_TABLE,  
+        "(id  int NOT NULL AUTO_INCREMENT, project_name  char(32) NOT NULL, motivation_words"
+        "  char(255),user_name char(32) not null,status int, primary key( id ), "
+        "foreign key ( project_name ) references project_data(project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
+        " foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE)"));
+        
+    team_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TEAM_TABLE,
+        "(user_name char(32) not null, project_name char(32) not null,"
+        "foreign key ( user_name ) references user_data( user_name)  ON DELETE CASCADE ON UPDATE CASCADE,"
+        " foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
+        " unique(user_name,project_name) )"));
+        
+    tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, TAGS_TABLE, 
+        "(id int auto_increment, tag char(30) unique,PRIMARY KEY ( id ) )"));
+
+    user_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, USER_TAGS_TABLE, 
+        "(user_name char(32) not null, id_tag int not null, "
+        "foreign key ( user_name ) references user_data( user_name ) ON DELETE CASCADE ON UPDATE CASCADE, "
+        "foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, unique(user_name,id_tag))"));
+        
+    project_tags_data_table = std::make_unique<mysqlx::Table>(CreateTable(sqlconn, PROJECT_TAGS_TABLE, 
+        "(project_name char(32) not null, id_tag int not null,"
+        " foreign key ( project_name ) references project_data( project_name ) ON DELETE CASCADE ON UPDATE CASCADE,"
+        "foreign key ( id_tag ) references tags_data( id ) ON DELETE CASCADE ON UPDATE CASCADE, "
+        "unique(project_name,id_tag))"));
 
     std::list<mysqlx::Schema> schemaList = sqlconn.getSchemas();
 
@@ -83,51 +106,21 @@ DBStatus MainDataBase::DeleteFromPostTable(std::string& post) {
     return DBStatus::ok;
 }
 
-DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
-    std::cout << "DelFromTableNotifications:" << std::endl;
-    project_data_table->remove()
+
+//needs del
+DBStatus MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
+    std::cout << "DeleteFromRequestToPostTable:" << std::endl;
+    notification_data_table->remove()
     .where("project_name=:param1 and user_name=:param2")
     .bind("param1",data.project_name)
     .bind("param2", data.username)
     .execute();
     return DBStatus::ok;
-}
-
-
-//needs del
-DBStatus MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
-    std::cout << "DeleteFromRequestToPostTable:" << std::endl;
-    // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from requesttopost where user_id=? and project_id=?");
-
     return DBStatus::ok;
 }
 
 Message<std::vector<RequestToPostData>, DBStatus> MainDataBase::FindRequestToPostTable(std::string &username) {
     std::cout << "FindRequestToPostTable:" << std::endl;
-    //выводим оповещения-ответы на пост юзера, либо ответы на его отклики
-    // MySQLQuery * selectQuery = new MySQLQuery(sqlconn, "select r.user_id, 
-    // r.project_id, p.project_name, r.motivation_words, r.status from requesttopost as r
-    // inner join projectdata as p on r.project_id=p.project_id where r.user_id=? and r.status<>3 or p.user_id=?")
-
-
-    
-    // selectQuery->setInt(1,user_id);
-    // selectQuery->setInt(2,user_id);
-    // selectQuery->ExecuteQuery();
-    // std::vector<RequestToPostData> data;
-
-    // for (unsigned int i=1; i<=selectQuery->GetResultRowCount(); i++)
-    // {
-    //     RequestToPostData temp;
-
-    //     temp.user_id=selectQuery->getInt(i,1);
-    //     temp.post_id=selectQuery->getInt(i,2);
-    //     temp.project_name=selectQuery->getString(i,3);
-    //     temp.motivation_words=selectQuery->getString(i,4);
-
-    //     temp.status=static_cast<Status>(selectQuery->getInt(i,5));
-    //     data.push_back(temp);
-    // }
 
     return std::vector<RequestToPostData>();
 }
@@ -206,6 +199,7 @@ Message<ProjectData, DBStatus> MainDataBase::FindIntoPostTable(std::string &proj
     }
     return Message<ProjectData, DBStatus>(DBStatus::not_found);
 }
+
 //функция находит все записи, которые содержат определенный проджектнейм, далее пока есть записи ищет по id тега его значение
 Message<std::vector<std::string>, DBStatus> MainDataBase::FindProjectsTags(std::string &project_name) {
     std::cout << "ProjectFindTag:" << std::endl;
@@ -366,26 +360,9 @@ DBStatus MainDataBase::EditPostInPostTable(ProjectData &data) {
 
 DBStatus MainDataBase::EditRequestToPostTable(RequestToPostData &data){
     std::cout << "EditRequestToPostTable:" << std::endl;
-    // MySQLQuery * updateQuery = new MySQLQuery(sqlconn, "update requesttopost set status=? where post_id=?, user_id=?")
-    // updateQuery->setInt(1,static_cast<Status>(data.status));
-    // updateQuery->setInt(2,data.user_id);
-    // updateQuery->setInt(3,data.post_id);
-
-    // updateQuery->ExecuteUpdate();
 
     return DBStatus::ok;
 }
-
-
-// DBStatus MainDataBase::IsUnique(std::string &username) {
-//     mysqlx::RowResult res = user_data_table->select("user_name")
-//     .where("user_name=:param")
-//     .bind("param", username)
-//     .execute();
-//     return res.();
-// }
-
-
 
 
 Message<std::string, DBStatus> MainDataBase::FindToken(std::string &username) {

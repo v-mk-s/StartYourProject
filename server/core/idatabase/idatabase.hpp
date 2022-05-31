@@ -23,7 +23,7 @@ class IMainDataBase
     virtual DBStatus DeleteFromPersonTable(std::string &username) = 0;
     
     virtual DBStatus DeleteFromRequestToPostTable(RequestToPostData &data) = 0;
-    virtual DBStatus DelFromTableNotifications(RequestToPostData& data) = 0;
+
 
     // Изменяют запись и возвращают статус если успешно false иначе true
     virtual DBStatus EditUserInPersonTable(UserData &data) = 0;

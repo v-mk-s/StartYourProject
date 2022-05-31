@@ -42,7 +42,7 @@ class MainDataBase: public IMainDataBase {
     DBStatus DeleteFromPersonTable(std::string &username) override;
     
     DBStatus DeleteFromRequestToPostTable(RequestToPostData &data) override;
-    DBStatus DelFromTableNotifications(RequestToPostData& data) override;
+
 
     // Изменяют запись и возвращают статус если успешно false иначе true
     DBStatus EditUserInPersonTable(UserData &data) override;
