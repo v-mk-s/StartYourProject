@@ -47,7 +47,7 @@ Body    :
 // В ответе заполненная структура ProjectData, ключи в json совпадают с названиями полей структуры
 #define GET_POST_URL "/post/find"
 
-// Нужно отправить на сервер заполненную структуру ProjectData и токен
+// Нужно отправить на сервер заполненную структуру ProjectData
 // По ключу "auth_token" должен лежать токен полученный при логировании
 #define CREATE_POST_URL "/post/create"
 
@@ -59,9 +59,12 @@ Body    :
 // По ключу "auth_token" должен лежать токен полученный при логировании
 #define DELETE_POST_URL "/post/delete"
 
-// In development
+// Нужно отправить на сервер заполненную структуру RequestToPostData
+// По ключу "auth_token" должен лежать токен полученный при логировании
 #define MAKE_REQUEST_URL "/post/request/make"
-// In development
+
+// Нужно отправить на сервер заполненную структуру RequestToPostData
+// По ключу "auth_token" должен лежать токен полученный при логировании
 #define ANSWER_REQUEST_URL "/post/request/answer"
 
 
@@ -154,6 +157,7 @@ struct UserData {
 
 
 struct RequestToPostData {
+    std::string username;
     std::string project_name;
     std::string motivation_words;
     enum class Status {yes=1, no=2, unknown=3};

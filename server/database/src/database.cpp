@@ -16,20 +16,7 @@ mysqlx::Table CreateTable(mysqlx::Session &session, const mysqlx::string &name, 
 MainDataBase::MainDataBase(): 
     cli( "root:123qwerty@localhost:33060/"SYP_DB_NAME, mysqlx::ClientOption::POOL_MAX_SIZE, 7),
     sqlconn(cli.getSession()) {
-    //mysqlx::Session(HOST, PORT, DB_USER, DB_PASSWORD)
     sqlconn.sql( "CREATE DATABASE IF NOT EXISTS "SYP_DB_NAME";").execute();
-    // sqlconn.sql("use SYP_DB;");
-
-    // sqlconn.sql("use SYP_DB; create table IF NOT EXISTS tags_data (id int auto_increment, tag char(30) unique,PRIMARY KEY ( id ) );");
-        
-    // sqlconn.sql("use SYP_DB; CREATE TABLE IF NOT EXISTS user_data  ( user_name  CHAR(32) NOT NULL, email  CHAR(32),  name  CHAR(32),"
-    //             " sur_name  CHAR(32), user_description  CHAR(255), password  CHAR(64) NOT NULL, PRIMARY KEY ( user_name ));");
-                    
-    // sqlconn.sql("use SYP_DB; CREATE TABLE IF NOT EXISTS project_data  ( user_name  char(32) NOT NULL, project_name  char(32),"
-    //             " team_name  char(32),  project_description  char(255),  diversity  double, primary key( project_name ),"
-    //             " foreign key ( user_name ) references user_data( user_name ));");
-                    
-    // db = std::make_unique<mysqlx::Schema>(sqlconn.getSchema("SYP_DB"));
 
     user_data_table = std::make_unique<mysqlx::Table>(
         CreateTable(sqlconn, USER_TABLE, "( user_name  CHAR(32) NOT NULL, email  CHAR(32),  name  CHAR(32),"
@@ -93,28 +80,21 @@ DBStatus MainDataBase::DeleteFromPostTable(std::string& post) {
     .where("project_name=:param")
     .bind("param",post)
     .execute();
-
     return DBStatus::ok;
 }
 
 DBStatus MainDataBase::DelFromTableNotifications(RequestToPostData& data) {
     std::cout << "DelFromTableNotifications:" << std::endl;
-    
-
-    // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from requesttopost where user_id=? and project_id=?");
-    // que->setInt(1,data.user_id);
-    // que->setInt(2,data.post_id);
-    // return que->ExecuteUpdate();
     project_data_table->remove()
-    .where("project_name=:param")
-    .bind("param",data.project_name)
+    .where("project_name=:param1 and user_name=:param2")
+    .bind("param1",data.project_name)
+    .bind("param2", data.username)
     .execute();
     return DBStatus::ok;
-
 }
 
 
-
+//needs del
 DBStatus MainDataBase::DeleteFromRequestToPostTable(RequestToPostData &data) {
     std::cout << "DeleteFromRequestToPostTable:" << std::endl;
     // MySQLQuery * que = new MySQLQuery(sqlconn, "DELETE from requesttopost where user_id=? and project_id=?");
@@ -176,70 +156,74 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
     return Message<UserData, DBStatus>(data);
 }
 
-// UserData MainDataBase::FindIntoPersonByID(int id) {
-//     mysqlx::RowResult res = user_data_table->select("id", "user_name", "email", "name", "sur_name", "user_description", "password")
-//     .where("id = :param")
-//     .orderBy("name")
-//     .bind("param",id)
-//     .execute();
-    
-//     UserData data;
-//     mysqlx::Row row = res.fetchOne();
-    
-//     data.id = row[0];
-//     data.username = std::string(row[1]);
-//     data.email = std::string(row[2]);
-//     data.name = std::string(row[3]);
-//     data.sur_name = std::string(row[4]);
-//     data.user_description = std::string(row[5]);
-//     data.password = std::string(row[6]);
-//     return data;
-// }
 
-// ProjectData MainDataBase::SelectPostByID(int &id) {
-//     mysqlx::RowResult res = project_data_table->select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
-//     .where("id= :param")
-//     .orderBy("project_name")
-//     .bind("param",id)
-//     .execute();
+Message<std::vector<std::string>, DBStatus> MainDataBase::FindIntoTeambyProjectName(std::string &project_name){
+    mysqlx::RowResult res = team_data_table->select("user_name", "project_name")
+    .where("project_name= :param")
+    .bind("param",project_name)
+    .execute();
+    mysqlx::Row row ;
+    std::vector<std::string> teammates;
+    while (row= res.fetchOne()){
+        teammates.push_back(std::string(row[0]));
+    }
+    return Message<std::vector<std::string>, DBStatus>(teammates);
+}
 
-//     ProjectData data;
-//     mysqlx::Row row = res.fetchOne();
+Message<ProjectData, DBStatus> MainDataBase::FindIntoPostTable(std::string &project_name) {
+    mysqlx::RowResult res = project_data_table->select("user_name", "project_name", "team_name", "project_description", "diversity")
+    .where("project_name= :param")
+    .bind("param",project_name)
+    .execute();
 
-//     data.projectid = row[0];
-//     data.userid = row[1];
-//     data.project_name = std::string(row[2]);
-//     data.team_name = std::string(row[3]);
-//     data.post_tags.push_back(std::string(row[4]));
-//     data.teammates.push_back(std::string(row[5]));
-//     data.project_description = std::string(row[6]);
-//     data.diversity = row[7];
-    
-//     return data;
-// }
+    ProjectData data;
+    if(mysqlx::Row row = res.fetchOne()) {
+        data.username = std::string(row[0]);
+        data.project_name = std::string(row[1]);
+        data.team_name = std::string(row[2]);
+        data.project_description = std::string(row[3]);
+        data.diversity = double(row[4]);
+        auto msg = FindProjectsTags(data.project_name);
+        data.post_tags = msg.data;
+        msg = FindIntoTeambyProjectName(data.project_name);
+        data.teammates = msg.data;
+        return Message<ProjectData, DBStatus>(data);
+    }
+    return Message<ProjectData, DBStatus>(DBStatus::not_found);
+}
+//функция находит все записи, которые содержат определенный проджектнейм, далее пока есть записи ищет по id тега его значение
+Message<std::vector<std::string>, DBStatus> MainDataBase::FindProjectsTags(std::string &project_name) {
+    std::cout << "ProjectFindTag:" << std::endl;
+    mysqlx::RowResult res = project_tags_data_table->select("project_name", "id_tag")
+    .where("project_name = :param")
+    .bind("param", project_name)
+    .execute();
+    mysqlx::Row row;
+    std::vector<std::string> tags;
+    while (row = res.fetchOne()) {
+        int temp = row[1];
+        auto msg = FindTagbyID(temp);
+        tags.push_back(std::string(msg.data));
+    }
+    return Message<std::vector<std::string>, DBStatus>(tags);
+}
 
-// ProjectData MainDataBase::SelectPostByProjectname(std::string &project_name) {
-//     mysqlx::RowResult res = project_data_table->select("id", "userid", "project_name", "team_name", "post_tag", "teammates", "project_description", "diversity")
-//     .where("project_name= :param")
-//     .orderBy("project_name")
-//     .bind("param",project_name)
-//     .execute();
 
-//     ProjectData data;
-//     mysqlx::Row row = res.fetchOne();
-    
-//     data.projectid = row[0];
-//     data.userid = row[1];
-//     data.project_name = std::string(row[2]);
-//     data.team_name = std::string(row[3]);
-//     data.post_tags.push_back(std::string(row[4]));
-//     data.teammates.push_back(std::string(row[5]));
-//     data.project_description = std::string(row[6]);
-//     data.diversity = row[7];
+Message<std::string, DBStatus> MainDataBase::FindTagbyID(int &id) {
+    std::cout << "FindTag:" << std::endl;
+    mysqlx::RowResult res = tags_data_table->select("id", "tag")
+    .where("id = :param")
+    .bind("param", id)
+    .execute();
+    mysqlx::Row row;
+    if (!(row = res.fetchOne())) {
+        return Message<std::string, DBStatus>(DBStatus::not_found);
+    }
+    return Message<std::string, DBStatus>(std::string(row[1]));
+}
 
-//     return data;
-// }
-Message<int, DBStatus> MainDataBase::FindTag(std::string &tag) {
+
+Message<int, DBStatus> MainDataBase::FindTagbyTagName(std::string &tag) {
     std::cout << "FindTag:" << std::endl;
     mysqlx::RowResult res = tags_data_table->select("id", "tag")
     .where("tag = :param")
@@ -252,10 +236,18 @@ Message<int, DBStatus> MainDataBase::FindTag(std::string &tag) {
     return Message<int, DBStatus>(int(row[0]));
 }
 
+DBStatus MainDataBase::InsertIntoTeamTable(std::string &username, std::string &projectname){
+    std::cout << "InsertIntoTeamsTable:" << std::endl;
+    team_data_table->insert("user_name", "project_name")
+    .values(username,projectname)
+    .execute();
+}
+
+
 
 DBStatus MainDataBase::InsertIntoTagsTable(std::string &data){
      std::cout << "InsertIntoTagsTable:" << std::endl;
-    auto msg = FindTag(data);
+    auto msg = FindTagbyTagName(data);
     if (msg.status == DBStatus::not_found){    
         tags_data_table->insert("tag")
         .values(data)
@@ -267,7 +259,7 @@ DBStatus MainDataBase::InsertIntoTagsTable(std::string &data){
 DBStatus MainDataBase::InsertIntoProjectTagsTable(std::string &data, std::string &project_name){
     std::cout << "InsertIntoProjectTable:" << std::endl;
     if(InsertIntoTagsTable(data) == DBStatus::ok){
-        auto msg = FindTag(data);
+        auto msg = FindTagbyTagName(data);
         project_tags_data_table->insert( "project_name", "id_tag")
         .values(project_name, msg.data)
         .execute();
@@ -283,11 +275,12 @@ DBStatus MainDataBase::InsertIntoPostTable(ProjectData &data) {
     .values (data.project_name, data.team_name, data.project_description, data.diversity, data.username)
     .execute();
 
-    for (int i=0;i<data.post_tags.size();i++){
+    for (int i = 0; i < data.post_tags.size() ; i++ ){
         InsertIntoProjectTagsTable(data.post_tags[i], data.project_name);
     }
-
-
+    for (int i = 0; i < data.teammates.size() ; i++ ){
+        InsertIntoTeamTable(data.teammates[i], data.project_name);
+    }
     return DBStatus::ok;
 }
 
@@ -405,7 +398,6 @@ Message<std::string, DBStatus> MainDataBase::FindToken(std::string &username) {
     return Message<std::string, DBStatus>(std::string(row[1]));
 }
 
-Message<ProjectData, DBStatus> MainDataBase::FindIntoPostTable(std::string &project_name) {
-    std::cout << "FindIntoPostTable:" << std::endl;
-    return DBStatus::not_found;
+Message<std::vector<std::string>, DBStatus> MainDataBase::SearchProjectNames(std::string &username) {
+
 }

@@ -139,7 +139,9 @@ inline std::vector<std::string> JSON::get<std::vector<std::string>>(const std::s
     json::array arr = obj[key].as_array();
     std::vector<std::string> result;
     for (auto it : arr) {
-        result.push_back(it.as_string().c_str());
+        if (it.as_string().size() != 0) {
+            result.push_back(it.as_string().c_str());
+        }
     }
     return result;
 }

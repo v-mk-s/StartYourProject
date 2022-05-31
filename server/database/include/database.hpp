@@ -30,14 +30,17 @@ class MainDataBase: public IMainDataBase {
     // просто добавляют данные и возвращают статус если успешно false иначе true
     DBStatus InsertIntoPostTable(ProjectData &data) override;
     DBStatus InsertIntoUserTable(UserData &data) override;
+
     DBStatus InsertIntoRequestToPostTable(RequestToPostData &data) override;
+    DBStatus InsertIntoTeamTable(std::string &username, std::string &projectname) override;
+    
     DBStatus InsertIntoTagsTable(std::string &data) override;
     DBStatus InsertIntoProjectTagsTable(std::string &data, std::string &projectname) override;
-    DBStatus InsertIntoTeamTable(std::string &data, std::string &projectname) override;
 
     // Удаляют запись и возвращают статус если успешно false иначе true
     DBStatus DeleteFromPostTable(std::string &project_name) override;
     DBStatus DeleteFromPersonTable(std::string &username) override;
+    
     DBStatus DeleteFromRequestToPostTable(RequestToPostData &data) override;
     DBStatus DelFromTableNotifications(RequestToPostData& data) override;
 
@@ -49,9 +52,15 @@ class MainDataBase: public IMainDataBase {
     // Возвращают одну запись
     Message<UserData, DBStatus> FindIntoPersonByUsername(std::string &username) override;
     Message<ProjectData, DBStatus> FindIntoPostTable(std::string &project_name) override;
+    
     Message<std::vector<RequestToPostData>, DBStatus>  FindRequestToPostTable(std::string &username) override;
+    Message<std::vector<std::string>, DBStatus> FindIntoTeambyProjectName(std::string &project_name) override;
+    Message<int, DBStatus> FindTagbyTagName(std::string &tag) override;
+    Message<std::string, DBStatus> FindTagbyID(int &id)  override;
+    Message<std::vector<std::string>, DBStatus> FindProjectsTags(std::string &project_name) override;
 
-    Message<int, DBStatus> FindTag(std::string &tag) override;
+    // Возвращает массив названий проектов которые создал пользователь
+    Message<std::vector<std::string>, DBStatus> SearchProjectNames(std::string &username) override;
 
     DBStatus InsertToken(std::string &username, std::string& token) override;
     // Если токен совпадает то false иначе true
