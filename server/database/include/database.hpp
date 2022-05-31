@@ -58,7 +58,7 @@ class MainDataBase: public IMainDataBase {
     Message<int, DBStatus> FindTagbyTagName(std::string &tag) override;
     Message<std::string, DBStatus> FindTagbyID(int &id)  override;
     Message<std::vector<std::string>, DBStatus> FindProjectsTags(std::string &project_name) override;
-
+    Message<std::vector<ProjectData>, DBStatus> SearchProjects(std::string &search_string) override;
     // Возвращает массив названий проектов которые создал пользователь
     Message<std::vector<std::string>, DBStatus> SearchProjectNames(std::string &username) override;
 

@@ -139,7 +139,7 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
     if (row.isNull()) {
         return Message<UserData, DBStatus>(DBStatus::not_found);
     }
-
+    
     data.username = mysqlx::string(row[0]);
     data.email = mysqlx::string(row[1]);
     data.name = mysqlx::string(row[2]);
@@ -148,7 +148,35 @@ Message<UserData, DBStatus> MainDataBase::FindIntoPersonByUsername(std::string &
     data.password = mysqlx::string(row[5]);
     return Message<UserData, DBStatus>(data);
 }
-
+Message<std::vector<ProjectData>, DBStatus> MainDataBase::SearchProjects(std::string &search_string) {
+    std::string str= "%"+(search_string)+"%";
+    mysqlx::RowResult res = project_data_table->select("project_name")
+    .where("project_name like :param_1 or project_description like :param_2 or team_name like :param_3")
+    .bind("param_1",str)
+    .bind("param_2",str)
+    .bind("param_3",str)
+    .execute();
+    std::vector<ProjectData> projects;
+    mysqlx::Row row;
+    while (row = res.fetchOne()){
+        std::string temp = std::string(row[0]);
+        ProjectData temp_proj = FindIntoPostTable(temp).data;
+        projects.push_back(temp_proj);
+    }
+    auto temp = FindTagbyTagName(search_string);
+    if (temp.status!=DBStatus::not_found){
+        res = project_tags_data_table->select("project_name")
+        .where("id_tag = :param")
+        .bind("param", temp.data)
+        .execute();
+        while (row = res.fetchOne()){
+            std::string temp = std::string(row[0]);
+            ProjectData temp_proj = FindIntoPostTable(temp).data;
+            projects.push_back(temp_proj);
+        }
+    }
+    return Message<std::vector<ProjectData>, DBStatus>(projects);
+}
 
 Message<std::vector<std::string>, DBStatus> MainDataBase::FindIntoTeambyProjectName(std::string &project_name){
     mysqlx::RowResult res = team_data_table->select("user_name", "project_name")

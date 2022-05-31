@@ -43,7 +43,7 @@ class IMainDataBase
  
     // Возвращает массив названий проектов которые создал пользователь
     virtual Message<std::vector<std::string>, DBStatus> SearchProjectNames(std::string &username) = 0;
-
+    virtual Message<std::vector<ProjectData>, DBStatus> SearchProjects(std::string &search_string) =0;
     virtual DBStatus InsertToken(std::string &username, std::string& token) = 0;
     // Если токен совпадает то false иначе true
     virtual Message<std::string, DBStatus> FindToken(std::string &username) = 0;
