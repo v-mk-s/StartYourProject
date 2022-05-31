@@ -6,52 +6,82 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1162</width>
-    <height>665</height>
+    <width>1000</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="2">
-    <widget class="QPushButton" name="pushBackButton">
-     <property name="text">
-      <string>Back</string>
+   <item row="0" column="0">
+    <spacer name="horizontalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="pushLogOutButton">
-     <property name="text">
-      <string>Log out</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
-   <item row="1" column="0" rowspan="12">
+   <item row="9" column="2">
+    <spacer name="verticalSpacer_9">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>48</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="2">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>47</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" rowspan="11" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Search</string>
+      <string>Main Page</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLineEdit" name="le_search"/>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushSearchButton">
-        <property name="text">
-         <string>Search</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QRadioButton" name="radioButton">
-        <property name="text">
-         <string>Find User?</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="3">
+      <item row="2" column="0" colspan="3">
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
          <string>User Data</string>
@@ -86,6 +116,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="l_projects">
+           <property name="text">
+            <string>Projects</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="l_user_description">
            <property name="text">
             <string>User Description</string>
@@ -98,7 +135,43 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="7" column="2">
+    <spacer name="verticalSpacer_8">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>48</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="11" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>47</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="9" column="3">
+    <widget class="QPushButton" name="pushUserEditButton">
+     <property name="text">
+      <string>Edit User</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -111,162 +184,33 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="2">
-    <spacer name="verticalSpacer_8">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>48</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="2">
-    <spacer name="verticalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="2">
-    <widget class="QLabel" name="l_project_name">
+   <item row="4" column="3">
+    <widget class="QPushButton" name="pushSearchProjectButton">
      <property name="text">
-      <string>Project Name</string>
+      <string>Search Project</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <spacer name="horizontalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>100</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="2">
-    <widget class="QPushButton" name="pushRequestToProjectButton">
+   <item row="8" column="3">
+    <widget class="QPushButton" name="pushPublishPostButton">
      <property name="text">
-      <string>Edit Project 1</string>
+      <string>Publish New Post</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>100</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="2">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="8" column="2">
-    <widget class="QPushButton" name="pushProject1DelButton">
+   <item row="7" column="3">
+    <widget class="QPushButton" name="pushSearchUserButton">
      <property name="text">
-      <string>Del Project 1</string>
+      <string>Search User</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="2">
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="pushLogOutButton">
+     <property name="text">
+      <string>Log out</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="10" column="2">
-    <spacer name="verticalSpacer_9">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>48</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="11" column="2">
-    <spacer name="verticalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="12" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>47</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>

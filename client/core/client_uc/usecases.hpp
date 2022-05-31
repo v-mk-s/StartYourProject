@@ -1,7 +1,5 @@
 #pragma once
 
-#include "clientui.hpp"
-#include "general.hpp"
 #include "utils.hpp"
 
 #define WRONG_AGE "Wrong age: TENET?"
@@ -134,6 +132,34 @@
 
 
 //--------------remake all------------------//
+
+class ILoginUseCase {
+public:
+    virtual ErrorStatus onLoginButton(const UserData& login) = 0;
+
+};
+
+class IRegisterUseCase {
+public:
+    virtual ErrorStatus onRegisterButton(const UserData& reg) = 0;
+
+};
+
+
+class IPublishPostUseCase {
+public:
+    virtual ErrorStatus onGetDataButton(const ProjectData& save) = 0;
+
+};
+
+class IUserEditUseCase
+{
+public:
+    virtual ErrorStatus onEditUserDataButton(const UserData& project_description_data) = 0;
+
+};
+
+
 
 
 class LoginUC : public ILoginUseCase {

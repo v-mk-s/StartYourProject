@@ -11,8 +11,20 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+#set_property(SOURCE login_page.h PROPERTY SKIP_AUTOUIC ON)
+#set_property(SOURCE login_page.cpp PROPERTY SKIP_AUTOUIC ON)
+#set_property(SOURCE login_page.ui PROPERTY SKIP_AUTOUIC ON)
+
+#find_package(Qt5Network REQUIRED)
+
+
+
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Network Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network Widgets)
+#target_link_libraries(${PROJECT_NAME} Qt6::Network)
+#add ${QT_QTNETWORK_LIBRARY} to TARGET_LINK_LIBRARIES.
+
 include_directories(
     ../general_utils
     core/client_uc
@@ -56,13 +68,19 @@ set(PROJECT_SOURCES
         client/include/user_page.h
         client/src/user_page.ui
 
+        client/src/look_for_user.cpp
+        client/include/look_for_user.h
+        client/src/look_for_user.ui
+
         client/src/process/general.cpp
         client/include/process/general.h
+        client/src/application_core.cpp
+        client/include/application_core.h
 
         ../general_utils/utils.hpp
         core/client_uc/usecases.hpp
         core/client_uc/usecases.cpp
-        core/clientui/clientui.hpp
+#       core/clientui/clientui.hpp
         core/basic/general.hpp
         core/basic/validation.cpp
         core/basic/validation.hpp
@@ -106,7 +124,7 @@ else()
 endif()
 
 target_include_directories(SYPcmakeVer_1 PUBLIC ${CLIENT_SYP_CORE_INCLUDE_DIRS})
-target_link_libraries(SYPcmakeVer_1 PRIVATE ${CLIENT_SYP_CORE_LIBRARIES} Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(SYPcmakeVer_1 PRIVATE ${CLIENT_SYP_CORE_LIBRARIES} Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Widgets)
 
 set_target_properties(SYPcmakeVer_1 PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

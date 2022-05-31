@@ -2,6 +2,10 @@
 #define REGISTER_PAGE_H
 
 #include <QWidget>
+#include "utils.hpp"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 namespace Ui {
 class RegisterPage;
@@ -25,6 +29,8 @@ private slots:
 
 private:
     Ui::RegisterPage *ui;
+
+    QNetworkAccessManager* registerNetworkManager;
 };
 
 #endif // REGISTER_PAGE_H
