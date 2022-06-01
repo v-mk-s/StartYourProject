@@ -62,15 +62,10 @@ void RegisterPage::on_pushRegisterButton_clicked()
 
         auto responce = registerNetworkManager->post(request,
                                                   strJson.toStdString().data());
-        // attention
-//        responce->setParent(loginNetworkManager->get(request));
+                                                  
         connect(responce, &QNetworkReply::finished, [=]() {
             if (responce->error() == QNetworkReply::NoError) {
-//            std::vector<char> body;
-//            auto bodyByteArray = responce->readAll();
-//            body.reserve(bodyByteArray.size());
-//            std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//            responce->deleteLater();
+
                 QMessageBox::about(this, "Registration", "Successed registration.\n NOW Start Your Project!");
 
                 this->close();

@@ -26,28 +26,19 @@ public:
     explicit UserPage(QWidget *parent = nullptr, std::shared_ptr<Context> context = nullptr);
     ~UserPage();
 
-//    void getUserData(const UserData& user_data);
-
 signals:
     void LogOut();
 
     void goToProjectPage();
     void goToMainUser();
-//    void goToPublishPostPage();
-//    void goToProjectPage();
-//    void getUserData();
 
 
 private slots:
     void on_pushSearchProjectButton_clicked();
 
-//    void on_pushRequestToProjectButton_clicked();
-
     void on_pushBackButton_clicked();
 
     void on_pushLogOutButton_clicked();
-
-//    void on_pushProject1DelButton_clicked();
 
     void on_pushUserEditButton_clicked();
 

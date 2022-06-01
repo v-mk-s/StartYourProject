@@ -27,8 +27,6 @@ signals:
 private slots:
     void on_pushSearchButton_clicked();
 
-//    void on_checkIsUserBox_stateChanged(int arg1);
-
     void on_pushBackButton_clicked();
 
     void on_pushRequestToProjectButton_clicked();

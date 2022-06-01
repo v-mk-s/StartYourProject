@@ -25,3 +25,14 @@ std::vector<std::string> getVectorFromString(const std::string& string) {
 
     return vec;
 }
+
+
+std::string getStringFromVector(const std::vector<std::string>& vector) {
+    std::string result;
+
+    for (int i = 0; i < vector.size(); ++i) {
+        result += vector[i] + " ";
+    }
+
+    return result;
+}

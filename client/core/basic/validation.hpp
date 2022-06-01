@@ -52,7 +52,6 @@ bool isValidUserDescription(const std::string &description);
 
 // // bool isValidPhoto(const std::vector<std::int32_t> &photo);
 
-// // may be redundant or Alex functions
 // // bool isValidDescription(const std::string description);
 // bool isValidRequestDescription(const std::string &request_description);
 

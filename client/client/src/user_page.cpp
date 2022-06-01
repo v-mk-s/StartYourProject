@@ -51,21 +51,11 @@ UserPage::UserPage(QWidget *parent, std::shared_ptr<Context> context) :
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setHeader(QNetworkRequest::ContentLengthHeader, strJson.length());
 
-//        std::cout << strJson.length() << std::endl;
-
     auto responce = userNetworkManager->post(request,
                                               strJson.toStdString().data());
-    // attention
-//        responce->setParent(loginNetworkManager->get(request));
 
     connect(responce, &QNetworkReply::finished, [=]() {
         if (responce->error() == QNetworkReply::NoError) {
-
-//                std::vector<char> body;
-//                auto bodyByteArray = responce->readAll();
-//                body.reserve(bodyByteArray.size());
-//                std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//                responce->deleteLater();
 
             QByteArray reply = responce->readAll();
             QJsonDocument doc = QJsonDocument::fromJson(reply);
@@ -141,6 +131,18 @@ void UserPage::on_pushUserEditButton_clicked()
 {
     this->close();
     user_edit_ui->show();
+
+    connect(user_edit_ui, &UserEditPage::refreshData, this, [=]() {
+        ui->l_username->setText(QString::fromStdString(_context->getUserData().username));
+        ui->l_email->setText(QString::fromStdString(_context->getUserData().email));
+        ui->l_name->setText(QString::fromStdString(_context->getUserData().name));
+        ui->l_surname->setText(QString::fromStdString(_context->getUserData().sur_name));
+
+//        std::string projects_str = getStringFromVector(_context->getUserData().projects);
+//        ui->l_projects->setText(QString::fromStdString(projects_str));
+
+        ui->l_user_description->setText(QString::fromStdString(_context->getUserData().user_discription));
+    });
 }
 
 

@@ -43,17 +43,9 @@ void ProjectPage::on_pushSearchButton_clicked()
 
     auto responce = projectNetworkManager->post(request,
                                               strJson.toStdString().data());
-    // attention
-//        responce->setParent(loginNetworkManager->get(request));
 
     connect(responce, &QNetworkReply::finished, [=]() {
         if (responce->error() == QNetworkReply::NoError) {
-
-//                std::vector<char> body;
-//                auto bodyByteArray = responce->readAll();
-//                body.reserve(bodyByteArray.size());
-//                std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//                responce->deleteLater();
 
             QByteArray reply = responce->readAll();
             QJsonDocument doc = QJsonDocument::fromJson(reply);
@@ -97,12 +89,6 @@ void ProjectPage::on_pushSearchButton_clicked()
             ui->l_post_tags->setText(qpost_tags);
             ui->l_teammates->setText(qteammates);
             ui->l_project_description->setText(qproject_description);
-
-//            _context->setTeamNameProjectData(qteam_name.toStdString());
-//            _context->setTeammatesProjectData(teammates_vec);
-//            _context->setProjectDescriptionProjectData(qproject_description.toStdString());
-//            _context->setProjectNameProjectData(qproject_name.toStdString());
-//            _context->setPostTagsProjectData(post_tags_vec);
 
         } else {
             qDebug("Project Error");

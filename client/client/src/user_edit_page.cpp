@@ -59,14 +59,16 @@ void UserEditPage::on_pushSaveButton_clicked()
 
     if (user_edit_uc.onEditUserDataButton(_tmp_user) == ErrorStatus::no_error) {
 
+        std::cout << _context->getUserData().auth_token << std::endl;
+
         QJsonObject param;
         param.insert("username", qusername);
         param.insert("password", qpassword);
         param.insert("auth_token", qauth_token);
         param.insert("email", qemail);
         param.insert("name", qname);
-        param.insert("surname", qsurname);
-        param.insert("user_discription", quser_description);
+        param.insert("sur_name", qsurname);
+        param.insert("user_description", quser_description);
 
 
         QJsonDocument doc(param);
@@ -77,21 +79,12 @@ void UserEditPage::on_pushSaveButton_clicked()
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
         request.setHeader(QNetworkRequest::ContentLengthHeader, strJson.length());
 
-//        std::cout << strJson.length() << std::endl;
 
         auto responce = userEditNetworkManager->post(request,
                                                   strJson.toStdString().data());
-        // attention
-//        responce->setParent(loginNetworkManager->get(request));
 
         connect(responce, &QNetworkReply::finished, [=]() {
             if (responce->error() == QNetworkReply::NoError) {
-
-//                std::vector<char> body;
-//                auto bodyByteArray = responce->readAll();
-//                body.reserve(bodyByteArray.size());
-//                std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//                responce->deleteLater();
 
                 QByteArray reply = responce->readAll();
                 std::string auth_token_reply = reply.toStdString();
@@ -105,9 +98,13 @@ void UserEditPage::on_pushSaveButton_clicked()
                 _context->setSurnameUserData(surname);
                 _context->setUserDescriptionUserData(user_description);
 
+                emit refreshData();
+
                 QMessageBox::information(this, "Information", "New User data was written");
 
             } else {
+                QByteArray reply = responce->readAll();
+                qDebug(reply);
                 qDebug("UserEdit Error");
             }
         });

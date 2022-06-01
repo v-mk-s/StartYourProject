@@ -61,20 +61,15 @@ void LoginPage::on_pushLoginButton_clicked()
 
         auto responce = loginNetworkManager->post(request,
                                                   strJson.toStdString().data());
-        // attention
-//        responce->setParent(loginNetworkManager->get(request));
 
         connect(responce, &QNetworkReply::finished, [=]() {
             if (responce->error() == QNetworkReply::NoError) {
 
-//                std::vector<char> body;
-//                auto bodyByteArray = responce->readAll();
-//                body.reserve(bodyByteArray.size());
-//                std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//                responce->deleteLater();
-
                 QByteArray reply = responce->readAll();
-                std::string auth_token_reply = reply.toStdString();
+                QJsonDocument doc = QJsonDocument::fromJson(reply);
+                QJsonObject json = doc.object();
+
+                std::string auth_token_reply = json["auth_token"].toString().toStdString();
 
                 _context->setAuthTokenUserData(auth_token_reply);
                 _context->setUsernameUserData(username);

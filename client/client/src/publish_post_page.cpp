@@ -10,6 +10,7 @@
 #include <QUrl>
 #include <QJsonDocument>
 #include <iostream>
+#include <QJsonArray>
 
 PublishPostPage::PublishPostPage(QWidget *parent, std::shared_ptr<Context> context) :
     QWidget(parent)
@@ -44,23 +45,36 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
 
     std::vector<std::string> post_tags = getVectorFromString(post_tags_str);
 
+
+
+    PublishPostUC publish_post_uc;
+
     _context->setProjectNameProjectData(project_name);
     _context->setTeamNameProjectData(team_name);
     _context->setTeammatesProjectData(teammates);
     _context->setPostTagsProjectData(post_tags);
     _context->setProjectDescriptionProjectData(project_description);
 
-    PublishPostUC publish_post_uc;
-
-    if (publish_post_uc.onGetDataButton(_context->getProjectData()) == ErrorStatus::no_error) {
+//    if (publish_post_uc.onGetDataButton(_context->getProjectData()) == ErrorStatus::no_error) {
         QJsonObject param;
         param.insert("auth_token", qauth_token);
         param.insert("project_name", qproject_name);
         param.insert("team_name", qteam_name);
-//        param.insert("teammates", qteammates);
-        param.insert("project_discription", qproject_description);
-//        add post_tags
-//        param.insert("post_tags", qpost_tags);
+        param.insert("project_description", qproject_description);
+        param.insert("username", QString::fromStdString(_context->getUserData().username));
+        param.insert("name", QString::fromStdString(_context->getUserData().name));
+
+        QJsonArray projects_array;
+        for (int i = 0; i < teammates.size(); ++i) {
+            projects_array.push_back(QString::fromStdString(teammates[i]));
+        }
+        param.insert("teammates", projects_array);
+
+        QJsonArray post_tags_array;
+        for (int i = 0; i < teammates.size(); ++i) {
+            post_tags_array.push_back(QString::fromStdString(post_tags[i]));
+        }
+        param.insert("post_tags", post_tags_array);
 
 
         QJsonDocument doc(param);
@@ -73,21 +87,9 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
 
         auto responce = publishPostNetworkManager->post(request,
                                                   strJson.toStdString().data());
-        // attention
-//        responce->setParent(loginNetworkManager->get(request));
 
         connect(responce, &QNetworkReply::finished, [=]() {
             if (responce->error() == QNetworkReply::NoError) {
-
-//                std::vector<char> body;
-//                auto bodyByteArray = responce->readAll();
-//                body.reserve(bodyByteArray.size());
-//                std::memcpy(body.data(), bodyByteArray.data(), body.capacity());
-//                responce->deleteLater();
-
-//                std::cout << _user_data.auth_token << " test" << std::endl;
-
-
 
                 QMessageBox::information(this, "Information", "New Post was published");
 
@@ -95,9 +97,9 @@ void PublishPostPage::on_pushSavePublishButton_clicked()
                 qDebug("PublishPost Error");
             }
         });
-    } else {
-        QMessageBox::warning(this, "Validation", "Not correct input data");
-    }
+//    } else {
+//        QMessageBox::warning(this, "Validation", "Not correct input data");
+//    }
 
 }
 

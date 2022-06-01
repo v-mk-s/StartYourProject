@@ -24,6 +24,7 @@ public:
 signals:
     void goToUserPage();
     void goToLoginPage();
+    void refreshData();
 
 private slots:
     void on_pushGoToUserPageButton_clicked();

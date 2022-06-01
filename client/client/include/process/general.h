@@ -39,4 +39,6 @@ struct Context {
 
 };
 
+std::string getStringFromVector(const std::vector<std::string>& vector);
+
 #endif // GENERAL_H

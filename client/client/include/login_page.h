@@ -22,10 +22,6 @@ public:
     LoginPage(std::shared_ptr<Context> context = nullptr, QWidget *parent = nullptr);
     ~LoginPage();
 
-//    void setUserAuthToken(std::string auth_token) { _context->getUserData().auth_token = auth_token; }
-//    void setUserUsername(std::string username) { _context->getUserData().username = username; }
-//    void setUserPassword(std::string password) { _context->getUserData().password = password; }
-
 private slots:
     void on_pushLoginButton_clicked();
 
@@ -40,7 +36,6 @@ private:
     RegisterPage* register_ui;
     UserPage* user_ui;
 
-//    UserData _user_data;
     std::shared_ptr<Context> _context;
 
 
