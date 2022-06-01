@@ -158,11 +158,6 @@ struct RequestToPostData {
     enum class Status {yes=1, no=2, unknown=3};
     Status status;
 
-    bool operator==(const RequestToPostData& other) const {
-        return user_id == other.user_id && 
-               post_id == other.post_id;
-    }
-
     RequestToPostData() = default;
 };
 

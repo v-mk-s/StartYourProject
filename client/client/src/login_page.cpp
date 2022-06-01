@@ -3,24 +3,34 @@
 #include "utils.hpp"
 #include "usecases.hpp"
 #include <QMessageBox>
+#include <QJsonObject>
+#include <QUrl>
+#include <QJsonDocument>
+#include "general.h"
 
-LoginPage::LoginPage(QWidget *parent)
+#include <iostream>
+
+LoginPage::LoginPage(std::shared_ptr<Context> context, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::LoginPage)
+    , loginNetworkManager(new QNetworkAccessManager)
+    , _context(context)
 {
     ui->setupUi(this);
 
-    ui_register = new RegisterPage();
-    connect(ui_register, &RegisterPage::goToLoginPage, this, &LoginPage::show);
+    QWidget* register_widget = nullptr;
+    register_ui = new RegisterPage(register_widget);
+    connect(register_ui, &RegisterPage::goToLoginPage, this, &LoginPage::show);
+
 }
+
+
 
 LoginPage::~LoginPage()
 {
     delete ui;
 }
 
-
-// need impl
 void LoginPage::on_pushLoginButton_clicked()
 {
     QString qusername = ui->le_login->text();
@@ -29,15 +39,60 @@ void LoginPage::on_pushLoginButton_clicked()
     std::string username = qusername.toUtf8().constData();
     std::string password = qpassword.toUtf8().constData();
 
-    UserData login_data;
-    login_data.username = username;
-    login_data.password = password;
+    _context->getUserData().username = username;
+    _context->getUserData().password = password;
 
     LoginUC login_uc;
 
-    // impl http communication
-    if (login_uc.onLoginButton(login_data) == ErrorStatus::no_error) {
-        QMessageBox::warning(this, "Validation", "username input data");
+    if (login_uc.onLoginButton(_context->getUserData()) == ErrorStatus::no_error) {
+
+        QJsonObject param;
+        param.insert("username", qusername);
+        param.insert("password", qpassword);
+
+
+        QJsonDocument doc(param);
+        QString strJson(doc.toJson(QJsonDocument::Compact));
+
+        QNetworkRequest request;
+        request.setUrl(QUrl(QString::fromStdString(std::string(URL) + LOGIN_URL)));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        request.setHeader(QNetworkRequest::ContentLengthHeader, strJson.length());
+
+        auto responce = loginNetworkManager->post(request,
+                                                  strJson.toStdString().data());
+
+        connect(responce, &QNetworkReply::finished, [=]() {
+            if (responce->error() == QNetworkReply::NoError) {
+
+                QByteArray reply = responce->readAll();
+                QJsonDocument doc = QJsonDocument::fromJson(reply);
+                QJsonObject json = doc.object();
+
+                std::string auth_token_reply = json["auth_token"].toString().toStdString();
+
+                _context->setAuthTokenUserData(auth_token_reply);
+                _context->setUsernameUserData(username);
+                _context->setPasswordUserData(password);
+
+                std::cout << _context->getUserData().auth_token << " test" << std::endl;
+
+                QMessageBox::warning(this, "На вратах ада было написано", "Оставь надежду, всяк сюда входящий!");
+
+                // goToUserPage
+                QWidget* user_widget = nullptr;
+                user_ui = new UserPage(user_widget, _context);
+                connect(user_ui, &UserPage::LogOut, this, &LoginPage::show);
+
+                user_ui->show();
+
+                this->close();
+
+            } else {
+                qDebug("Login Error");
+            }
+        });
+
     } else {
         QMessageBox::warning(this, "Validation", "Try again!");
     }
@@ -46,8 +101,7 @@ void LoginPage::on_pushLoginButton_clicked()
 
 void LoginPage::on_pushGoToRegisterButton_clicked()
 {
-
-    ui_register->show();
+    register_ui->show();
     this->close();
 }
 
